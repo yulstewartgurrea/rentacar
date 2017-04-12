@@ -15,28 +15,29 @@ create table car(
 	brand_name text,
 	model txt,
 	rental_rate numeric,
-	CarOwner int references owner(owner_id)
+	owner_id int references owner(owner_id)
 );
 
 create table user(
-	User_id serial primary key,
+	user_id serial primary key,
 	first_name text,
 	last_name text,
 	address1 text,
 	address2 text,
 	mobile_no numeric,
-	email text unique,
-	password txt,
+	email text unique not null,
+	password text not null,
 	is_admin boolean default false
+	is_customer boolean default false
 );
 
 create table rent(
 	rental_id serial primary key,
 	date_rented text,
-	date_due,
-	date_returned,
-	total_bill,
+	date_due date,
+	date_returned date,
+	total_bill numeric,
 	overdue_cost numeric,
-	Car int references car(car_id),
-	Renter int references owner(owner_id)
+	plate_number int references car(plate_number),
+	renter int references owner(user_id)
 );
