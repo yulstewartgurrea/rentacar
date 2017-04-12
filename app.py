@@ -10,7 +10,7 @@ def hellow_world():
     return "hellow world!"
 
 @app.route("/admin/<string:email>", methods=['POST'])
-def new_admin():
+def new_admin(email):
 	jsn = json.loads(request.data)
 
 	res = spcall("new_admin", (
@@ -21,6 +21,19 @@ def new_admin():
 		return jsonify({'status': 'Error', 'message': res[0][0]})
 
 	return jsonify({'status': 'ok', 'message': res[0][0]})
+
+@app.route("/customer/<string:email>", methods=['POST'])
+def new_customer(email):
+    jsn = json.loads(request.data)
+
+    res = spcall("new_customer",(
+        jsn['email'],
+        jsn['password']), True)
+
+    if 'Error' in res[0][0]:
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    return jsonify({'status': 'ok', 'message': res[0][0]})
 
 @app.after_request
 def add_cors(resp):
