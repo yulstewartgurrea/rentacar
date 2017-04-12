@@ -39,5 +39,5 @@ create table rent(
 	total_bill numeric,
 	overdue_cost numeric,
 	plate_number int references car(plate_number),
-	renter int references owner(user_id)
+	renter_id int references owner(user_id)
 );
