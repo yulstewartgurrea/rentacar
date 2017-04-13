@@ -47,8 +47,6 @@ create table Car(
 	owner_id int references Owner(owner_id)
 );
 
--- select new_car('ghx-938', 'silver', 'mitsubishi', 'lancer 1996', 10, 1)
-
 create table CarPix(
 	cp_id serial primary key,
 	image1 text,
@@ -59,11 +57,9 @@ create table CarPix(
 
 );
 
--- select new_car('ghx-938', 'silver', 'mitsubishi', 'lancer 1996', 10, 1)
-
 -- Add Car
 
-create or replace function new_car(p_plate_number text, p_color text, p_brand_name text, p_model text, p_rental_rate numeric, p_owner_id int) returns text as
+create or replace function new_car(p_plate_number text, p_color text, p_brand_name text, p_model text, p_rental_rate numeric, p_image text, p_owner_id int) returns text as
 $$
 declare 
 	v_plate_number text;
@@ -72,11 +68,11 @@ declare
 begin 
 	select into v_plate_number from Car where plate_number = p_plate_number;
 		if v_plate_number isnull then
-			if p_plate_number = '' or p_color = '' or p_brand_name = '' or p_model = '' or p_rental_rate = null or p_owner_id = null then
+			if p_plate_number = '' or p_color = '' or p_brand_name = '' or p_model = '' or p_rental_rate = null or p_owner_id = null or p_image = null then
 				v_res = 'Error';
 			else
-				insert into Car(plate_number, color, brand_name, model, rental_rate, owner_id)
-					values(p_plate_number, p_color, p_brand_name, p_model, p_rental_rate, p_owner_id);
+				insert into Car(plate_number, color, brand_name, model, rental_rate, image, owner_id)
+					values(p_plate_number, p_color, p_brand_name, p_model, p_rental_rate, p_image, p_owner_id);
 					v_res = 'Ok';
 			end if;
 		else
@@ -86,6 +82,14 @@ begin
 end;
 $$
 	language 'plpgsql';
+
+-- select new_car('ghx-938', 'silver', 'mitsubishi', 'lancer 1996', 10, 'image1', 1)
+
+create or replace function get_cars(out text, out text, out text, out text, out numeric, out text, out int) returns setof record as
+$$
+	select plate_number, color, brand_name, model, rental_rate, p_image, owner_id from Car;
+$$
+	language 'sql';
 
 create table UserAccount(
 	user_id serial primary key,
@@ -165,6 +169,6 @@ create table Rent(
 	date_returned date,
 	total_bill numeric,
 	overdue_cost numeric,
-	plate_number int references Car(plate_number),
+	plate_number text references Car(plate_number),
 	renter_id int references Owner(user_id)
 );

@@ -20,7 +20,7 @@ def new_admin(email):
 	if 'Error' in res[0][0]:
 		return jsonify({'status': 'Error', 'message': res[0][0]})
 
-	return jsonify({'status': 'ok', 'message': res[0][0]})
+	return jsonify({'status': 'Ok', 'message': res[0][0]})
 
 @app.route("/customer/<string:email>", methods=['POST'])
 def new_customer(email):
@@ -33,7 +33,7 @@ def new_customer(email):
     if 'Error' in res[0][0]:
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
-    return jsonify({'status': 'ok', 'message': res[0][0]})
+    return jsonify({'status': 'Ok', 'message': res[0][0]})
 
 @app.route("/owner/<string:first_name>/<string:last_name>", methods=['POST'])
 def new_owner(first_name, last_name):
@@ -49,9 +49,9 @@ def new_owner(first_name, last_name):
     if 'Error' in res[0][0]:
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
-    return jsonify({'status': 'ok', 'message': res[0][0]})
+    return jsonify({'status': 'Ok', 'message': res[0][0]})
 
-@app.route("/car/<string:plate_number>/<string:color>/<string:model>/<float:rental_rate>", methods=['POST'])
+@app.route("/car/<string:plate_number>/<string:color>/<string:brand_name>/<string:model>/<string:rental_rate>", methods=['POST'])
 def new_car(plate_number, color, brand_name, model, rental_rate):
     jsn = json.loads(request.data)
 
@@ -61,12 +61,15 @@ def new_car(plate_number, color, brand_name, model, rental_rate):
         jsn['brand_name'],
         jsn['model'],
         jsn['rental_rate'],
+        jsn['image'],
         jsn['owner_id']), True)
 
     if 'Error' in res[0][0]:
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
-    return jsonify({'status': 'Error', 'message': res[0][0]})
+    return jsonify({'status': 'Ok', 'message': res[0][0]})
+
+
 
 @app.after_request
 def add_cors(resp):
