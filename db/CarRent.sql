@@ -87,7 +87,7 @@ $$
 
 create or replace function get_cars(out text, out text, out text, out text, out numeric, out text, out int) returns setof record as
 $$
-	select plate_number, color, brand_name, model, rental_rate, p_image, owner_id from Car;
+	select plate_number, color, brand_name, model, rental_rate, image, owner_id from Car;
 $$
 	language 'sql';
 
