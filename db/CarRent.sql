@@ -85,9 +85,16 @@ $$
 
 -- select new_car('ghx-938', 'silver', 'mitsubishi', 'lancer 1996', 10, 'image1', 1)
 
+-- Get all Cars
 create or replace function get_cars(out text, out text, out text, out text, out numeric, out text, out int) returns setof record as
 $$
 	select plate_number, color, brand_name, model, rental_rate, image, owner_id from Car;
+$$
+	language 'sql';
+
+create or replace function get_carbyid(in p_plate_number text, out text, out text, out text, out numeric, out text, out int) returns setof record as
+$$
+	select color, brand_name, model, rental_rate, image, owner_id from Car where plate_number = p_plate_number;
 $$
 	language 'sql';
 

@@ -9,11 +9,12 @@ app = Flask(__name__)
 def hellow_world():
     return "hellow world!"
 
+# Add new Admin
 @app.route("/admin/<string:email>", methods=['POST'])
 def new_admin(email):
 	jsn = json.loads(request.data)
 
-	res = spcall("new_admin", (
+	res = spcall('new_admin', (
 		jsn['email'],
 		jsn['password']), True)
 
@@ -22,11 +23,12 @@ def new_admin(email):
 
 	return jsonify({'status': 'Ok', 'message': res[0][0]})
 
+# Add new customer
 @app.route("/customer/<string:email>", methods=['POST'])
 def new_customer(email):
     jsn = json.loads(request.data)
 
-    res = spcall("new_customer", (
+    res = spcall('new_customer', (
         jsn['email'],
         jsn['password']), True)
 
@@ -35,11 +37,12 @@ def new_customer(email):
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
+#Add new owner of car
 @app.route("/owner/<string:first_name>/<string:last_name>", methods=['POST'])
 def new_owner(first_name, last_name):
     jsn = json.loads(request.data)
 
-    res = spcall("new_owner", (
+    res = spcall('new_owner', (
         jsn['first_name'],
         jsn['last_name'],
         jsn['address1'],
@@ -55,7 +58,7 @@ def new_owner(first_name, last_name):
 def new_car(plate_number, color, brand_name, model, rental_rate):
     jsn = json.loads(request.data)
 
-    res = spcall("new_car", (
+    res = spcall('new_car', (
         jsn['plate_number'],
         jsn['color'],
         jsn['brand_name'],
@@ -69,6 +72,22 @@ def new_car(plate_number, color, brand_name, model, rental_rate):
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
+@app.route('/cars', methods=['GET'])
+def get_cars():
+    res = spcall('get_cars', ())
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    recs = []
+    for r in res:
+        recs.append({'plate_number': str(r[0]), 'color': str(r[1]), 'brand_name': str(r[2]), 'model': r[3],
+            'rental_rate': str(r[4]), 'image': str(r[5]), 'owner_id': r[6]})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+
+@app.route('/car/<string:plate_number')
+def get_carbyid():
 
 
 @app.after_request
