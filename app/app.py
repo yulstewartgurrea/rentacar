@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 import json, os, sys
 import flask
 from config import *
@@ -6,11 +6,46 @@ from config import *
 app = Flask(__name__)
 
 @app.route('/')
-def hellow_world():
-    return "hellow world!"
+def hello_world():
+    return "hello world!"
+
+# Login
+@app.route('/login', methods=['POST'])
+def login():
+    jsn = json.loads(request.data)
+
+    res = spcall('login', (
+        jsn['email'],
+        jsn['password'],), True)
+
+    if len(res) == 0:
+        return jsonify({'status': 'Invalid credentials'})
+
+    if 'Invalid credentials' in str(res):
+        return jsonify({'status': 'Invalid credentials', 'message': res[0][0]})
+
+    if 'Login successful' in str(res):
+        session['logged_in'] == True
+        user = get_userbyemail(jsn['email'])
+        session['first_name'] = user[0][0]
+        session['last_name'] = user[0][1]
+        session['address1'] = user[0][2]
+        session['address2'] = user[0][3]
+        session['mobile_no'] = user[0][4]
+        session['is_admin'] = user[0][5]
+        session['is_customer'] = user[0][6]
+        return jsonify({'status': 'Login successful'})
+    else:
+        return jsonify({'status': 'Invalid credentials'})
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.pop('logged_in', None)
+    session.clear()
+    return jsonify({'message': 'Successfuly logged out'})
 
 # Add new Admin
-@app.route("/admin/<string:email>", methods=['POST'])
+@app.route('/admin/<string:email>', methods=['POST'])
 def new_admin(email):
 	jsn = json.loads(request.data)
 
@@ -24,7 +59,7 @@ def new_admin(email):
 	return jsonify({'status': 'Ok', 'message': res[0][0]})
 
 # Add new customer
-@app.route("/customer/<string:email>", methods=['POST'])
+@app.route('/customer/<string:email>', methods=['POST'])
 def new_customer(email):
     jsn = json.loads(request.data)
 
@@ -38,7 +73,7 @@ def new_customer(email):
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
 #Add new owner of car
-@app.route("/owner/<string:first_name>/<string:last_name>", methods=['POST'])
+@app.route('/owner/<string:first_name>/<string:last_name>', methods=['POST'])
 def new_owner(first_name, last_name):
     jsn = json.loads(request.data)
 
@@ -54,7 +89,7 @@ def new_owner(first_name, last_name):
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
-@app.route("/car/<string:plate_number>/<string:color>/<string:brand_name>/<string:model>/<string:rental_rate>", methods=['POST'])
+@app.route('/car/<string:plate_number>/<string:color>/<string:brand_name>/<string:model>/<string:rental_rate>', methods=['POST'])
 def new_car(plate_number, color, brand_name, model, rental_rate):
     jsn = json.loads(request.data)
 
@@ -100,7 +135,6 @@ def get_carbyid(plate_number):
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
     
-
 
 @app.after_request
 def add_cors(resp):

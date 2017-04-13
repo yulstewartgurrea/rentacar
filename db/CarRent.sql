@@ -168,6 +168,33 @@ $$
 
 -- select new_customer('c1@gmail.com', 'password');
 
+-- Login
+create or replace function login(p_email text, p_password text) returns text as
+$$
+declare
+	v_email text;
+	v_res text;
+
+begin
+	select into v_email email from UserAccount where email = p_email and password = p_password;
+	if v_email isnull or p_email = '' or p_password = '' then
+		v_res = 'Invalid credentials';
+	else
+		v_res = 'Login successful';
+	end if;
+	return v_res;
+end;
+$$
+	language 'plpgsql';
+
+-- Login role with users email
+create or replace function get_userbyemail(in p_email text, out first_name text, out last_name text, out address1 text, 
+										out address2 text, out mobile_no numeric, out p_is_admin boolean,
+										out p_is_cutomer boolean) returns setof record as
+$$
+	select first_name, last_name, address1, address2, mobile_no, is_admin, is_customer from UserAccount where email = p_email;
+$$
+	language 'sql';
 
 create table Rent(
 	rental_id serial primary key,
