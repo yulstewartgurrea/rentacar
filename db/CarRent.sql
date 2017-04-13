@@ -43,7 +43,20 @@ create table Car(
 	brand_name text,
 	model text,
 	rental_rate numeric,
-	owner_id int references owner(owner_id)
+	image text,
+	owner_id int references Owner(owner_id)
+);
+
+-- select new_car('ghx-938', 'silver', 'mitsubishi', 'lancer 1996', 10, 1)
+
+create table CarPix(
+	cp_id serial primary key,
+	image1 text,
+	image2 text,
+	image3 text,
+	image4 text,
+	plate_number text references Car(plate_number)
+
 );
 
 -- select new_car('ghx-938', 'silver', 'mitsubishi', 'lancer 1996', 10, 1)
@@ -152,6 +165,6 @@ create table Rent(
 	date_returned date,
 	total_bill numeric,
 	overdue_cost numeric,
-	plate_number int references car(plate_number),
-	renter_id int references owner(user_id)
+	plate_number int references Car(plate_number),
+	renter_id int references Owner(user_id)
 );

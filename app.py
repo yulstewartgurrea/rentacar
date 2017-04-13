@@ -26,7 +26,7 @@ def new_admin(email):
 def new_customer(email):
     jsn = json.loads(request.data)
 
-    res = spcall("new_customer",(
+    res = spcall("new_customer", (
         jsn['email'],
         jsn['password']), True)
 
@@ -34,6 +34,39 @@ def new_customer(email):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
     return jsonify({'status': 'ok', 'message': res[0][0]})
+
+@app.route("/owner/<string:first_name>/<string:last_name>", methods=['POST'])
+def new_owner(first_name, last_name):
+    jsn = json.loads(request.data)
+
+    res = spcall("new_owner", (
+        jsn['first_name'],
+        jsn['last_name'],
+        jsn['address1'],
+        jsn['address2'],
+        jsn['mobile_no']), True)
+
+    if 'Error' in res[0][0]:
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    return jsonify({'status': 'ok', 'message': res[0][0]})
+
+@app.route("/car/<string:plate_number>/<string:color>/<string:model>/<float:rental_rate>", methods=['POST'])
+def new_car(plate_number, color, brand_name, model, rental_rate):
+    jsn = json.loads(request.data)
+
+    res = spcall("new_car", (
+        jsn['plate_number'],
+        jsn['color'],
+        jsn['brand_name'],
+        jsn['model'],
+        jsn['rental_rate'],
+        jsn['owner_id']), True)
+
+    if 'Error' in res[0][0]:
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    return jsonify({'status': 'Error', 'message': res[0][0]})
 
 @app.after_request
 def add_cors(resp):
