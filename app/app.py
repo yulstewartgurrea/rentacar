@@ -86,8 +86,20 @@ def get_cars():
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
-@app.route('/car/<string:plate_number')
-def get_carbyid():
+@app.route('/car/<string:plate_number>')
+def get_carbyid(plate_number):
+    res = spcall('get_carbyid', (plate_number,),)
+
+    if 'Error' in str[0][0]:
+        return jsonify({'status': 'Error', 'message': str[0][0]})
+
+    recs = []
+    for r in res:
+        res.append({'color': str(r[0]), 'brand_name': str(r[1]), 'model': str(r[2]), 'rental_rate': str(r[3]),
+            'image': str(r[4]), 'price': str(r[5])})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+    
 
 
 @app.after_request
