@@ -79,6 +79,19 @@ def new_customer(email):
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
+# Get customers
+@app.route('/customers', methods=['GET'])
+def get_customers():
+    res = spcall('get_customers', ())
+
+    recs = []
+    for r in res:
+        recs.append({'user_id': r[0], 'first_name': str(r[1]), 'last_name': str(r[2]), 'address1': str(r[3]),
+                    'address2': str(r[4]), 'mobile_no': str(r[5]), 'email': str(r[6]), 'email': str(r[7]),
+                    'is_admin': str(r[8]), 'is_customer': str(r[9])})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+
 #Add new owner of car
 @app.route('/owner/<string:first_name>/<string:last_name>', methods=['POST'])
 def new_owner(first_name, last_name):
