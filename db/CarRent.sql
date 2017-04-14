@@ -92,7 +92,7 @@ $$
 $$
 	language 'sql';
 
-create or replace function get_carbyid(in p_plate_number text, out text, out text, out text, out numeric, out text, out int) returns setof record as
+create or replace function get_carbyplatenumber(in p_plate_number text, out text, out text, out text, out numeric, out text, out int) returns setof record as
 $$
 	select color, brand_name, model, rental_rate, image, owner_id from Car where plate_number = p_plate_number;
 $$
