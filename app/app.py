@@ -35,7 +35,9 @@ def login():
         session['mobile_no'] = user[0][5]
         session['is_admin'] = user[0][6]
         session['is_customer'] = user[0][7]
-        return jsonify({'status': 'Login successful', 'message': res[0][0]})
+        return jsonify({'status': 'Login successful', 'message': res[0][0], 'owner_id': user[0][0], 'first_name': user[0][1],
+                        'last_name': user[0][2], 'address1': user[0][3], 'address2': user[0][4], 'mobile_no': user[0][5],
+                        'is_admin': user[0][6], 'is_customer': user[0][7]})
     else:
         return jsonify({'status': 'Invalid credentials'})
 
@@ -128,10 +130,10 @@ def get_cars():
 
 @app.route('/car/<plate_number>', methods=['GET'])
 def get_carbyplatenumber(plate_number):
-    res = spcall('get_carbyid', (plate_number,),)
+    res = spcall('get_carbyplatenumber', (plate_number,),)
 
     if 'Error' in str(res[0][0]):
-        return jsonify({'status': 'Error', 'message': str[0][0]})
+        return jsonify({'status': 'Error', 'message': res[0][0]})
 
     recs = []
     for r in res:
