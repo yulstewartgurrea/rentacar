@@ -168,6 +168,14 @@ $$
 
 -- select new_customer('c1@gmail.com', 'password');
 
+-- Get customers
+create or replace function get_customers() returns setof record as
+$$
+	select user_id, first_name, last_name, address1, address2, mobile_no, email,
+			password, is_admin, is_customer from UserAccount;
+$$
+	language 'sql';
+
 -- Login
 create or replace function login(p_email text, p_password text) returns text as
 $$
