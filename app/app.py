@@ -27,17 +27,19 @@ def login():
     if 'Login successful' in str(res):
         session['logged_in'] == True
         user = get_userbyemail(jsn['email'])
-        session['first_name'] = user[0][0]
-        session['last_name'] = user[0][1]
-        session['address1'] = user[0][2]
-        session['address2'] = user[0][3]
-        session['mobile_no'] = user[0][4]
-        session['is_admin'] = user[0][5]
-        session['is_customer'] = user[0][6]
+        session['owner_id'] = user[0][0]
+        session['first_name'] = user[0][1]
+        session['last_name'] = user[0][2]
+        session['address1'] = user[0][3]
+        session['address2'] = user[0][4]
+        session['mobile_no'] = user[0][5]
+        session['is_admin'] = user[0][6]
+        session['is_customer'] = user[0][7]
         return jsonify({'status': 'Login successful'})
     else:
         return jsonify({'status': 'Invalid credentials'})
 
+# Logout
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('logged_in', None)
