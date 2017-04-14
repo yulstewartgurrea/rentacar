@@ -172,7 +172,7 @@ $$
 create or replace function get_customers() returns setof record as
 $$
 	select user_id, first_name, last_name, address1, address2, mobile_no, email,
-			password, is_admin, is_customer from UserAccount;
+			password, is_admin, is_customer from UserAccount where is_customer = TRUE;
 $$
 	language 'sql';
 
