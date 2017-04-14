@@ -39,6 +39,9 @@ def login():
     else:
         return jsonify({'status': 'Invalid credentials'})
 
+def get_userbyemail(email):
+    return spcall("get_userbyemail", (email),)
+
 # Logout
 @app.route('/logout', methods=['POST'])
 def logout():
