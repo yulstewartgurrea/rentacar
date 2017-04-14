@@ -169,7 +169,8 @@ $$
 -- select new_customer('c1@gmail.com', 'password');
 
 -- Get customers
-create or replace function get_customers() returns setof record as
+create or replace function get_customers(out int, out text, out text, out text, out text, out numeric, out text,
+										out text, out boolean, out boolean) returns setof record as
 $$
 	select user_id, first_name, last_name, address1, address2, mobile_no, email,
 			password, is_admin, is_customer from UserAccount where is_customer = TRUE;
