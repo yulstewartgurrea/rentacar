@@ -90,7 +90,7 @@ def get_customers():
                     'address2': str(r[4]), 'mobile_no': str(r[5]), 'email': str(r[6]), 'email': str(r[7]),
                     'is_admin': str(r[8]), 'is_customer': str(r[9])})
 
-    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+    return jsonify({'status': 'Ok', 'entries': re cs, 'count': len(recs)})
 
 #Add new owner of car
 @app.route('/owner/<string:first_name>/<string:last_name>', methods=['POST'])
