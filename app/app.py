@@ -154,6 +154,8 @@ def get_carbyplatenumber(plate_number):
             'image': str(r[4]), 'owner_id': r[5]})
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+
+
     
 
 @app.after_request
