@@ -1,0 +1,250 @@
+/* Global */
+
+body {
+  color: #3a3a3a;
+}
+
+.error {
+    color: #a94442;
+}
+
+/* Register Modal */
+
+#ModalDialog {
+  width: 500px;
+}
+
+#ModalHeader {
+  border-bottom: 0px; 
+  margin-right: 50px; 
+  margin-left: 50px; 
+  margin-top: 50px; 
+  padding: 0px;
+}
+
+#ModalHeader .modal-title {
+  font-size: 40px; 
+  margin-bottom: 0px;
+}
+
+#ModalHeader h4 {
+  margin-top: 0px;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+#ModalBody {
+  margin-right: 50px; 
+  margin-left: 50px; 
+  margin-bottom: 50px; 
+  padding: 0px;
+}
+
+#ColMonth {
+  padding-right: 5px;
+}
+
+#ColDay {
+  padding-left: 10px; 
+  padding-right: 10px;
+}
+
+#ColYear {
+  padding-left: 5px;
+}
+
+#Stats {
+  padding: 0px;
+}
+
+#PanelBody {
+  padding: 0px;
+}
+
+/* Login Collapse */
+
+#CarouselTwo .form-signin {
+  max-width: 300px;
+  padding: 0px;
+  margin: 0 auto;
+}
+
+#CarouselTwo.form-signin .form-signin-heading,
+#CarouselTwo.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+
+#CarouselTwo .form-signin .checkbox {
+  font-weight: normal;
+}
+
+#CarouselTwo .form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+
+#CarouselTwo .form-signin .form-control:focus {
+  z-index: 2;
+}
+
+#CarouselTwo .form-signin input[id="loginuser"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#CarouselTwo .form-signin input[id="loginpass"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+
+/* Header */
+
+#Header {
+  background: rgba(255, 255, 255, 0); 
+  border: 0px;
+  margin-bottom: 0px;
+}
+
+#HeaderLogo {
+  opacity:0.5;
+}
+
+#BrandDropdown {
+  background: rgba(0, 0, 0, 0); 
+  border: none; 
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0); 
+  -webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0); 
+  position: left;
+  margin-left: -15px;
+}
+
+#DropdownDivider {
+  background-color: rgba(0, 0, 0, 0.3); 
+  margin: 10px 12px;
+}
+
+#SearchBar {
+  background-color: rgba(0,0,0,0.2); 
+  border: none;
+}
+
+#SearchToggle {
+  background-color: rgba(0,0,0,0.2); 
+  border: none;
+}
+
+#SearchLogo {
+  color: white; 
+  opacity: 0.5;
+}
+
+/* Carousel */
+
+#Carousel {
+  height: 100%; 
+  width: auto; 
+  margin: 0 auto;
+}
+
+#CarouselOne .crop, #CarouselTwo .crop, #CarouselThree .crop {
+  height: 100%; 
+  overflow:hidden;
+}
+
+#CarouselOne img, #CarouselTwo img, #CarouselThree img {
+  width: auto;
+}
+
+#CarouselOne .carousel-caption {
+  margin-bottom: 160px; 
+  text-align: left; 
+  text-shadow: 1px 1px 50px #000000;
+}
+
+#CarouselTwo .carousel-caption {
+  margin-bottom: 160px; 
+  text-shadow: 1px 1px 50px #000000;
+}
+
+#CarouselThree .carousel-caption {
+  margin-bottom: 160px; 
+  text-align: right; 
+  text-shadow: 1px 1px 50px #000000;
+}
+
+#CarouselOne h1, #CarouselTwo h1, #CarouselThree h1 {
+  font-size: 50px;
+  line-height: 40px;
+}
+
+#CarouselOne .btn, #CarouselThree .btn {
+  padding: 15px 45px;
+}
+
+#CarouselTwo .btn {
+  padding: 15px 60px;
+}
+
+/* Featurette */
+#FeaturetteHeader {
+  text-align: center;
+}
+
+#Featurette .col-lg-4 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#Featurette h2 {
+  font-weight: normal;
+}
+
+#Featurette .col-lg-4 p {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+#Featurette .featurette-divider {
+  margin: 80px 0; 
+}
+
+#Featurette .featurette-title {
+  margin-top: 0px;
+  font-size: 50px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+#Featurette .featurette-heading {
+  margin-top: 200px;
+  font-size: 50px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+#Featurette .btn-lg {
+  padding: 15px 45px;
+}
+
+#FeaturetteProponets {
+  text-align: center;
+}
+
+#Proponets .btn-default {
+  padding: 10px 25px;
+}
+
+#Proponets h1 {
+  margin-bottom: 10px;
+}
+

@@ -1,0 +1,409 @@
+<html>
+
+	<head>
+		<meta charset="utf-8"> <!-- for character ">>" --> 
+		<!-- solve problem for icon's flat UI -->
+
+		<link href="pictures/favicon.png" rel="shortcut icon">
+		<title>Hygeia: Fitness Planner</title>
+
+		<link href="app/static/css/bootstrap-custom.css" rel="stylesheet">
+		<link href="app/static/css/index.css" rel="stylesheet">
+		<script src="app/static/javascript/jquery.js"></script>
+		<script src="app/static/javascript/jquery.validate.js"></script>
+		<script src="app/static/javascript/bootstrap.js"></script>
+		<script src="app/static/javascript/globs.js"></script>
+		<script src="app/static/javascript/jqinit.js"></script>
+	</head>
+
+	<body>
+
+		<!-- Register Modal -->
+		<div class="modal fade" id="SignUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" id="ModalDialog">
+				<div class="modal-content">
+					<!-- Header -->
+					<div class="modal-header" id="ModalHeader">
+						<button type="button" class="close" data-dismiss="modal" data-target="#SignUpModal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">lose</span></button>
+						<h1 class="modal-title">Register</h1> <h4> It is free, and will always be. </h4>
+						<!-- Tabs -->
+						<ul class="nav nav-tabs" role="tablist" id="RegisterTab">
+						  <li class="active"><a href="#UserAccount" role="tab">Account</a> </li>
+						  <li> <a href="#PersonalInfo" role="tab">Info</a> </li>
+						  <li> <a href="#HealthStats" role="tab">Stats</a> </li>
+						  <li> <a href="#PlanGenerator" id="plangen" role="tab">Generate</a> </li>
+						</ul>
+					</div>
+					<!-- Body -->
+					<div class="modal-body" id="ModalBody">				
+						<div class="tab-content">
+							<!-- User Account -->
+							<div class="tab-pane fade in active" id="UserAccount"> <br> <br> 
+								<form class="center form" id="form-signup" method="post" action="javascript: adduser();">	
+									<div class="control-group">
+										<div class="controls">
+											<label class="control-label" for="username">Username:</label>
+											<input name="username" id="username" value="" type="text" class="form-control" placeholder="Username">
+										</div> <br>
+										<div class="controls">
+											<label class="control-label" for="email">Email:</label>
+											<input name="email" id="email" value="" type="text" class="form-control" placeholder="Email">
+										</div> <br>
+										<div class="controls">
+											<label class="control-label" for="password">Password:</label>
+											<input name="password" id="password" value="" type="password" class="form-control" placeholder="Password">
+										</div> <br>
+										<div class="controls">
+											<label class="control-label" for="cpassword">Confirm Password:</label>
+											<input name="cpassword" id="cpassword" value="" type="password" class="form-control" placeholder="Confirm Password">
+										</div> <br>
+									</div> <br> 
+									<button name="submit" id="register" value="" type="submit" class="btn btn-primary btn-block">Register</button> 
+								</form>
+							</div>
+							<!-- Personal Info -->
+							<div class="tab-pane fade" id="PersonalInfo"> <br> <br> 
+								<form class="center form" id="form-userinfo" method="post" action="javascript:setpersonalinfo();">
+									<div class="control-group">
+										<div class="controls">
+											<label class="control-label" for="fullname">Full Name:</label>
+											<input size="50" name="fullname" id="fullname" value="" type="text" class="form-control" placeholder="First Middle Last">
+										</div> <br>		
+										<div class="controls">
+											<label class="control-label" for="birthday">Birthday:</label> 
+											<div class="row"> 
+												<div class="col-md-4" id="ColMonth">
+													<select class="form-control" name="month"  id="month">
+													<option value = "00">Month</option>
+													<option value = "01">January</option>
+													<option value = "02">February</option>
+													<option value = "03">March</option>
+													<option value = "04">April</option>
+													<option value = "05">May</option>
+													<option value = "06">June</option>
+													<option value = "07">July</option>
+													<option value = "08">August</option>
+													<option value = "09">September</option>
+													<option value = "10">October</option>
+													<option value = "11">November</option>
+													<option value = "12">December</option>
+													</select> 
+												</div> 
+												<div class="col-md-4" id="ColDay">
+													<select class="form-control" name="day"  id="day">
+													<option value = "00">Day</option>
+													<option value = "01">01</option>
+													<option value = "02">02</option>
+													<option value = "03">03</option>
+													<option value = "04">04</option>
+													<option value = "05">05</option>
+													<option value = "06">06</option>
+													<option value = "07">07</option>
+													<option value = "08">08</option>
+													<option value = "09">09</option>
+													<option value = "10">10</option>
+													<option value = "11">11</option>
+													<option value = "12">12</option>
+													<option value = "13">13</option>
+													<option value = "14">14</option>
+													<option value = "15">15</option>
+													<option value = "16">16</option>
+													<option value = "17">17</option>
+													<option value = "18">18</option>
+													<option value = "19">19</option>
+													<option value = "20">20</option>
+													<option value = "21">21</option>
+													<option value = "22">22</option>
+													<option value = "23">23</option>
+													<option value = "24">24</option>
+													<option value = "25">25</option>
+													<option value = "26">26</option>
+													<option value = "27">27</option>
+													<option value = "28">28</option>
+													<option value = "29">29</option>
+													<option value = "30">30</option>
+													<option value = "31">31</option>
+													</select> 
+												</div> 
+												<div class="col-md-4" id="ColYear">
+													<select class="form-control" name="year"  id="year">
+													<option value = "00">Year</option>
+													<option value = "2002">2002</option>
+													<option value = "2001">2001</option>
+													<option value = "2000">2000</option>
+													<option value = "1999">1999</option>
+													<option value = "1998">1998</option>
+													<option value = "1997">1997</option>
+													<option value = "1996">1996</option>
+													<option value = "1995">1995</option>
+													<option value = "1994">1994</option>
+													<option value = "1993">1993</option>
+													<option value = "1992">1992</option>
+													<option value = "1991">1991</option>
+													<option value = "1990">1990</option>
+													<option value = "1989">1989</option>
+													<option value = "1988">1988</option>
+													<option value = "1987">1987</option>
+													<option value = "1986">1986</option>
+													<option value = "1985">1985</option>
+													<option value = "1984">1984</option>
+													<option value = "1983">1983</option>
+													<option value = "1982">1982</option>
+													<option value = "1981">1981</option>
+													<option value = "1980">1980</option>
+													<option value = "1979">1979</option>
+													<option value = "1978">1978</option>
+													<option value = "1977">1977</option>
+													<option value = "1976">1976</option>
+													<option value = "1975">1975</option>
+													<option value = "1974">1974</option>
+													<option value = "1973">1973</option>
+													<option value = "1972">1972</option>
+													<option value = "1971">1971</option>
+													<option value = "1970">1970</option>
+													<option value = "1969">1969</option>
+													<option value = "1968">1968</option>
+													<option value = "1967">1967</option>
+													<option value = "1966">1966</option>
+													<option value = "1965">1965</option>
+													<option value = "1965">1964</option>
+													</select> 
+												</div>
+											</div>
+										</div> <br>
+								        <fieldset>
+								        <div class="controls" id="gender"> 
+								        	<label class="control-label" for="gender">Gender:</label>
+								            <div class="row" id="genderrow">
+								              <div class="col-md-3"> 
+								                  <label class="radio-inline"> <input type="radio" name="gender" value="male">&nbsp;&nbsp;Male</label> 
+								              </div> 
+								              <div class="col-md-3"> 
+								                  <label class="radio-inline"> <input type="radio" name="gender" value="female">&nbsp;&nbsp;Female</label> 
+								              </div>
+								            </div> 
+								        </div> <br>
+								        </fieldset>
+								        <button name="submit" id="save" value="" type="submit" class="btn btn-primary btn-block">Save</button>
+								    </div> 
+								</form> 
+							</div>
+
+		
+		<!-- Header  --> 
+		<div class="navbar navbar-inverse navbar-fixed-top" id="Header" role="navigation">
+	      <div class="container">
+	        <div class="navbar-header">
+			  <ul class="nav navbar-nav">
+	            <li class="dropdown">
+	              <a href="#" class="navbar-brand dropdown" data-toggle="dropdown"><p><img src="pictures/logo-b.png" id="HeaderLogo" height="25" width="15"> Hygeia <span class="caret"></span></p></a>
+	              <ul class="dropdown-menu" id="BrandDropdown" role="menu">
+	                <li><a href="#">About</a></li>
+	                <li><a href="#">Contact</a></li>
+	                <li><a href="#">Help</a></li>
+	                <li class="divider" id="DropdownDivider"></li>
+	                <li><a href="#">Terms of Use</a></li>
+	                <li><a href="#">Privacy Policy</a></li>
+	              </ul>
+	            </li>
+	          </ul>
+	        </div>
+	        <div class="navbar-collapse collapse">
+	          <form class="navbar-form navbar-right" role="form">
+	            <div class="input-group">
+				  <input type="text" class="form-control" id="SearchBar">
+				  <span class="input-group-addon" id="SearchToggle"><a href="#"><span class="glyphicon glyphicon-search" id="SearchLogo"></span></span></a>
+				</div>
+	          </form>
+	        </div><!--/.navbar-collapse -->
+	      </div>
+	    </div>
+
+	    <!-- Carousel -->
+		<div id="Carousel" class="carousel slide" data-ride="carousel" >
+			<!-- Indicators -->
+			<ol class="carousel-indicators">
+				<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+				<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+				<li data-target="#carousel-example-generic" data-slide-to="2"></li>
+			</ol>
+			<!-- Wrapper for slides -->
+			<div class="carousel-inner" id="CarouselInner">
+				<div class="item active" id="CarouselOne">
+					<div class="crop">
+					<img src="app/static/pictures/carousel-11.jpg"> </div>
+					<div class="carousel-caption"> <h1> What are you waiting for? </h1>
+						<p class="lead"> Come and join us now. </p>
+						<button class="btn btn-success btn-lg" data-toggle="modal" data-target="#SignUpModal" href="#SignUpModal">Register</button>
+					</div>
+				</div>
+				<div class="item" id="CarouselTwo">
+					<div class="crop">
+					<img src="pictures/carousel-2.jpg"> </div>
+					<!-- Login Collapse -->
+					<div class="carousel-caption"> 
+						<h1> Glad you are back. </h1>
+						<p class="lead"> Be right on track always. </p>
+						<form class="form-signin" action="javascript: logincollapse();" role="form">
+							  	<div id="LogInCollapse" class="collapse">
+							  		<input id="loginuser" type="text" class="form-control" placeholder="Username">
+								    <input id="loginpass" type="password" class="form-control" placeholder="Password">
+								    <label class="checkbox"> <input id="rememberme" type="checkbox" value="true"> Remember me </label>
+								    <p id="LogInOutput"> </p>
+							    </div>
+							  <button type="submit" class="btn btn-primary btn-lg">Log In</button>
+						</form>
+					</div>
+				</div>
+				<div class="item" id="CarouselThree">
+					<div class="crop">
+					<img src="pictures/carousel-3.jpg"> </div>
+					<div class="carousel-caption"> <h1>Know more about everything.  </h1> 
+						<p class="lead"> It is always worth the try. </p>
+						<button class="btn btn-warning btn-lg" data-toggle="modal" data-target="">Browse Plans</button>
+					</div>
+				</div>
+			</div>			<!-- Controls -->
+			<a class="left carousel-control" href="#Carousel" role="button" data-slide="prev">
+			<span class="glyphicon glyphicon-chevron-left"></span>
+			</a>
+			<a class="right carousel-control" href="#Carousel" role="button" data-slide="next">
+			<span class="glyphicon glyphicon-chevron-right"></span>
+			</a>
+	    </div>
+
+		<!-- Featurettes -->
+	    <div class="container" id="Featurette">
+
+	      <!-- Example row of columns -->
+	      <br> <br> <br> <br>
+	      <div class="row featurette" id="FeaturetteHeader">
+	      	  <img src="pictures/logo-b.png" align="middle"> <br> <br>
+			  <h1 class="featurette-title">Hygeia.<span class="text-muted"><br>Your new colleague in town.</span></h1> <br>
+			  <p class="lead"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p> <br>
+			  <button class="btn btn-default btn-lg" href="#">Take a Tour</button>
+		  </div>
+
+	      <hr class="featurette-divider">
+
+		  <div class="row featurette"> 
+			<div class="col-md-7">
+			  <h1 class="featurette-heading">Create your own Plan. <span class="text-muted"><br>Oh yes, it's that easy.</span></h1>
+			  <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo. </p> 
+			  <button class="btn btn-default btn-lg" href="#">Know More »</button>
+			</div>
+			<div class="col-md-5">
+			  <img class="featurette-image img-responsive" src="pictures/featurette-2.jpg">
+			</div>
+		  </div>
+
+		  <hr class="featurette-divider">
+
+		  <div class="row featurette">
+			<div class="col-md-5"> 
+			  <img class="featurette-image img-responsive" src="pictures/featurette-4.jpg">
+			</div>
+			<div class="col-md-7"> 
+			  <h2 class="featurette-heading">Record your Progress. <span class="text-muted"><br>See for yourself.</span></h2>
+			  <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+			  <button class="btn btn-default btn-lg" href="#">View Details »</button>
+			</div>
+		  </div>
+
+		  <hr class="featurette-divider">
+
+		  <div class="row featurette">
+			<div class="col-md-7">
+			  <h2 class="featurette-heading">Keep yourself Fit. <span class="text-muted"><br>Always.</span></h2>
+			  <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+			  <button class="btn btn-default btn-lg" href="#">About Hygeia »</button>
+			</div>
+			<div class="col-md-5">
+			  <img class="featurette-image img-responsive" src="pictures/featurette-5.jpg">
+			</div>
+		  </div>
+
+		  <hr class="featurette-divider">
+
+		  <!-- Proponets -->
+		  
+		  <div class="row featurette" id="FeaturetteProponets">
+			  <h1 class="featurette-title">The people behind this project.</h1> 
+			  <span class="text-muted"><p class="lead"> Possibly the next Zuckerbergs. </p> </span>
+			  <button class="btn btn-default btn-lg" href="#">Follow Jug-Ah on Github »</button> 
+
+		  	  <br> <br> <br> <br> <br>
+
+			  <div id="Proponets">
+			  <div class="row">
+
+				<div class="col-lg-4">
+				  <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+				  <h2>silver6464</h2>
+				  <h4><span class="text-muted">Liver Lover Boy.</span></h4> 
+				  <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p> 
+				  <p><a class="btn btn-default" href="#" role="button">Follow »</a></p>
+				</div>
+
+				<div class="col-lg-4">
+				  <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+				  <h2>anobilisgorse</h2>
+				  <h4><span class="text-muted">Classified Information.</span></h4>
+				  <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p> 
+				  <p><a class="btn btn-default" href="#" role="button">Follow »</a></p>
+
+				</div>
+
+				<div class="col-lg-4">
+				  <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+				  <h2>jorenerza</h2>
+				  <h4><span class="text-muted">The Next Zuckerberg.</span></h4> 
+				  <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit.</p> 
+				  <p><a class="btn btn-default" href="#" role="button">Follow »</a></p>
+				</div>
+			  </div>
+			  
+			  <br>
+
+			  <div class="row">
+			  	<div class="col-lg-4">
+				  <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+				  <h2>arelenyosoya</h2>
+				  <h4><span class="text-muted">The Next Zuckerberg.</span></h4> 
+				  <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p> 
+				  <p><a class="btn btn-default" href="#" role="button">Follow »</a></p>
+				</div>
+
+				<div class="col-lg-4">
+				  <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+				  <h2>breezyrush</h2>
+				  <h4><span class="text-muted">Jug-Ah's Adviser</span></h4> 
+				  <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p> 
+				  <p><a class="btn btn-default" href="#" role="button">Follow »</a></p>
+
+				</div>
+
+				<div class="col-lg-4">
+				  <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+				  <h2>lorainefaithparagoso</h2>
+				  <h4><span class="text-muted">I Hope You Are Happy.</span></h4> 
+				  <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit.</p> 
+				  <p><a class="btn btn-default" href="#" role="button">Follow »</a></p>
+				</div>
+			  </div>
+			  </div>
+			   <hr class="footer-divider">
+			</div>
+
+			<!-- Footer -->
+			<div class="footer">
+				<p class="pull-right"> <a href="#">Terms of Use</a> · <a href="#">Privacy</a> · <a href="#">Back to top</a></p>
+				<p>© 2014 Jug-Ah Inc. · <a href="#">About Us</a> · <a href="#">Contact Us</a> · <a href="#">Help?</a></p>
+			</div>
+	    </div> 
+
+
+	</body>
+	
+</html>
