@@ -39,3 +39,15 @@ function shakeModal(){
                 $('#loginModal .modal-dialog').removeClass('shake'); 
     }, 1000 ); 
 }
+
+function logout() {
+    $.ajax({
+        url: 'http://127.0.0.1:5000/logout',
+        type: 'POST',
+        success: function(res){
+            alert(res.message);
+            window.location.href="../login.html"
+        }
+
+    });
+}
