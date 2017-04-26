@@ -13,14 +13,18 @@ function login() {
         data: data,
         dataType: 'json',
         success: function(res) {
-            if(res.status === 'Login successful' && res.admin===true && res.active===true) {
+            console.log(res);
+            if(res.status==='Login successful' && res.is_admin===true && res.is_customer===false) {
                 alert('Login Successful');
-                window.location.href="../partials/admin/dashboard.html";
-            } else if(res.status === 'Login successful' && res.customer===true && res.active===true) {
-                alert('Login Successful');
-                window.location.href="../partials/customer/shop.html";
-            } else {
+                window.location.href="partials/admin/dashboard.html";
+            } 
+            // else if(res.status === 'Login successful' && res.customer===true && res.active===true) {
+                // alert('Login Successful');
+                // window.location.href="../partials/customer/shop.html";
+            // } 
+            else {
                    shakeModal();
+                   alert('error');
             }
         }
 

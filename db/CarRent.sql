@@ -197,7 +197,7 @@ $$
 	language 'plpgsql';
 
 -- Login role with users email
-create or replace function get_userbyemail(in p_email text, out int, out text, out text, out  text, 
+create or replace function get_userbyemail(in p_email text, out int, out text, out text, out text, 
 										out text, out numeric, out boolean, out boolean) returns setof record as
 $$
 	select user_id, first_name, last_name, address1, address2, mobile_no, is_admin, is_customer from UserAccount where email = p_email;

@@ -25,9 +25,8 @@ def login():
         return jsonify({'status': 'Invalid credentials', 'message': res[0][0]})
 
     if 'Login successful' in str(res):
-        session['logged_in'] == True
         user = get_userbyemail(jsn['email'])
-        session['owner_id'] = user[0][0]
+        session['user_id'] = user[0][0]
         session['first_name'] = user[0][1]
         session['last_name'] = user[0][2]
         session['address1'] = user[0][3]
@@ -35,14 +34,14 @@ def login():
         session['mobile_no'] = user[0][5]
         session['is_admin'] = user[0][6]
         session['is_customer'] = user[0][7]
-        return jsonify({'status': 'Login successful', 'message': res[0][0], 'owner_id': user[0][0], 'first_name': user[0][1],
-                        'last_name': user[0][2], 'address1': user[0][3], 'address2': user[0][4], 'mobile_no': user[0][5],
-                        'is_admin': user[0][6], 'is_customer': user[0][7]})
+        return jsonify({'status': 'Login successful', 'message': res[0][0], 'id': session['user_id'], 'first_name': session['first_name'], 
+                    'last_name': session['last_name'], 'address1': session['address1'], 'address2': session['address2'], 
+                    'mobile_no': session['mobile_no'], 'is_admin': session['is_admin'], 'is_customer': session['is_customer']})
     else:
         return jsonify({'status': 'Invalid credentials'})
 
 def get_userbyemail(email):
-    return spcall("get_userbyemail", (email),)
+    return spcall("get_userbyemail", (email,))
 
 # Logout
 @app.route('/logout', methods=['POST'])
@@ -90,7 +89,7 @@ def get_customers():
                     'address2': str(r[4]), 'mobile_no': str(r[5]), 'email': str(r[6]), 'email': str(r[7]),
                     'is_admin': str(r[8]), 'is_customer': str(r[9])})
 
-    return jsonify({'status': 'Ok', 'entries': re cs, 'count': len(recs)})
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
 #Add new owner of car
 @app.route('/owner/<string:first_name>/<string:last_name>', methods=['POST'])
