@@ -3,7 +3,7 @@ function login() {
     var email = $("#email").val();
     var password = $("#password").val();
 
-    var data = JSON.stringify({"email": email, "password": password});
+    var data = JSON.stringify({'email': email, 'password': password});
 
     $.ajax({
         url: 'http://127.0.0.1:5000/login',
@@ -30,6 +30,26 @@ function login() {
     });
 }
 
+function register() {
+
+    var reg_email = $('#reg_email').val();
+    var reg_password = $('#reg_password').val();
+
+    var date = JSON.stringify({'email': reg_email, 'password': reg_password})
+
+    $.ajax({
+        url:
+        type:
+        contentType:
+        data:
+        dataType:
+        success: function(res){
+            
+        }
+
+    });
+}
+
 function shakeModal(){
     $('#loginModal .modal-dialog').addClass('shake');
              $('.error').addClass('alert alert-danger').html("Invalid email/password combination");
@@ -44,8 +64,9 @@ function logout() {
         url: 'http://127.0.0.1:5000/logout',
         type: 'POST',
         success: function(res){
+            console.log(res);
             alert(res.message);
-            window.location.href="../login.html"
+            window.location.href="../../login_register_modal.html"
         }
 
     });
