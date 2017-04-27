@@ -108,7 +108,7 @@ def new_owner(first_name, last_name):
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
-@app.route('/car/<string:plate_number>/<string:color>/<string:brand_name>/<string:model>/<string:rental_rate>', methods=['POST'])
+@app.route('/car/<string:plate_number>/<string:brand_name>/<string:model>/<string:color>/<string:rental_rate>', methods=['POST'])
 def new_car(plate_number, color, brand_name, model, rental_rate):
     jsn = json.loads(request.data)
 

@@ -30,9 +30,9 @@ $(document).ready(function(){
 
 });
 
-window.onload = function(){
-    $("#userprofile").hide();
-    $("#addcar").hide();
-    $("#tableforcars").hide();
+// window.onload = function(){
+//     $("#userprofile").hide();
+//     $("#addcar").hide();
+//     $("#tableforcars").hide();
 
-} 
+// } 
