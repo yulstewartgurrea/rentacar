@@ -89,10 +89,3 @@ function logout() {
 
     });
 }
-
-window.onload = function(){
-    $("#userprofile").hide();
-    $("#addcar").hide();
-    $("#tableforcars").hide();
-
-} 
