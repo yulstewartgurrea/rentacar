@@ -24,7 +24,6 @@ function login() {
             // } 
             else {
                    shakeModal();
-                   alert('error');
             }
         }
 
