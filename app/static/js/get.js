@@ -34,13 +34,14 @@ function getcars() {
 function getcarshtml(car_owner_id, car_plate_numbers, car_brand_name, car_model, car_color, car_rental_rate, car_image) {
     return '<tr> ' +
             '<td>' + car_owner_id + '</td>' +
-            '<td>'+ '<button type="button" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">' + car_plate_number + '</button>'+'</td>' +
-            // '<td>' + '<a href="#" onclick="getcardetails('+car_plate_number+');">' +car_plate_number + '</a>'+'</td>' +            
+            '<td>'+ '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">' + car_plate_number + '</a>'+'</td>' +
             '<td>' + car_brand_name + '</td>' +
             '<td>' + car_model + '</td>' +
             '<td>' + car_color + '</td>' +
             '<td>' + car_rental_rate + '</td>' +
-            '<td>' + car_image + '</td>' +           
+            '<td>' + car_image + '</td>' +
+            '<td>' + '<div class="ti-pencil-alt"> update' + '</td>' + 
+            '<td>' + '<div class="ti-trash"> delete' + '</td>' +                     
             '</tr>'
 }
 
