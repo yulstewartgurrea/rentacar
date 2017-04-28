@@ -1,27 +1,40 @@
-function getcustomer(email_address, is_customer, is_active) {
+function getcarhtml(owner_id, plate_number, brand_name, model, color, rental_rate, image) {
     return '<tr> ' +
-            '<td>' + email_address + '</td>' +
-            '<td>' + is_customer + '</td>' +
-            '<td>' + is_active + '</td>' +
+            '<td>' + owner_id + '</td>' +
+            '<td>' + plate_number + '</td>' +
+            '<td>' + brand_name + '</td>' +
+            '<td>' + model + '</td>' +
+            '<td>' + color + '</td>' +
+            '<td>' + rental_rate + '</td>' +
+            '<td>' + image + '</td>' +
             '</tr>'
 }
 
-function getcustomers() {
+function getcars() {
     $.ajax({
-        url: 'http://127.0.0.1:5000/api/get/customers',
+        url: 'http://127.0.0.1:5000/cars',
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            $("#customers").html("");
-            if(res.status=='ok'){
+            $("#cars").html("");
+            if(res.status=='Ok'){
                 for (i=0; i<res.count; i++) {
-                    email_address = res.entries[i].email_address;
-                    is_customer= res.entries[i].is_customer;
-                    is_active = res.entries[i].is_active;
-                    $("#customers").append(getcustomer(email_address, is_customer, is_active));
+                    plate_number = res.entries[i].plate_number;
+                    brand_name = res.entries[i].brand_name;
+                    model = res.entries[i].model;
+                    color = res.entries[i].color;
+                    rental_rate = res.entries[i].rental_rate;
+                    image = res.entries[i].image;
+                    owner_id = res.entries[i].owner_id;
+                    $("#cars").append(getcarhtml(owner_id, plate_number, brand_name, model, color, rental_rate, image));
                 }
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addcarpage").hide();
+                $("#carspage").show();
+                $("#addownerpage").hide();
             } else {
-                $("#customers").html("");
+                $("#cars").html("");
                 alert('Error')
             }
         }
