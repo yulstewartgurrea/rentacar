@@ -94,7 +94,7 @@ $$
 
 create or replace function get_carbyplatenumber(in p_plate_number text, out text, out text, out text, out numeric, out text, out int) returns setof record as
 $$
-	select color, brand_name, model, rental_rate, image, owner_id from Car where plate_number = p_plate_number;
+	select car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id from Car where car_plate_number = p_plate_number;
 $$
 	language 'sql';
 

@@ -135,27 +135,24 @@ def get_cars():
 
     recs = []
     for r in res:
-        recs.append({'plate_number': str(r[0]), 'color': str(r[1]), 'brand_name': str(r[2]), 'model': r[3],
-            'rental_rate': str(r[4]), 'image': str(r[5]), 'owner_id': r[6]})
+        recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_brand_name': str(r[2]), 'car_model': r[3],
+            'car_rental_rate': str(r[4]), 'car_image': str(r[5]), 'car_owner_id': r[6]})
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
-@app.route('/car/<plate_number>', methods=['GET'])
-def get_carbyplatenumber(plate_number):
-    res = spcall('get_carbyplatenumber', (plate_number,),)
+@app.route('/car/<string:car_plate_number>', methods=['GET'])
+def get_carbyplatenumber(car_plate_number):
+    res = spcall('get_carbyplatenumber', (car_plate_number,), )
 
     if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
     recs = []
     for r in res:
-        recs.append({'color': str(r[0]), 'brand_name': str(r[1]), 'model': str(r[2]), 'rental_rate': str(r[3]),
-            'image': str(r[4]), 'owner_id': r[5]})
+        recs.append({'car_color': str(r[0]), 'car_brand_name': str(r[1]), 'car_model': str(r[2]), 'car_rental_rate': str(r[3]),
+            'car_image': str(r[4]), 'car_owner_id': r[5]})
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
-
-
-    
 
 @app.after_request
 def add_cors(resp):
