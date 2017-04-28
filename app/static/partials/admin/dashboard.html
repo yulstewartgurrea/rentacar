@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="../../paper-dashboard/assets/img/apple-icon.png">
+	<!-- <link rel="icon" type="image/png" sizes="96x96" href="../../paper-dashboard/assets/img/favicon.png"> -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
 	<title>Paper Dashboard by Creative Tim</title>
@@ -558,28 +558,31 @@ But that's the difference in our opinions.</textarea>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>First Name</label>
-                                                <input type="text" class="form-control border-input" placeholder="Company" value="Creative Code Inc.">
+                                                <input type="text" class="form-control border-input" id="owner_first_name">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Last Name<label>
-                                                <input type="text" class="form-control border-input" placeholder="Username" value="michael23">
+                                                <label>Last Name</label>
+                                                <input type="text" class="form-control border-input" id="owner_last_name">
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="form-group">
-                                                <label></label>
-                                                <input type="text" class="form-control border-input" placeholder="Company" value="Chet">
+                                                <label>Address 1</label>
+                                                <input type="text" class="form-control border-input" id="owner_address1">
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Model</label>
-                                                <input type="text" class="form-control border-input" placeholder="Last Name" value="Faker">
+                                                <label>Address 2</label>
+                                                <input type="text" class="form-control border-input" id="owner_address2">
                                             </div>
                                         </div>
                                     </div>
@@ -587,28 +590,16 @@ But that's the difference in our opinions.</textarea>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Color</label>
-                                                <input type="text" class="form-control border-input" placeholder="Home Address" value="Melbourne, Australia">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Image</label>
-                                                <input type="text" class="form-control border-input" placeholder="Home Address" value="Melbourne, Australia">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Rental Rate</label>
-                                                <input type="text" class="form-control border-input" placeholder="City" value="Melbourne">
+                                                <label>Mobile No.</label>
+                                                <input type="text" class="form-control border-input" id="owner_mobile_no">
                                             </div>
                                         </div>
                                     </div>
                                     
                                     <div class="text-center">
-                                        <button class="btn btn-info btn-fill btn-wd">Save</button>
+                                        <input type="button" class="btn btn-info btn-fill btn-wd" onclick="addowner();" value="Save">
                                     </div>
-                                    <div class="clearfix"></div>
+                                    
                                 </form>
                             </div>
                         </div>
@@ -633,13 +624,13 @@ But that's the difference in our opinions.</textarea>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Plate Number</label>
-                                                <input type="text" class="form-control border-input" placeholder="Company" value="Creative Code Inc.">
+                                                <input type="text" class="form-control border-input" id="car_plate_number">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Owner</label>
-                                                <input type="text" class="form-control border-input" placeholder="Username" value="michael23">
+                                                <input type="text" class="form-control border-input" id="car_owner_id">
                                             </div>
                                         </div>
                                     </div>
@@ -648,13 +639,13 @@ But that's the difference in our opinions.</textarea>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Brand Name</label>
-                                                <input type="text" class="form-control border-input" placeholder="Company" value="Chet">
+                                                <input type="text" class="form-control border-input" id="car_brand_name">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Model</label>
-                                                <input type="text" class="form-control border-input" placeholder="Last Name" value="Faker">
+                                                <input type="text" class="form-control border-input" id="car_model">
                                             </div>
                                         </div>
                                     </div>
@@ -663,27 +654,27 @@ But that's the difference in our opinions.</textarea>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Color</label>
-                                                <input type="text" class="form-control border-input" placeholder="Home Address" value="Melbourne, Australia">
+                                                <input type="text" class="form-control border-input" id="car_color">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Image</label>
-                                                <input type="text" class="form-control border-input" placeholder="Home Address" value="Melbourne, Australia">
+                                                <input type="text" class="form-control border-input" id="car_image">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Rental Rate</label>
-                                                <input type="text" class="form-control border-input" placeholder="City" value="Melbourne">
+                                                <input type="text" class="form-control border-input" id="car_rental_rate">
                                             </div>
                                         </div>
                                     </div>
                                     
                                     <div class="text-center">
-                                        <button class="btn btn-info btn-fill btn-wd">Save</button>
+                                        <input type="button" class="btn btn-info btn-fill btn-wd" onclick="addcar();" value="Save">
                                     </div>
-                                    <div class="clearfix"></div>
+                                    <!-- <div class="clearfix"></div> -->
                                 </form>
                             </div>
                         </div>

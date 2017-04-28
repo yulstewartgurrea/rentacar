@@ -92,34 +92,34 @@ def get_customers():
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
 #Add new owner of car
-@app.route('/owner/<string:first_name>/<string:last_name>', methods=['POST'])
-def new_owner(first_name, last_name):
+@app.route('/owner/<string:owner_first_name>/<string:owner_last_name>', methods=['POST'])
+def new_owner(owner_first_name, owner_last_name):
     jsn = json.loads(request.data)
 
     res = spcall('new_owner', (
-        jsn['first_name'],
-        jsn['last_name'],
-        jsn['address1'],
-        jsn['address2'],
-        jsn['mobile_no']), True)
+        jsn['owner_first_name'],
+        jsn['owner_last_name'],
+        jsn['owner_address1'],
+        jsn['owner_address2'],
+        jsn['owner_mobile_no'],), True)
 
     if 'Error' in res[0][0]:
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
-@app.route('/car/<string:plate_number>/<string:brand_name>/<string:model>/<string:color>/<string:rental_rate>', methods=['POST'])
-def new_car(plate_number, color, brand_name, model, rental_rate):
+@app.route('/car/<string:car_plate_number>/<string:car_brand_name>/<string:car_model>/<string:car_color>', methods=['POST'])
+def new_car(car_plate_number, car_color, car_brand_name, car_model):
     jsn = json.loads(request.data)
 
     res = spcall('new_car', (
-        jsn['plate_number'],
-        jsn['color'],
-        jsn['brand_name'],
-        jsn['model'],
-        jsn['rental_rate'],
-        jsn['image'],
-        jsn['owner_id']), True)
+        jsn['car_plate_number'],
+        jsn['car_color'],
+        jsn['car_brand_name'],
+        jsn['car_model'],
+        jsn['car_rental_rate'],
+        jsn['car_image'],
+        jsn['car_owner_id']), True)
 
     if 'Error' in res[0][0]:
         return jsonify({'status': 'Error', 'message': res[0][0]})

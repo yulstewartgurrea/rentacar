@@ -2,11 +2,11 @@
 
 create table Owner(
 	owner_id serial primary key,
-	first_name text,
-	last_name text,
-	address1 text,
-	address2 text,
-	mobile_no numeric
+	owner_first_name text,
+	owner_last_name text,
+	owner_address1 text,
+	owner_address2 text,
+	owner_mobile_no numeric
 );
 
 -- Add Owner
@@ -23,7 +23,7 @@ begin
 			if p_fname = '' or p_lname = '' or p_add1 = '' or p_add2 = '' or p_mobile_no = null then 
 				v_res = 'Error';
 			else 
-				insert into Owner(first_name, last_name, address1, address2, mobile_no)
+				insert into Owner(owner_first_name, owner_last_name, owner_address1, owner_address2, owner_mobile_no)
 						values(p_fname, p_lname, p_add1, p_add2, p_mobile_no);
 						v_res = 'Ok';
 			end if;
@@ -38,13 +38,13 @@ $$
 -- select new_owner('o1', 'o1', 'add1', 'add1', 1);
 
 create table Car(
-	plate_number text primary key,
-	color text,
-	brand_name text,
-	model text,
-	rental_rate numeric,
-	image text,
-	owner_id int references Owner(owner_id)
+	car_plate_number text primary key,
+	car_color text,
+	car_brand_name text,
+	car_model text,
+	car_rental_rate numeric,
+	car_image text,
+	car_owner_id int references Owner(owner_id)
 );
 
 create table CarPix(
@@ -66,12 +66,12 @@ declare
 	v_res text;
 
 begin 
-	select into v_plate_number from Car where plate_number = p_plate_number;
+	select into v_plate_number from Car where car_plate_number = p_plate_number;
 		if v_plate_number isnull then
 			if p_plate_number = '' or p_color = '' or p_brand_name = '' or p_model = '' or p_rental_rate = null or p_owner_id = null or p_image = null then
 				v_res = 'Error';
 			else
-				insert into Car(plate_number, color, brand_name, model, rental_rate, image, owner_id)
+				insert into Car(car_plate_number, car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id)
 					values(p_plate_number, p_color, p_brand_name, p_model, p_rental_rate, p_image, p_owner_id);
 					v_res = 'Ok';
 			end if;
@@ -88,7 +88,7 @@ $$
 -- Get all Cars
 create or replace function get_cars(out text, out text, out text, out text, out numeric, out text, out int) returns setof record as
 $$
-	select plate_number, color, brand_name, model, rental_rate, image, owner_id from Car;
+	select car_plate_number, car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id from Car;
 $$
 	language 'sql';
 
