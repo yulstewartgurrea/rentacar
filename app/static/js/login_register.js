@@ -20,13 +20,16 @@ function login() {
                 $("#userprofile").hide();
                 $("#addcar").hide();
                 $("#tableforcars").hide();
-            } 
-            // else if(res.status === 'Login successful' && res.customer===true && res.active===true) {
-                // alert('Login Successful');
-                // window.location.href="../partials/customer/shop.html";
-            // } 
-            else {
-                   shakeModalLogin();
+                $("#updatecarpage").hide();
+            } else if(res.status==='Login successful' && res.is_admin===false && res.is_customer===true) {
+                alert('Login Successful');
+                window.location.href="partials/customer/ecommerce.html";
+                $("#shoppage").hide();
+                $("#cardetailspage").hide();
+                $("#cartpage").hide();
+                $("#checkoutpage").hide();
+            } else {
+                shakeModalLogin();
             }
         }
 

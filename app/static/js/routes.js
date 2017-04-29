@@ -51,14 +51,8 @@ function showaddownerpage() {
 function showshophomepage() {
 	$("#homepage").show();
 	$("#shoppage").hide();
-	$("#shoppage2").hide();
-	$("#shoppage3").hide();
-	$("#shoppage4").hide();
 	$("#cardetailspage").hide();
-	$("#cardetailspage2").hide();
 	$("#cartpage").hide();
-	$("#cartpage2").hide();
 	$("#checkoutpage").hide();
-	$("#checkoutpage2").hide();
-	$("#checkoutpage3").hide();
+
 }	
