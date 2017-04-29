@@ -44,7 +44,8 @@ create table Car(
 	car_model text,
 	car_rental_rate numeric,
 	car_image text,
-	car_owner_id int references Owner(owner_id)
+	car_owner_id int references Owner(owner_id),
+	car_category_name text references Category(category_name)
 );
 
 create table CarPix(
@@ -59,7 +60,8 @@ create table CarPix(
 
 -- Add Car
 
-create or replace function new_car(p_plate_number text, p_color text, p_brand_name text, p_model text, p_rental_rate numeric, p_image text, p_owner_id int) returns text as
+create or replace function new_car(p_plate_number text, p_color text, p_brand_name text, p_model text, p_rental_rate numeric,
+									p_image text, p_owner_id int, p_category_name text) returns text as
 $$
 declare 
 	v_plate_number text;
@@ -68,11 +70,12 @@ declare
 begin 
 	select into v_plate_number from Car where car_plate_number = p_plate_number;
 		if v_plate_number isnull then
-			if p_plate_number = '' or p_color = '' or p_brand_name = '' or p_model = '' or p_rental_rate = null or p_owner_id = null or p_image = null then
+			if p_plate_number = '' or p_color = '' or p_brand_name = '' or p_model = '' or p_rental_rate = null or
+				p_owner_id = null or p_image = null or p_category_name = null  then
 				v_res = 'Error';
 			else
-				insert into Car(car_plate_number, car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id)
-					values(p_plate_number, p_color, p_brand_name, p_model, p_rental_rate, p_image, p_owner_id);
+				insert into Car(car_plate_number, car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id, car_category_name)
+					values(p_plate_number, p_color, p_brand_name, p_model, p_rental_rate, p_image, p_owner_id, p_category_name);
 					v_res = 'Ok';
 			end if;
 		else
@@ -83,12 +86,12 @@ end;
 $$
 	language 'plpgsql';
 
--- select new_car('ghx-938', 'silver', 'mitsubishi', 'lancer 1996', 10, 'image1', 1)
+-- select new_car('ghx-938', 'silver', 'mitsubishi', 'lancer 1996', 10, 'image1', 1, "compact")
 
 -- Get all Cars
-create or replace function get_cars(out text, out text, out text, out text, out numeric, out text, out int) returns setof record as
+create or replace function get_cars(out text, out text, out text, out text, out numeric, out text, out int, out text) returns setof record as
 $$
-	select car_plate_number, car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id from Car;
+	select car_plate_number, car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id, category_name from Car;
 $$
 	language 'sql';
 
@@ -140,7 +143,6 @@ $$
 -- select new_admin('yulgurz@gmail.com', 'password');
 
 -- New Customer
-
 create or replace function new_customer(p_email text, p_password text) returns text as
 $$
 declare 
@@ -214,3 +216,46 @@ create table Rent(
 	plate_number text references Car(plate_number),
 	renter_id int references Owner(user_id)
 );
+
+create table Category(
+	category_name text primary key
+);
+
+-- New category
+create or replace function new_category(p_category_name text) returns text as
+$$
+declare
+	v_category_name text;
+	v_res text;
+
+begin
+	select into v_category_name category_name from Category where category_name = p_category_name;
+
+		if v_category_name isnull then
+			if p_category_name = '' then
+				v_res = 'Error';
+			else
+				insert into Category(category_name)
+					values(p_category_name);
+					v_res = 'Ok';
+			end if;
+		else
+			v_res = 'Category already exists';
+		end if;
+		return v_res;
+end;
+$$
+	language 'plpgsql';
+
+-- select new_category('SUV');
+-- select new_category('Compact Vehicle');
+-- select new_category('Van');
+-- select new_category('Pick-Up Truck');
+-- select new_category('Construction');
+
+-- Get category 
+create or replace function get_category(out text) returns setof text as 
+$$
+	select category_name from Category;
+$$
+	language 'sql';
