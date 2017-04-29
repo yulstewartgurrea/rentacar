@@ -17,17 +17,9 @@ function login() {
             if(res.status==='Login successful' && res.is_admin===true && res.is_customer===false) {
                 alert('Login Successful');
                 window.location.href="partials/admin/dashboard.html";
-                $("#userprofile").hide();
-                $("#addcar").hide();
-                $("#tableforcars").hide();
-                $("#updatecarpage").hide();
             } else if(res.status==='Login successful' && res.is_admin===false && res.is_customer===true) {
                 alert('Login Successful');
                 window.location.href="partials/customer/ecommerce.html";
-                $("#shoppage").hide();
-                $("#cardetailspage").hide();
-                $("#cartpage").hide();
-                $("#checkoutpage").hide();
             } else {
                 shakeModalLogin();
             }
