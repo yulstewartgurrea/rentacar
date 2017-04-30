@@ -86,7 +86,8 @@ end;
 $$
 	language 'plpgsql';
 
--- select new_car('ghx-938', 'silver', 'mitsubishi', 'lancer 1996', 10, 'image1', 1, "compact")
+-- select new_car('ghx-938', 'silver', 'mitsubishi', 'lancer 1996', 10, 'image1', 1, 'Compact Vehicle');
+-- select new_car('kdh-662', 'gold', 'isuzu', 'crosswind 2006', 10, 'image1', 1, 'MPV');
 
 -- Get all Cars
 create or replace function get_cars(out text, out text, out text, out text, out numeric, out text, out int, out text) returns setof record as
@@ -95,11 +96,24 @@ $$
 $$
 	language 'sql';
 
+-- Get car by plate_number
 create or replace function get_carbyplatenumber(in p_plate_number text, out text, out text, out text, out numeric, out text, out int) returns setof record as
 $$
 	select car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id from Car where car_plate_number = p_plate_number;
 $$
 	language 'sql';
+
+-- select get_carbyplatenumber('ghx-938');	
+
+-- Get car by category
+create or replace function get_carbycategory(in p_category_name text, out text,out text, out text, out text, out numeric, out text, out int) returns setof record as
+$$
+	select car_plate_number, car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id from Car where car_category_name = p_category_name;
+$$
+	language 'sql';
+
+-- select get_carbycategory('Compact Vehicle');
+
 
 create table UserAccount(
 	user_id serial primary key,
@@ -257,5 +271,42 @@ $$
 create or replace function get_category(out text) returns setof text as 
 $$
 	select category_name from Category;
+$$
+	language 'sql';
+
+create table Brand(
+	brandname text primary key
+);
+
+-- New brandname
+create or replace function new_brand(p_brandname text) returns text as
+$$
+declare
+	v_brandname text;
+	v_res text;
+
+begin
+	select into v_brandname brandname from Brand where brandname = p_brandname;
+
+		if v_brandname isnull then
+			if p_brandname = '' then
+				v_res = 'Error';
+			else
+				insert into Brand(brandname)
+					values(p_brandname);
+					v_res = 'Ok';
+			end if;
+		else
+			v_res = 'Brand already exists';
+		end if;
+		return v_res;
+end;
+$$
+	language 'plpgsql';
+
+-- Get Brand
+create or replace function get_brand(out text) returns setof text as
+$$
+	select brandname from Brand;
 $$
 	language 'sql';
