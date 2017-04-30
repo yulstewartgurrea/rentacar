@@ -99,7 +99,7 @@ $$
 -- Get car by plate_number
 create or replace function get_carbyplatenumber(in p_plate_number text, out text, out text, out text, out numeric, out text, out int) returns setof record as
 $$
-	select car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id from Car where car_plate_number = p_plate_number;
+	select car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id from Car where car_plate_number = p_plate_number;
 $$
 	language 'sql';
 
@@ -108,11 +108,17 @@ $$
 -- Get car by category
 create or replace function get_carbycategory(in p_category_name text, out text,out text, out text, out text, out numeric, out text, out int) returns setof record as
 $$
-	select car_plate_number, car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id from Car where car_category_name = p_category_name;
+	select car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id from Car where car_category_name = p_category_name;
 $$
 	language 'sql';
 
 -- select get_carbycategory('Compact Vehicle');
+
+create or replace function get_carbybrandname(in p_brandname text, out text, out text, out text, out numeric, out text, out int, out text) returns setof record as
+$$
+	select car_plate_number, car_color, car_model, car_rental_rate, car_image, car_owner_id, car_category_name from Car where car_brandname = p_brandname;
+$$
+	language 'sql';
 
 
 create table UserAccount(
