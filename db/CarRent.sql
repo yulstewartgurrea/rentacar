@@ -40,12 +40,12 @@ $$
 create table Car(
 	car_plate_number text primary key,
 	car_color text,
-	car_brand_name text,
 	car_model text,
 	car_rental_rate numeric,
 	car_image text,
 	car_owner_id int references Owner(owner_id),
-	car_category_name text references Category(category_name)
+	car_category_name text references Category(category_name),
+	car_brandname text references Brand(brandname)
 );
 
 create table CarPix(
@@ -60,7 +60,7 @@ create table CarPix(
 
 -- Add Car
 
-create or replace function new_car(p_plate_number text, p_color text, p_brand_name text, p_model text, p_rental_rate numeric,
+create or replace function new_car(p_plate_number text, p_color text, p_brandname text, p_model text, p_rental_rate numeric,
 									p_image text, p_owner_id int, p_category_name text) returns text as
 $$
 declare 
@@ -70,12 +70,12 @@ declare
 begin 
 	select into v_plate_number from Car where car_plate_number = p_plate_number;
 		if v_plate_number isnull then
-			if p_plate_number = '' or p_color = '' or p_brand_name = '' or p_model = '' or p_rental_rate = null or
-				p_owner_id = null or p_image = null or p_category_name = null  then
+			if p_plate_number = '' or p_color = '' or p_brandname = '' or p_model = '' or p_rental_rate = null or
+				p_owner_id = null or p_image = null or p_category_name = null or p_car_brandname = null  then
 				v_res = 'Error';
 			else
-				insert into Car(car_plate_number, car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id, car_category_name)
-					values(p_plate_number, p_color, p_brand_name, p_model, p_rental_rate, p_image, p_owner_id, p_category_name);
+				insert into Car(car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id, car_category_name)
+					values(p_plate_number, p_color, p_brandname, p_model, p_rental_rate, p_image, p_owner_id, p_category_name);
 					v_res = 'Ok';
 			end if;
 		else
@@ -92,7 +92,7 @@ $$
 -- Get all Cars
 create or replace function get_cars(out text, out text, out text, out text, out numeric, out text, out int, out text) returns setof record as
 $$
-	select car_plate_number, car_color, car_brand_name, car_model, car_rental_rate, car_image, car_owner_id, category_name from Car;
+	select car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id, car_category_name from Car;
 $$
 	language 'sql';
 
@@ -303,6 +303,13 @@ begin
 end;
 $$
 	language 'plpgsql';
+
+-- select new_brand('Toyota');
+-- select new_brand('Isuzu');
+-- select new_brand('Honda');
+-- select new_brand('Mitsubishi');
+-- select new_brand('Ford');
+-- select new_brand('Hyundai');
 
 -- Get Brand
 create or replace function get_brand(out text) returns setof text as
