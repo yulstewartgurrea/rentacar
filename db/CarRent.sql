@@ -71,7 +71,7 @@ begin
 	select into v_plate_number from Car where car_plate_number = p_plate_number;
 		if v_plate_number isnull then
 			if p_plate_number = '' or p_color = '' or p_brandname = '' or p_model = '' or p_rental_rate = null or
-				p_owner_id = null or p_image = null or p_category_name = null or p_car_brandname = null  then
+				p_owner_id = null or p_image = null or p_category_name = null  then
 				v_res = 'Error';
 			else
 				insert into Car(car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id, car_category_name)
@@ -86,8 +86,8 @@ end;
 $$
 	language 'plpgsql';
 
--- select new_car('ghx-938', 'silver', 'mitsubishi', 'lancer 1996', 10, 'image1', 1, 'Compact Vehicle');
--- select new_car('kdh-662', 'gold', 'isuzu', 'crosswind 2006', 10, 'image1', 1, 'MPV');
+-- select new_car('ghx-938', 'silver', 'Mitsubishi', 'lancer 1996', 10, 'image1', 1, 'Compact Vehicle');
+-- select new_car('kdh-662', 'gold', 'Isuzu', 'crosswind 2006', 10, 'image1', 1, 'MPV');
 
 -- Get all Cars
 create or replace function get_cars(out text, out text, out text, out text, out numeric, out text, out int, out text) returns setof record as
@@ -114,11 +114,17 @@ $$
 
 -- select get_carbycategory('Compact Vehicle');
 
+-- Get car by brandname
 create or replace function get_carbybrandname(in p_brandname text, out text, out text, out text, out numeric, out text, out int, out text) returns setof record as
 $$
 	select car_plate_number, car_color, car_model, car_rental_rate, car_image, car_owner_id, car_category_name from Car where car_brandname = p_brandname;
 $$
 	language 'sql';
+
+-- select get_carbybrandname('Mitsubishi');
+-- select get_carbybrandname('Isuzu');
+-- select get_carbybrandname('Honda');
+-- select get_carbybrandname('Toyota');
 
 
 create table UserAccount(
