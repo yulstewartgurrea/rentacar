@@ -9,13 +9,13 @@ function getcars() {
             if(res.status=='Ok'){
                 for (i=0; i<res.count; i++ ) {
                     car_plate_number = res.entries[i].car_plate_number; 
-                    car_brand_name = res.entries[i].car_brand_name;
+                    car_brandname = res.entries[i].car_brandname;
                     car_model = res.entries[i].car_model;
                     car_color = res.entries[i].car_color;
                     car_rental_rate = res.entries[i].car_rental_rate;
                     car_image = res.entries[i].car_image;
                     car_owner_id = res.entries[i].car_owner_id;
-                    $("#cars").append(getcarshtml(car_owner_id, car_plate_number, car_brand_name, car_model, car_color, car_rental_rate, car_image));
+                    $("#cars").append(getcarshtml(car_owner_id, car_plate_number, car_brandname, car_model, car_color, car_rental_rate, car_image));
                 }
                 $("#mainpage").hide();
                 $("#userprofilepage").hide();
@@ -31,11 +31,11 @@ function getcars() {
     });
 }
 
-function getcarshtml(car_owner_id, car_plate_numbers, car_brand_name, car_model, car_color, car_rental_rate, car_image) {
+function getcarshtml(car_owner_id, car_plate_numbers, car_brandname, car_model, car_color, car_rental_rate, car_image) {
     return '<tr> ' +
             '<td>' + car_owner_id + '</td>' +
             '<td>'+ '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">' + car_plate_number + '</a>'+'</td>' +
-            '<td>' + car_brand_name + '</td>' +
+            '<td>' + car_brandname + '</td>' +
             '<td>' + car_model + '</td>' +
             '<td>' + car_color + '</td>' +
             '<td>' + car_rental_rate + '</td>' +
@@ -57,12 +57,12 @@ function getcarbyplatenumber(car_plate_number){
             if(res.status=='Ok'){
                 for(i=0; i<res.count; i++) {
                     car_color = res.entries[i].car_color;
-                    car_brand_name = res.entries[i].car_brand_name;
+                    car_brandname = res.entries[i].car_brandname;
                     car_model = res.entries[i].car_model;
                     car_rental_rate = res.entries[i].car_rental_rate;
                     car_image = res.entries[i].car_image;
                     car_owner_id = res.entries[i].car_owner_id;
-                    $("#cardetails").append(getcardetailshtml(car_owner_id, car_brand_name, car_model, car_color, car_rental_rate, car_image))
+                    $("#cardetails").append(getcarbyplatenumberhtml(car_owner_id, car_brandname, car_model, car_color, car_rental_rate, car_image))
                 }
                 $("#updatecarpage").show();
                 $("#carspage").hide();
@@ -74,10 +74,10 @@ function getcarbyplatenumber(car_plate_number){
     });
 }
 
-function getcardetailshtml(car_owner_id, car_brand_name, car_model, car_color, car_rental_rate, car_image) {
+function getcarbyplatenumberhtml(car_owner_id, car_brandname, car_model, car_color, car_rental_rate, car_image) {
     return '<tr> ' +
             '<td>' + car_owner_id + '</td>' +
-            '<td>' + car_brand_name + '</td>' +
+            '<td>' + car_brandname + '</td>' +
             '<td>' + car_model + '</td>' +
             '<td>' + car_color + '</td>' +
             '<td>' + car_rental_rate + '</td>' +
@@ -138,4 +138,37 @@ function getcardetailshtml(car_owner_id, car_brand_name, car_model, car_color, c
     //     <input type="button" class="btn btn-info btn-fill btn-wd" onclick="addcar();" value="Save">
     // </div>
 
+}
+
+function get_carbycategory(car_category_name) {
+    $.ajax({
+        url: 'http://127.0.0.1:5000/car/category/'+car_category_name,
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            console.log(res);
+            $("#cars").html("");
+            if(res.status=='Ok'){
+                for (i=0; i<res.count; i++ ) {
+                    car_plate_number = res.entries[i].car_plate_number; 
+                    car_brand_name = res.entries[i].car_brand_name;
+                    car_model = res.entries[i].car_model;
+                    car_color = res.entries[i].car_color;
+                    car_rental_rate = res.entries[i].car_rental_rate;
+                    car_image = res.entries[i].car_image;
+                    car_owner_id = res.entries[i].car_owner_id;
+                    $("#cars").append(getcarshtml(car_owner_id, car_plate_number, car_brand_name, car_model, car_color, car_rental_rate, car_image));
+                }
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addcarpage").hide();
+                $("#carspage").show();
+                $("#addownerpage").hide();
+                $("#updatecarpage").hide();
+            } else {
+                $("#cars").html("");
+                alert('Error')
+            }
+        }
+    });
 }

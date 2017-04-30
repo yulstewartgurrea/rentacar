@@ -135,7 +135,7 @@ def get_cars():
 
     recs = []
     for r in res:
-        recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_brand_name': str(r[2]), 'car_model': r[3],
+        recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_brandname': str(r[2]), 'car_model': r[3],
             'car_rental_rate': str(r[4]), 'car_image': str(r[5]), 'car_owner_id': r[6], 'car_category_name': str(r[7])})
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
@@ -149,12 +149,12 @@ def get_carbyplatenumber(car_plate_number):
 
     recs = []
     for r in res:
-        recs.append({'car_color': str(r[0]), 'car_brand_name': str(r[1]), 'car_model': str(r[2]), 'car_rental_rate': str(r[3]),
-            'car_image': str(r[4]), 'car_owner_id': r[5]})
+        recs.append({'car_color': str(r[0]), 'car_brandname': str(r[1]), 'car_model': str(r[2]), 'car_rental_rate': str(r[3]),
+            'car_image': str(r[4]), 'car_owner_id': r[5], 'car_category_name': str(r[6])})
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
-@app.route('/car/<string:car_category_name>', methods=['GET'])
+@app.route('/car/category/<string:car_category_name>', methods=['GET'])
 def get_carbycategory(car_category_name):
     res = spcall('get_carbycategory', (car_category_name,), )
 
@@ -168,7 +168,7 @@ def get_carbycategory(car_category_name):
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
-@app.route('/car/<string:car_brandname>', methods=['GET'])
+@app.route('/car/brand/<string:car_brandname>', methods=['GET'])
 def get_carbybrandname(car_brandname):
     res = spcall('get_carbybrandname', (car_brandname,), )
 
@@ -178,7 +178,7 @@ def get_carbybrandname(car_brandname):
     recs = []
     for r in res:
         recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_model': str(r[2]), 'car_rental_rate': str(r[3]),
-            'car_image': str(r[4]), 'car_owner_id': r[5], 'car_category_name': str([6]) })
+            'car_image': str(r[4]), 'car_owner_id': r[5], 'car_category_name': str(r[6]) })
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
