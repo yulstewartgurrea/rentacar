@@ -52,6 +52,7 @@ def login():
         session['mobile_no'] = user[0][5]
         session['is_admin'] = user[0][6]
         session['is_customer'] = user[0][7]
+
         return jsonify({'status': 'Login successful', 'message': res[0][0], 'id': session['user_id'], 'first_name': session['first_name'], 
                     'last_name': session['last_name'], 'address1': session['address1'], 'address2': session['address2'], 
                     'mobile_no': session['mobile_no'], 'is_admin': session['is_admin'], 'is_customer': session['is_customer'], 'categories': recscategory,
@@ -78,7 +79,7 @@ def new_admin(email):
 		jsn['email'],
 		jsn['password']), True)
 
-	if 'Error' in res[0][0]:
+	if 'Error' in str(res[0][0]):
 		return jsonify({'status': 'Error', 'message': res[0][0]})
 
 	return jsonify({'status': 'Ok', 'message': res[0][0]})
@@ -92,7 +93,7 @@ def new_customer():
         jsn['email'],
         jsn['password']), True)
 
-    if 'Error' in res[0][0]:
+    if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
@@ -122,7 +123,7 @@ def new_owner(owner_first_name, owner_last_name):
         jsn['owner_address2'],
         jsn['owner_mobile_no'],), True)
 
-    if 'Error' in res[0][0]:
+    if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
@@ -225,7 +226,7 @@ def get_carbyplatenumber(car_plate_number):
 def get_carbycategory(car_category_name):
     res = spcall('get_carbycategory', (car_category_name,), )
 
-    if 'Error' in str(res[0][0]):
+    if 'Error' in str(res):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
     recs = []
@@ -239,7 +240,7 @@ def get_carbycategory(car_category_name):
 def get_carbybrandname(car_brandname):
     res = spcall('get_carbybrandname', (car_brandname,), )
 
-    if 'Error' in str(res[0][0]):
+    if 'Error' in str(res):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
     recs = []
@@ -253,7 +254,7 @@ def get_carbybrandname(car_brandname):
 def get_carbycategorybrandname(car_category_name, car_brandname):
     res = spcall('get_carbycategorybrandname', (car_category_name, car_brandname,), )
 
-    if 'Error' in str(res[0][0]):
+    if 'Error' in str(res):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
     recs = []

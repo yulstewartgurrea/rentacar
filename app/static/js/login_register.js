@@ -40,6 +40,7 @@ function login() {
         dataType: 'json',
         success: function(res) {
             console.log(res);
+            $("#name").html();
             $("#categories").html("");
             $("#brands").html("");
             if(res.status==='Login successful' && res.is_admin===true && res.is_customer===false) {
@@ -47,6 +48,7 @@ function login() {
                 document.location.href="../../partials/admin/dashboard.html";
             } else if(res.status==='Login successful' && res.is_admin===false && res.is_customer===true) {
                 alert('Login Successful');
+                $("#name").append(getnamehtml(res.first_name));
                 for (i=0; i<res.countcategories; i++ ) {
                     category_name = res.categories[i].category_name; 
                     $("#categories").append(getcategoryhtml(category_name));
@@ -58,7 +60,7 @@ function login() {
                 $("#accountpage").hide();
                 $("#homepage").show();
                 $("#shoppage").hide();
-                $("#cardetailspage").hide();
+                $("#cardetailsecommercepage").hide();
                 $("#cartpage").hide();
                 $("#checkoutpage").hide();
                 $("#brandarea").show();
@@ -67,10 +69,14 @@ function login() {
                 $("#allcarsmenuweb").show();
                 $("#allcarsmenumobile").show();
             } else {
-                shakeModalLogin();
+                alert("Invalid Credentials")
             }
         }
     });
+}
+
+function getnamehtml(first_name) {
+    return first_name
 }
 
 function getcategoryhtml(category_name) {
@@ -96,6 +102,7 @@ function getbrandhtml(brandname){
                 '</div>'+
                 '<h2 class="product-name"><a href="#">'+brandname+'</a></h2>'+
             '</div>'
+            
 }
 
 

@@ -20,7 +20,7 @@ function addowner() {
             if(res.status==='Ok') {
                 alert("Owner Added")
             } else {
-                alert(res.message)
+                alert("Error")
             }
         }
 
