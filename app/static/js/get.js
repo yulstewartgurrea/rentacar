@@ -89,7 +89,7 @@ function getecommercecategoryhtml(category_name) {
 }
 
 function getecommercebrandhtml(brandname) {
-    return '<li>'+'<a href="#">'+brandname+'</a>'+'</li>'
+    return '<li onclick="getcarbybrand(\''+brandname+'\');">'+'<a href="#">'+brandname+'</a>'+'</li>'
 }
 
 function getcarshtml(car_owner_id, car_category_name, car_plate_numbers, car_brandname, car_model, car_color, car_rental_rate, car_image) {
@@ -371,3 +371,52 @@ function getcarbycategoryhtml(car_owner_id, car_plate_number, car_brand_name, ca
 
 }
 
+function getcarbybrand(car_brandname) {
+    $.ajax({
+        url: 'http://127.0.0.1:5000/car/brand/'+car_brandname,
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            console.log(res);
+            $("#carbybrandecommerce").html("");
+            if(res.status=='Ok'){
+                for (i=0; i<res.count; i++ ) {
+                    car_plate_number = res.entries[i].car_plate_number; 
+                    car_category_name = res.entries[i].car_category_name;
+                    car_model = res.entries[i].car_model;
+                    car_color = res.entries[i].car_color;
+                    car_rental_rate = res.entries[i].car_rental_rate;
+                    car_image = res.entries[i].car_image;
+                    car_owner_id = res.entries[i].car_owner_id;
+                    $("#carbybrandecommerce").append(getcarbybrandhtml(car_owner_id, car_plate_number, car_model, car_color, car_rental_rate, car_image, car_category_name));
+                }
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addcarpage").hide();
+                $("#carspage").show();
+                $("#addownerpage").hide();
+                $("#updatecarpage").hide();
+                $("#carsecommerce").hide()
+
+            } else if(res.status==='Error') {
+                $("#carbybrandecommerce").html("");
+                alert('Error')
+            }
+        }
+    });
+}
+
+function getcarbybrandhtml(car_owner_id, car_plate_number, car_model, car_color, car_rental_rate, car_image, car_category_name) {
+    return '<div class="col-lg-4 col-md-4 col-sm-4">'+
+                '<div class="single-product">'+
+                    '<div class="product-img">'+
+                        '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+
+                            '<img class="primary-image" src="../../shoptemplate/img/product/women/8.jpg" alt="" />'+
+                            '<img class="secondary-image" src="../../shoptemplate/img/product/women/3.jpg" alt="" />'+
+                        '</a>'+
+                        '<h2 class="product_title"><a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+car_model+'</a></h2>'+                          
+                    '</div>'+
+                '</div>'+
+            '</div>'
+
+}

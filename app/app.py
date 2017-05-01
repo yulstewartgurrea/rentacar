@@ -246,7 +246,7 @@ def get_carbybrandname(car_brandname):
     recs = []
     for r in res:
         recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_model': str(r[2]), 'car_rental_rate': str(r[3]),
-            'car_image': str(r[4]), 'car_owner_id': r[5]})
+            'car_image': str(r[4]), 'car_owner_id': r[5], 'car_category_name': str(r[6])})
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
