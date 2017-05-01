@@ -1,60 +1,9 @@
-function login() {
-
-    var email = $("#email").val();
-    var password = $("#password").val();
-
-    var data = JSON.stringify({'email': email, 'password': password});
-
-    $.ajax({
-        url: 'http://127.0.0.1:5000/login',
-        // url: 'http://localhost:5000/login',
-        type: 'POST',
-        contentType: 'application/json; charset=utf-8',
-        data: data,
-        dataType: 'json',
-        success: function(res) {
-            console.log(res);
-            $("#categories").html("");
-            if(res.status==='Login successful' && res.is_admin===true && res.is_customer===false) {
-                alert('Login Successful:');
-                document.location.href="../../partials/admin/dashboard.html";
-            } else if(res.status==='Login successful' && res.is_admin===false && res.is_customer===true) {
-                alert('Login Successful');
-                for (i=0; i<res.count; i++ ) {
-                    category_name = res.entries[i].category_name; 
-                    $("#categories").append(getcategoryhtml(category_name));
-                }
-                // window.location.href="partials/customer/ecommerce.html";
-                $("#accountpage").hide();
-                $("#homepage").show();
-                $("#shoppage").hide();
-                $("#cardetailspage").hide();
-                $("#cartpage").hide();
-                $("#checkoutpage").hide();
-                $("#brandarea").show();
-                $("#categories").show();
-            } else {
-                shakeModalLogin();
-            }
-        }
-    });
-}
-
-function getcategoryhtml(category_name) {
-    return '<div class="col-lg-3 col-md-3" >'+ 
-                '<div class="product-content">'+
-                '<h2 class="product-name"><a href="#">'+category_name+'</a></h2>'+
-                '</div>'+
-            '</div>'
-
-}
-
 function register() {
 
-    var reg_email = $('#reg_email').val();
-    var reg_password = $('#reg_password').val();
+    var email = $('#reg_email').val();
+    var password = $('#reg_password').val();
 
-    var data = JSON.stringify({'email': reg_email, 'password': reg_password})
+    var data = JSON.stringify({'email': email, 'password': password})
 
     $.ajax({
         url:'http://127.0.0.1:5000/register',
@@ -74,6 +23,73 @@ function register() {
 
     });
 }
+
+function login() {
+
+    var email = $("#email").val();
+    var password = $("#password").val();
+
+    var data = JSON.stringify({'email': email, 'password': password});
+
+    $.ajax({
+        url: 'http://127.0.0.1:5000/login',
+        // url: 'http://localhost:5000/login',
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        data: data,
+        dataType: 'json',
+        success: function(res) {
+            console.log(res);
+            $("#categories").html("");
+            $("#brands").html("");
+            if(res.status==='Login successful' && res.is_admin===true && res.is_customer===false) {
+                alert('Login Successful:');
+                document.location.href="../../partials/admin/dashboard.html";
+            } else if(res.status==='Login successful' && res.is_admin===false && res.is_customer===true) {
+                alert('Login Successful');
+                for (i=0; i<res.countcategories; i++ ) {
+                    category_name = res.categories[i].category_name; 
+                    $("#categories").append(getcategoryhtml(category_name));
+                }
+                for(i=0; i<res.countbrands; i++){
+                    brandname = res.brands[i].brandname;
+                    $("#brands").append(getbrandhtml(brandname))                   
+                }
+                $("#accountpage").hide();
+                $("#homepage").show();
+                $("#shoppage").hide();
+                $("#cardetailspage").hide();
+                $("#cartpage").hide();
+                $("#checkoutpage").hide();
+                $("#brandarea").show();
+                $("#categories").show();
+                $("#brands").show();
+                $("#allcarsmenuweb").show();
+                $("#allcarsmenumobile").show();
+            } else {
+                shakeModalLogin();
+            }
+        }
+    });
+}
+
+function getcategoryhtml(category_name) {
+    return '<div class="col-lg-3 col-md-3" >'+ 
+                '<div class="product-content">'+
+                '<h2 class="product-name"><a href="#">'+category_name+'</a></h2>'+
+                '</div>'+
+            '</div>'
+}
+
+function getbrandhtml(brandname){
+    return '<div class="col-md-2">'+
+                '<div class="single-brand">'+
+                    '<a href="#"><img src="../../shoptemplate/img/brand/1.png" alt="" /></a>'+
+                '</div>'+
+                '<h2 class="product-name"><a href="#">'+brandname+'</a></h2>'+
+            '</div>'
+}
+
 
 function shakeModalLogin(){
     $('#loginModal .modal-dialog').addClass('shake');

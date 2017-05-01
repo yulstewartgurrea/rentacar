@@ -35,6 +35,7 @@ function getcars() {
         success: function(res) {
             console.log(res);
             $("#cars").html("");
+            $("#carsecommerce").html("");
             if(res.status=='Ok'){
                 for (i=0; i<res.count; i++ ) {
                     car_plate_number = res.entries[i].car_plate_number; 
@@ -46,6 +47,7 @@ function getcars() {
                     car_owner_id = res.entries[i].car_owner_id;
                     car_category_name = res.entries[i].car_category_name;
                     $("#cars").append(getcarshtml(car_owner_id, car_category_name, car_plate_number, car_brandname, car_model, car_color, car_rental_rate, car_image));
+                    $("#carsecommerce").append(getcarsecommercehtml(car_owner_id, car_category_name, car_plate_number, car_brandname, car_model, car_color, car_rental_rate, car_image));
                 }
                 $("#mainpage").hide();
                 $("#userprofilepage").hide();
@@ -53,6 +55,7 @@ function getcars() {
                 $("#carspage").show();
                 $("#addownerpage").hide();
                 $("#updatecarpage").hide();
+                $("#shoppage").show();
             } else {
                 $("#cars").html("");
                 alert('Error')
@@ -76,9 +79,55 @@ function getcarshtml(car_owner_id, car_category_name, car_plate_numbers, car_bra
             '</tr>'
 }
 
+function getcarsecommercehtml(car_owner_id, car_category_name, car_plate_numbers, car_brandname, car_model, car_color, car_rental_rate, car_image) {
+    return '<div class="col-lg-4 col-md-4 col-sm-4">'+
+                '<div class="single-product">'+
+                    '<div class="product-img">'+
+                        '<a href="#">'+
+                            '<img class="primary-image" src="../../shoptemplate/img/product/women/8.jpg" alt="" />'+
+                            '<img class="secondary-image" src="../../shoptemplate/img/product/women/3.jpg" alt="" />'+
+                        '</a>'+
+                        '<h2 class="product-name"><a href="#">'+car_model+'</a></h2>'+
+                        '<div class="actions">'+
+                            '<div class="action-buttons">'+
+                                '<div class="add-to-cart">'+
+                                    '<a href="#">Add to cart</a>'+
+                                '</div>'+
+                                '<div class="add-to-links">'+
+                                    '<div class="add-to-wishlist">'+
+                                        '<a href="#" data-toggle="tooltip" title="Add to Wishlist"><i class="fa fa-star"></i>'+
+                                        '</a>'+
+                                    '</div>'+
+                                    '<div class="compare-button">'+
+                                        '<a href="#" data-toggle="tooltip" title="Compare"><i class="fa fa-exchange"></i></a>'+
+                                    '</div>'+                                  
+                                '</div>'+
+                                '<div class="quickviewbtn">'+
+                                    '<a href="#" data-toggle="tooltip" title="Quick View"><i class="fa fa-search-plus"></i></a>'+
+                                '</div>'+
+                            '</div>'+
+                       ' </div>'+                          
+                    '</div>'+
+                    '<div class="product-content">'+
+                        '<h2 class="product-name"><a href="#">Light house shoes</a></h2>'+
+                        // '<div class="pro-rating">'+
+                            // <a href="#"><i class="fa fa-star"></i></a>
+                            // <a href="#"><i class="fa fa-star"></i></a>
+                            // <a href="#"><i class="fa fa-star"></i></a>
+                            // <a href="#"><i class="fa fa-star"></i></a>
+                            // <a href="#"><i class="fa fa-star"></i></a>
+                        // </div>
+                        // <div class="price-box">
+                        //     <span class="new-price">£90.00</span>
+                        // </div>
+                    '</div>'+
+                '</div>'+
+            '</div>'
+}
+
 function getcarbyplatenumber(car_plate_number){
     $.ajax({
-        url: 'http://127.0.0.1:5000/car/'+car_plate_number,
+        url: 'http://127.0.0.1:5000/car/platenumber/'+car_plate_number,
         type: 'GET',
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
