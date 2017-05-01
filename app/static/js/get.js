@@ -83,7 +83,7 @@ function getcategoryhtml(category_name) {
 }
 
 function getbrandhtml(brandname) {
-    return ''
+    return '<li><a href="#">'+brandname+'</a> <span class="count">(14)</span></li>'
 }
 
 function getcarshtml(car_owner_id, car_category_name, car_plate_numbers, car_brandname, car_model, car_color, car_rental_rate, car_image) {
