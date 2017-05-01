@@ -1,30 +1,30 @@
-function getcategory() {
-    $.ajax({
-        url: 'http://127.0.0.1:5000/category',
-        type: 'GET',
-        dataType: 'json',
-        success: function(res) {
-            console.log(res);
-            $("#categories").html("");
-            if(res.status=='Ok'){
-                for (i=0; i<res.count; i++ ) {
-                    category_name = res.entries[i].category_name; 
-                    $("#categories").append(getcategoryhtml(category_name));
-                }
-                $("#mainpage").hide();
-                $("#userprofilepage").hide();
-                $("#addcarpage").hide();
-                $("#carspage").show();
-                $("#addownerpage").hide();
-                $("#updatecarpage").hide();
-            } else {
-                $("#categories").html("");
-                alert('Error')
-            }
-        }
-    });
+// function getcategory() {
+//     $.ajax({
+//         url: 'http://127.0.0.1:5000/category',
+//         type: 'GET',
+//         dataType: 'json',
+//         success: function(res) {
+//             console.log(res);
+//             $("#categories").html("");
+//             if(res.status=='Ok'){
+//                 for (i=0; i<res.count; i++ ) {
+//                     category_name = res.entries[i].category_name; 
+//                     $("#categories").append(getcategoryhtml(category_name));
+//                 }
+//                 $("#mainpage").hide();
+//                 $("#userprofilepage").hide();
+//                 $("#addcarpage").hide();
+//                 $("#carspage").show();
+//                 $("#addownerpage").hide();
+//                 $("#updatecarpage").hide();
+//             } else {
+//                 $("#categories").html("");
+//                 alert('Error')
+//             }
+//         }
+//     });
 
-}
+// }
 
 
 function getcars() {
@@ -32,10 +32,13 @@ function getcars() {
         url: 'http://127.0.0.1:5000/cars',
         type: 'GET',
         dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
         success: function(res) {
             console.log(res);
             $("#cars").html("");
             $("#carsecommerce").html("");
+            $("#categories2").html("");
+            $("#brands2").html();
             if(res.status=='Ok'){
                 for (i=0; i<res.count; i++ ) {
                     car_plate_number = res.entries[i].car_plate_number; 
@@ -49,6 +52,16 @@ function getcars() {
                     $("#cars").append(getcarshtml(car_owner_id, car_category_name, car_plate_number, car_brandname, car_model, car_color, car_rental_rate, car_image));
                     $("#carsecommerce").append(getcarsecommercehtml(car_owner_id, car_category_name, car_plate_number, car_brandname, car_model, car_color, car_rental_rate, car_image));
                 }
+
+                for (i=0; i<res.countcategories; i++ ) {
+                    category_name = res.categories[i].category_name; 
+                    $("#categories2").append(getcategoryhtml(category_name));
+                }
+
+                for(i=0; i<res.countbrands; i++){
+                    brandname = res.brands[i].brandname;
+                    $("#brands2").append(getbrandhtml(brandname))                   
+                }
                 $("#mainpage").hide();
                 $("#userprofilepage").hide();
                 $("#addcarpage").hide();
@@ -56,12 +69,21 @@ function getcars() {
                 $("#addownerpage").hide();
                 $("#updatecarpage").hide();
                 $("#shoppage").show();
+
             } else {
                 $("#cars").html("");
                 alert('Error')
             }
         }
     });
+}
+
+function getcategoryhtml(category_name) {
+    return '<li>'+'<a href="#">' +category_name+ '</a>'+'</li>'
+}
+
+function getbrandhtml(brandname) {
+    return ''
 }
 
 function getcarshtml(car_owner_id, car_category_name, car_plate_numbers, car_brandname, car_model, car_color, car_rental_rate, car_image) {

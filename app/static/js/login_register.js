@@ -75,8 +75,16 @@ function login() {
 
 function getcategoryhtml(category_name) {
     return '<div class="col-lg-3 col-md-3" >'+ 
+                '<div class="single-product">'+
+                    '<div class="product-img">'+
+                        '<a href="#">'+
+                            '<img class="primary-image" src="../../shoptemplate/img/product/1.jpg" alt="" />'+
+                            // '<img class="secondary-image" src="img/product/2.jpg" alt="" />'+
+                        '</a>'+                        
+                    '</div>'
+                '</div>'+
                 '<div class="product-content">'+
-                '<h2 class="product-name"><a href="#">'+category_name+'</a></h2>'+
+                    '<h2 class="product-name"><a href="#">'+category_name+'</a></h2>'+
                 '</div>'+
             '</div>'
 }
