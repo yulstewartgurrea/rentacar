@@ -49,10 +49,10 @@ function showaddownerpage() {
 }
 
 function showshophomepage() {
+	$("#accountpage").show();
 	$("#homepage").show();
 	$("#shoppage").hide();
 	$("#cardetailspage").hide();
 	$("#cartpage").hide();
 	$("#checkoutpage").hide();
-
 }	

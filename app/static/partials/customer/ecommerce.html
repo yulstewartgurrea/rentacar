@@ -247,9 +247,58 @@
 		</div>
 	</div>
 	<!-- END HOME SLIDER -->
+
+	<!-- my-account-area start -->
+	<div id="accountpage">
+	<div class="my-account-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<form method="post">
+						<div class="form-fields">
+							<h2>Login</h2>
+							<p>
+								<label>Username or email address <span class="required">*</span></label>
+								<input type="text" id="email"/>
+							</p>
+							<p>
+								<label>Password <span class="required">*</span></label>
+								<input type="password" id="password"/>
+							</p>
+						</div>
+						<div class="form-action">
+							<p class="lost_password"><a href="#">Lost your password?</a></p>
+							<input class="btn btn-default btn-login" type="button" value="Login" onclick="login();">
+							<label><input type="checkbox" />  Remember me </label>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-6">
+					<form action="#">
+						<div class="form-fields">
+							<h2>Register</h2>
+							<p>
+								<label>Email address  <span class="required">*</span></label>
+								<input type="text" />
+							</p>
+							<p>
+								<label>Password <span class="required">*</span></label>
+								<input type="password" />
+							</p>
+						</div>
+						<div class="form-action">
+							<input type="submit" value="Register" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<!-- my-account-area end -->
 	
 	<!-- HOMEPAGE features-area start -->
-	<div class="features-area pad-60" id="homepage">
+	<div class="features-area pad-60" id="homepage" style="display:none">
 		<div class="container">
 			<!-- section-heading start -->
 			<div class="row">
@@ -270,83 +319,29 @@
 
 					  <!-- Tab panes -->
 					  <div class="tab-content">
-						<div role="tabpanel" class="tab-pane active" id="home">
+						<div role="tabpanel" class="tab-pane active">
 							<div class="row">
 								<div class="features-curosel">
-									<!-- single-product start -->
-									<div class="col-lg-3 col-md-3">
-										<div class="single-product">
-											<div class="product-img">
-												<a href="#">
-													<img class="primary-image" src="../../shoptemplate/img/product/17.jpg" alt="" />
-													<img class="secondary-image" src="../../shoptemplate/img/product/18.jpg" alt="" />
-												</a>							
-											</div>
-											<div class="product-content">
-												<h2 class="product-name"><a href="#">Compact Vehicles</a></h2>
-											</div>
-										</div>
-									</div>
-									<!-- single-product end -->				
-									<!-- single-product start -->
-									<div class="col-lg-3 col-md-3">
-										<div class="single-product">
+									
+
+									<!-- single-product end -->	
+									<div id="categories"></div>
+									<!-- <div class="col-lg-3 col-md-3" id="categories"> -->
+
+										<!-- <div class="single-product"> -->
+										<!-- <div id="categories"></div> -->
+											<!-- span class="sale-text">Sale</span>
 											<div class="product-img">
 												<a href="#">
 													<img class="primary-image" src="../../shoptemplate/img/product/1.jpg" alt="" />
-													<img class="secondary-image" src="../../shoptemplate/img/product/2.jpg" alt="" />
-												</a>																			
+													<img class="secondary-image" src="img/product/2.jpg" alt="" />
+												</a>						
 											</div>
 											<div class="product-content">
-												<h2 class="product-name"><a href="#">SUV</a></h2>
+												<h2 class="product-name"><a href="#">Vestibulum suscipit</a></h2>
 											</div>
-										</div>
-									</div>
-									<!-- single-product end -->	
-									<!-- single-product start -->
-									<div class="col-lg-3 col-md-3">
-										<div class="single-product">
-											<div class="product-img">
-												<a href="#">
-													<img class="primary-image" src="../../shoptemplate/img/product/3.jpg" alt="" />
-													<img class="secondary-image" src="../../shoptemplate/img/product/4.jpg" alt="" />
-												</a>																			
-											</div>
-											<div class="product-content">
-												<h2 class="product-name"><a href="#">Pick-Up Truck</a></h2>												
-											</div>
-										</div>
-									</div>
-									<!-- single-product end -->	
-									<!-- single-product start -->
-									<div class="col-lg-3 col-md-3">
-										<div class="single-product">
-											<div class="product-img">
-												<a href="#">
-													<img class="primary-image" src="../../shoptemplate/img/product/5.jpg" alt="" />
-													<img class="secondary-image" src="../../shoptemplate/img/product/6.jpg" alt="" />
-												</a>							
-											</div>
-											<div class="product-content">
-												<h2 class="product-name"><a href="#">Van</a></h2>
-											</div>
-										</div>
-									</div>
-									<!-- single-product end -->	
-									<!-- single-product start -->
-									<div class="col-lg-3 col-md-3">
-										<div class="single-product">
-											<div class="product-img">
-												<a href="#">
-													<img class="primary-image" src="../../shoptemplate/img/product/7.jpg" alt="" />
-													<img class="secondary-image" src="../../shoptemplate/img/product/8.jpg" alt="" />
-												</a>							
-											</div>
-											<div class="product-content">
-												<h2 class="product-name"><a href="#">Construction</a></h2>
-											</div>
-										</div>
-									</div>
+										</div> -->
+									<!-- </div>			 -->
 									<!-- single-product end -->				
 								</div>
 							</div>
@@ -1544,7 +1539,7 @@
 
 	
 	<!-- brand-area start -->
-	<div class="brand-area pad-60">
+	<div class="brand-area pad-60" style="display:none" id="brandarea">
 		<div class="container">
 			<!-- section-heading start -->
 			<div class="row">
@@ -1619,7 +1614,7 @@
 	<!-- footer start -->
 	<footer>
 		<!-- footer-top-area start -->
-		<div class="footer-top-area">
+		<div class="footer-top-area" style="display:none">
 			<div class="container">
 				<div class="row">
 					<!-- footer-widget start -->
@@ -1755,6 +1750,10 @@
 
         <!-- Routes js -->
         <script src="../../js/routes.js"></script>
+
+        <!-- Login -->
+        <script src="../../js/login_register.js" type="text/javascript"></script>
+
 
     </body>
 </html>

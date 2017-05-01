@@ -10,13 +10,31 @@ def hello_world():
     return "hello world!"
 
 # Login
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     jsn = json.loads(request.data)
 
     res = spcall('login', (
         jsn['email'],
         jsn['password'],), True)
+
+    rescategory = spcall('get_category', ())
+
+    resbrand = spcall('get_brand', ())
+
+    if 'Error' in str(rescategory[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    if 'Error' in str(resbrand[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    recscategory = []
+    for r in rescategory:
+        recscategory.append({'category_name': str(r[0])})
+
+    recsbrand = []
+    for r in resbrand:
+        recsbrand.append({'brand_name': str(r[0])})
 
     if len(res) == 0:
         return jsonify({'status': 'Invalid credentials'})
@@ -36,7 +54,8 @@ def login():
         session['is_customer'] = user[0][7]
         return jsonify({'status': 'Login successful', 'message': res[0][0], 'id': session['user_id'], 'first_name': session['first_name'], 
                     'last_name': session['last_name'], 'address1': session['address1'], 'address2': session['address2'], 
-                    'mobile_no': session['mobile_no'], 'is_admin': session['is_admin'], 'is_customer': session['is_customer']})
+                    'mobile_no': session['mobile_no'], 'is_admin': session['is_admin'], 'is_customer': session['is_customer'], 'categories': recscategory,
+                    'countcategories': len(recscategory), 'brands': recsbrand, 'countbrands': len(recsbrand)})
     else:
         return jsonify({'status': 'Invalid credentials'})
 
@@ -108,6 +127,34 @@ def new_owner(owner_first_name, owner_last_name):
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
+# Get all categories
+@app.route('/category', methods=['GET'])
+def get_categories():
+    res = spcall('get_category', ())
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    recs = []
+    for r in res:
+        recs.append({'category_name': str(r[0])})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+
+@app.route('/brand', methods=['POST'])
+def get_brands():
+    res = spcall('get_brand', ())
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    recs = []
+    for r in res:
+        recs.append({'category_name': str(r[0])})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+
+# Add new car
 @app.route('/car/<string:car_plate_number>/<string:car_brand_name>/<string:car_model>/<string:car_color>', methods=['POST'])
 def new_car(car_plate_number, car_color, car_brand_name, car_model):
     jsn = json.loads(request.data)

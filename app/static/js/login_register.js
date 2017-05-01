@@ -14,18 +14,39 @@ function login() {
         dataType: 'json',
         success: function(res) {
             console.log(res);
+            $("#categories").html("");
             if(res.status==='Login successful' && res.is_admin===true && res.is_customer===false) {
-                alert('Login Successful');
-                window.location.href="partials/admin/dashboard.html";
+                alert('Login Successful:');
+                document.location.href="../../partials/admin/dashboard.html";
             } else if(res.status==='Login successful' && res.is_admin===false && res.is_customer===true) {
                 alert('Login Successful');
-                window.location.href="partials/customer/ecommerce.html";
+                for (i=0; i<res.count; i++ ) {
+                    category_name = res.entries[i].category_name; 
+                    $("#categories").append(getcategoryhtml(category_name));
+                }
+                // window.location.href="partials/customer/ecommerce.html";
+                $("#accountpage").hide();
+                $("#homepage").show();
+                $("#shoppage").hide();
+                $("#cardetailspage").hide();
+                $("#cartpage").hide();
+                $("#checkoutpage").hide();
+                $("#brandarea").show();
+                $("#categories").show();
             } else {
                 shakeModalLogin();
             }
         }
-
     });
+}
+
+function getcategoryhtml(category_name) {
+    return '<div class="col-lg-3 col-md-3" >'+ 
+                '<div class="product-content">'+
+                '<h2 class="product-name"><a href="#">'+category_name+'</a></h2>'+
+                '</div>'+
+            '</div>'
+
 }
 
 function register() {
@@ -79,7 +100,7 @@ function logout() {
         success: function(res){
             console.log(res);
             alert(res.message);
-            window.location.href="../../login_register_modal.html"
+            document.location.href="../../partials/customer/ecommerce.html";
         }
 
     });

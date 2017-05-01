@@ -1,3 +1,32 @@
+function getcategory() {
+    $.ajax({
+        url: 'http://127.0.0.1:5000/category',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            console.log(res);
+            $("#categories").html("");
+            if(res.status=='Ok'){
+                for (i=0; i<res.count; i++ ) {
+                    category_name = res.entries[i].category_name; 
+                    $("#categories").append(getcategoryhtml(category_name));
+                }
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addcarpage").hide();
+                $("#carspage").show();
+                $("#addownerpage").hide();
+                $("#updatecarpage").hide();
+            } else {
+                $("#categories").html("");
+                alert('Error')
+            }
+        }
+    });
+
+}
+
+
 function getcars() {
     $.ajax({
         url: 'http://127.0.0.1:5000/cars',
@@ -15,7 +44,8 @@ function getcars() {
                     car_rental_rate = res.entries[i].car_rental_rate;
                     car_image = res.entries[i].car_image;
                     car_owner_id = res.entries[i].car_owner_id;
-                    $("#cars").append(getcarshtml(car_owner_id, car_plate_number, car_brandname, car_model, car_color, car_rental_rate, car_image));
+                    car_category_name = res.entries[i].car_category_name;
+                    $("#cars").append(getcarshtml(car_owner_id, car_category_name, car_plate_number, car_brandname, car_model, car_color, car_rental_rate, car_image));
                 }
                 $("#mainpage").hide();
                 $("#userprofilepage").hide();
@@ -31,9 +61,10 @@ function getcars() {
     });
 }
 
-function getcarshtml(car_owner_id, car_plate_numbers, car_brandname, car_model, car_color, car_rental_rate, car_image) {
+function getcarshtml(car_owner_id, car_category_name, car_plate_numbers, car_brandname, car_model, car_color, car_rental_rate, car_image) {
     return '<tr> ' +
             '<td>' + car_owner_id + '</td>' +
+            '<td>' + car_category_name + '</td>' +
             '<td>'+ '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">' + car_plate_number + '</a>'+'</td>' +
             '<td>' + car_brandname + '</td>' +
             '<td>' + car_model + '</td>' +
@@ -62,7 +93,8 @@ function getcarbyplatenumber(car_plate_number){
                     car_rental_rate = res.entries[i].car_rental_rate;
                     car_image = res.entries[i].car_image;
                     car_owner_id = res.entries[i].car_owner_id;
-                    $("#cardetails").append(getcarbyplatenumberhtml(car_owner_id, car_brandname, car_model, car_color, car_rental_rate, car_image))
+                    car_category_name = res.entries[i].car_category_name;
+                    $("#cardetails").append(getcarbyplatenumberhtml(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image))
                 }
                 $("#updatecarpage").show();
                 $("#carspage").hide();
@@ -74,9 +106,10 @@ function getcarbyplatenumber(car_plate_number){
     });
 }
 
-function getcarbyplatenumberhtml(car_owner_id, car_brandname, car_model, car_color, car_rental_rate, car_image) {
+function getcarbyplatenumberhtml(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image) {
     return '<tr> ' +
             '<td>' + car_owner_id + '</td>' +
+            '<td>' + car_category_name + '</td>' +
             '<td>' + car_brandname + '</td>' +
             '<td>' + car_model + '</td>' +
             '<td>' + car_color + '</td>' +
@@ -140,24 +173,24 @@ function getcarbyplatenumberhtml(car_owner_id, car_brandname, car_model, car_col
 
 }
 
-function get_carbycategory(car_category_name) {
+function getcarbycategory(car_category_name) {
     $.ajax({
         url: 'http://127.0.0.1:5000/car/category/'+car_category_name,
         type: 'GET',
         dataType: 'json',
         success: function(res) {
             console.log(res);
-            $("#cars").html("");
+            $("#carbycategory").html("");
             if(res.status=='Ok'){
                 for (i=0; i<res.count; i++ ) {
                     car_plate_number = res.entries[i].car_plate_number; 
-                    car_brand_name = res.entries[i].car_brand_name;
+                    car_brandname = res.entries[i].car_brandname;
                     car_model = res.entries[i].car_model;
                     car_color = res.entries[i].car_color;
                     car_rental_rate = res.entries[i].car_rental_rate;
                     car_image = res.entries[i].car_image;
                     car_owner_id = res.entries[i].car_owner_id;
-                    $("#cars").append(getcarshtml(car_owner_id, car_plate_number, car_brand_name, car_model, car_color, car_rental_rate, car_image));
+                    $("#carbycategory").append(getcarbycategoryhtml(car_owner_id, car_plate_number, car_brand_name, car_model, car_color, car_rental_rate, car_image));
                 }
                 $("#mainpage").hide();
                 $("#userprofilepage").hide();
@@ -166,7 +199,7 @@ function get_carbycategory(car_category_name) {
                 $("#addownerpage").hide();
                 $("#updatecarpage").hide();
             } else {
-                $("#cars").html("");
+                $("#carbycategory").html("");
                 alert('Error')
             }
         }
