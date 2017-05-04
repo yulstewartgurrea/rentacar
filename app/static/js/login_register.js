@@ -68,6 +68,8 @@ function login() {
                 $("#brands").show();
                 $("#allcarsmenuweb").show();
                 $("#allcarsmenumobile").show();
+                $("#menu1").show();
+                $("#ecommercehomepage2").show();
             } else {
                 alert("Invalid Credentials")
             }

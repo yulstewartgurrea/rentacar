@@ -335,3 +335,15 @@ $$
 	select brandname from Brand;
 $$
 	language 'sql';
+
+create or replace function get_categorybrand(out text, out text) returns setof record as
+$$
+	select Category.category_name, Brand.brandname From Category Cross Join Brand;
+$$
+	language 'sql';
+
+create or replace function get_categorybrand2(out text, out text) returns setof record as
+$$ 
+	select category_name, brandname From Category, Brand;
+$$
+	language 'sql';

@@ -50,9 +50,18 @@ function showaddownerpage() {
 
 function showshophomepage() {
 	$("#accountpage").show();
-	$("#homepage").show();
+	$("#homepage").hide();
 	$("#shoppage").hide();
 	$("#cardetailspage").hide();
 	$("#cartpage").hide();
 	$("#checkoutpage").hide();
 }	
+
+function showshophomepage2() {
+	$("#accountpage").hide();
+	$("#homepage").show();
+	$("#shoppage").hide();
+	$("#cardetailspage").hide();
+	$("#cartpage").hide();
+	$("#checkoutpage").hide();  
+}

@@ -95,23 +95,23 @@
 					<!-- header-top-left start -->
 					<div class="col-lg-6 col-md-6 col-sm-7">
 						<div class="header-top-left">
-							<div class="top-message">Default welcome Yul</div></div>
+							<div class="top-message">Default welcome Yul</div>
 							<div class="phone-number"> Call support free: <span>123 456  789</span></div>
 						</div>
 					</div>
 					<!-- header-top-left end -->
 					<!-- header-top-right start -->
-					<div class="col-lg-6 col-md-6 col-sm-5">
+					<div class="col-lg-6 col-md-6 col-sm-6">
 						<div class="header-top-right">
-							<!-- <div class="lang-select"> -->
-								<!-- <ul> -->
-									<!-- <li><a href="#"><img src="../../shoptemplate/img/en.png" alt="" /></a></li> -->
-								<!-- </ul> -->
-							<!-- </div> -->
-							<div class="top-menu">
+							<!-- <div class="lang-select">
 								<ul>
-									<li><a href="my-account.html" style="display: none">My Account</a></li>
-									<li><a href="#" onclick="logout();" style="display: none">Logout</a></li>
+									<li><a href="#"><img src="../../shoptemplate/img/en.png" alt="" /></a></li>
+								</ul>
+							</div> -->
+							<div class="top-menu" id="menu1" style="display: none">
+								<ul>
+									<li><a href="#">My Account</a></li>
+									<li><a href="#" onclick="logout();">Logout</a></li>
 								</ul>
 							</div>
 						</div>
@@ -155,7 +155,8 @@
 						<div class="mainmenu">
 							<nav>
 								<ul>
-									<li><a href="#" onclick="showshophomepage();">Home</a></li>
+									<li><a href="#" onclick="showshophomepage();" id="ecommercehomepage">Home</a></li>
+									<li style="display:none"><a href="#" onclick="showshophomepage2();" id="ecommercehomepage2">Home</a></li>
 									<li  id="allcarsmenuweb" onclick="getcars();" style="display: none"><a href="#">Vehicles</li>
 									<li><a href="contact.html">Contact</a></li>
 								</ul>
@@ -378,7 +379,7 @@
 						<ul class="sidebar-menu">
 
 							<!-- Brands -->
-							<div id="brands2"></div>
+							<div id="categoriesbrand"></div>
 							<!-- Brands end -->
 						
 						</ul>
@@ -419,7 +420,8 @@
 							<!-- Cars single product -->
 							<div id="carsecommerce"></div>
 							<div id="carbycategoryeccomerce"></div>
-							<div id="carbybrandecommerce"></div>	
+							<div id="carbybrandecommerce"></div>
+							<div id="carbycategorybrandecommerce"></div>	
 							<!-- Cars single product end -->
 
 						</div>

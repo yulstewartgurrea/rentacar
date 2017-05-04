@@ -59,10 +59,36 @@ function getcars() {
                     $("#categories2").append(getecommercecategoryhtml(category_name));
                 }
 
-                for(i=0; i<res.countbrands; i++){
-                    brandname = res.brands[i].brandname;
-                    $("#brands2").append(getecommercebrandhtml(brandname));                   
+                // for(i=0; i<res.countbrands; i++){
+                //     brandname = res.brands[i].brandname;
+                //     $("#brands2").append(getecommercebrandhtml(brandname));    
+
+                // }
+
+                // for(i=0; i<res.countcategoriesbrand; i++){
+                //     car_plate_number = res.entries[i].car_plate_number; 
+                //     car_model = res.entries[i].car_model;
+                //     car_color = res.entries[i].car_color;
+                //     car_rental_rate = res.entries[i].car_rental_rate;
+                //     car_image = res.entries[i].car_image;
+                //     car_owner_id = res.entries[i].car_owner_id;
+                //     $("#categoriesbrand").append(getecommercecategoriesbrandhtml(car_owner_id, car_plate_number, car_model, car_color, car_rental_rate, car_image))
+                // }
+
+                // for(i=0; i<res.countcategories; i++){
+                //     category_name = res.categories[i].category_name; 
+                //     for(i=0; i<res.countbrands; i++){
+                //         brandname = res.brands[i].brandname;
+                //         $("#categoriesbrand").append(getecommercebrandhtml(category_name, brandname))
+                //     }
+                // }
+
+                for(i=0; i<res.countcategorybrand; i++){
+                    category_name = res.categorybrand[i].category_name;
+                    brandname = res.categorybrand[i].brandname;
+                    $("#categoriesbrand").append(getecommercebrandhtml(category_name, brandname))
                 }
+
                 $("#mainpage").hide();
                 $("#userprofilepage").hide();
                 $("#addcarpage").hide();
@@ -88,8 +114,9 @@ function getecommercecategoryhtml(category_name) {
     return '<li onclick="getcarbycategory(\''+category_name+'\');">'+'<a href="#">' +category_name+ '</a>'+'</li>'
 }
 
-function getecommercebrandhtml(brandname) {
-    return '<li onclick="getcarbybrand(\''+brandname+'\');">'+'<a href="#">'+brandname+'</a>'+'</li>'
+function getecommercebrandhtml(category_name, brandname) {
+    // return '<li onclick="getcarbybrand(\''+brandname+'\');">'+'<a href="#">'+brandname+'</a>'+'</li>'
+    return '<li onclick="getcarbycategorybrandname(\''+category_name+'\''+','+'\''+brandname+'\');">'+'<a href="#">'+category_name+','+brandname+'</a>'+'</li>'
 }
 
 function getcarshtml(car_owner_id, car_category_name, car_plate_numbers, car_brandname, car_model, car_color, car_rental_rate, car_image) {
@@ -407,6 +434,56 @@ function getcarbybrand(car_brandname) {
 }
 
 function getcarbybrandhtml(car_owner_id, car_plate_number, car_model, car_color, car_rental_rate, car_image, car_category_name) {
+    return '<div class="col-lg-4 col-md-4 col-sm-4">'+
+                '<div class="single-product">'+
+                    '<div class="product-img">'+
+                        '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+
+                            '<img class="primary-image" src="../../shoptemplate/img/product/women/8.jpg" alt="" />'+
+                            '<img class="secondary-image" src="../../shoptemplate/img/product/women/3.jpg" alt="" />'+
+                        '</a>'+
+                        '<h2 class="product_title"><a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+car_model+'</a></h2>'+                          
+                    '</div>'+
+                '</div>'+
+            '</div>'
+
+}
+
+function getcarbycategorybrandname(car_category_name, car_brandname) {
+    $.ajax({
+        url: 'http://127.0.0.1:5000/car/category/'+car_category_name+'/brand/'+car_brandname,
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            console.log(res);
+            $("#carbycategorybrandecommerce").html("");
+            if(res.status=='Ok'){
+                for (i=0; i<res.count; i++ ) {
+                    car_plate_number = res.entries[i].car_plate_number; 
+                    car_model = res.entries[i].car_model;
+                    car_color = res.entries[i].car_color;
+                    car_rental_rate = res.entries[i].car_rental_rate;
+                    car_image = res.entries[i].car_image;
+                    car_owner_id = res.entries[i].car_owner_id;
+                    $("#carbycategorybrandecommerce").append(getcarbybrandcategoryhtml(car_owner_id, car_plate_number, car_model, car_color, car_rental_rate, car_image));
+                }
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addcarpage").hide();
+                $("#carspage").show();
+                $("#addownerpage").hide();
+                $("#updatecarpage").hide();
+                $("#carsecommerce").hide()
+
+            } else if(res.status==='Error') {
+                $("#carbycategorybrandecommerce").html("");
+                alert('Error')
+            }
+        }
+    });
+
+}
+
+function getcarbybrandcategoryhtml(car_owner_id, car_model, car_color, car_rental_rate, car_image, car_plate_number) {
     return '<div class="col-lg-4 col-md-4 col-sm-4">'+
                 '<div class="single-product">'+
                     '<div class="product-img">'+

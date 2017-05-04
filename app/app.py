@@ -183,6 +183,8 @@ def get_cars():
 
     resbrand = spcall('get_brand', ())
 
+    rescategorybrand = spcall('get_categorybrand', ())
+
     if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
@@ -190,6 +192,9 @@ def get_cars():
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
     if 'Error' in str(resbrand[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    if 'Error' in str(rescategorybrand):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
     recs = []
@@ -205,8 +210,13 @@ def get_cars():
     for r in resbrand:
         recsbrand.append({'brandname': str(r[0])})
 
+    recscategorybrand = []
+    for r in rescategorybrand:
+        recscategorybrand.append({'category_name': str(r[0]), 'brandname': str(r[1])})
+
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs), 'categories': recscategory,
-                'countcategories': len(recscategory), 'brands': recsbrand, 'countbrands': len(recsbrand)})
+                'countcategories': len(recscategory), 'brands': recsbrand, 'countbrands': len(recsbrand),
+                'categorybrand': recscategorybrand, 'countcategorybrand': len(recscategorybrand)})
 
 @app.route('/car/platenumber/<string:car_plate_number>', methods=['GET'])
 def get_carbyplatenumber(car_plate_number):
@@ -250,7 +260,7 @@ def get_carbybrandname(car_brandname):
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
-@app.route('/car/<string:car_category_name>/<string:car_brandname>', methods=['GET'])
+@app.route('/car/category/<string:car_category_name>/brand/<string:car_brandname>', methods=['GET'])
 def get_carbycategorybrandname(car_category_name, car_brandname):
     res = spcall('get_carbycategorybrandname', (car_category_name, car_brandname,), )
 
