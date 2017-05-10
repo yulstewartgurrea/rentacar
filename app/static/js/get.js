@@ -94,7 +94,7 @@ function getcarsecommercehtml(car_owner_id, car_category_name, car_plate_number,
                             '<img class="primary-image" src="../../shoptemplate/img/product/women/8.jpg" alt="" />'+
                             '<img class="secondary-image" src="../../shoptemplate/img/product/women/3.jpg" alt="" />'+
                         '</a>'+
-                        '<h2 class="product_title"><a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+car_model+'</a></h2>'+                          
+                        '<h2 class="product_title">'+'<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+car_model+'</a>'+'</h2>'+                          
                     '</div>'+
                 '</div>'+
             '</div>'
