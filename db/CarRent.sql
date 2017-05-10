@@ -37,6 +37,23 @@ $$
 
 -- select new_owner('o1', 'o1', 'add1', 'add1', 1);
 
+-- Update Owner
+create or replace function update_owner(p_owner_id int, p_owner_fname text, p_owner_lname text, p_owner_add1 text, p_owner_add2, text,
+										p_owner_mobile_no numeric) returns void as
+$$
+	update Owner
+	set
+		owner_first_name = p_owner_fname,
+		owner_last_name = p_owner_lname,
+		owner_address1 = p_owner_add1,
+		owner_address2 = p_owner_add2,
+		owner_mobile_no = p_owner_mobile_no
+
+	where 
+	owner_id = p_owner_id
+$$
+	language 'sql';
+
 create table Car(
 	car_plate_number text primary key,
 	car_color text,
@@ -86,8 +103,28 @@ end;
 $$
 	language 'plpgsql';
 
--- select new_car('ghx-938', 'silver', 'Mitsubishi', 'lancer 1996', 10, 'image1', 1, 'Compact Vehicle');
--- select new_car('kdh-662', 'gold', 'Isuzu', 'crosswind 2006', 10, 'image1', 1, 'MPV');
+select new_car('ghx-938', 'silver', 'Mitsubishi', 'lancer 1996', 10, 'image1', 1, 'Compact Vehicle');
+select new_car('kdh-662', 'gold', 'Isuzu', 'crosswind 2006', 10, 'image1', 1, 'MPV');
+
+-- Update Car
+create or replace function update_car(in p_plate_number text, p_color text, p_brandname text, p_model text, p_rental_rate numeric,
+									p_image text, p_owner_id int, p_category_name text) returns void as
+$$
+	update Car
+	set 
+		car_color = p_color,
+		car_model = p_model,
+		car_rental_rate = p_rental_rate,
+		car_image = p_image,
+		car_category_name = p_category_name,
+		car_owner_id = p_owner_id,
+		car_brandname = p_brandname
+	where 
+		car_plate_number = p_plate_number
+$$
+	language 'sql';
+
+select car_update('ghx-938', 'black', 'Mitsubishi', 'lancer 1996', 10, 'image10', 2, 'SUV');
 
 -- Get all Cars
 create or replace function get_cars(out text, out text, out text, out text, out numeric, out text, out int, out text) returns setof record as
@@ -97,9 +134,9 @@ $$
 	language 'sql';
 
 -- Get car by plate_number
-create or replace function get_carbyplatenumber(in p_plate_number text, out text, out text, out text, out numeric, out text, out int, out text) returns setof record as
+create or replace function get_carbyplatenumber(in p_plate_number text, out text, out text, out text, out text, out numeric, out text, out int, out text) returns setof record as
 $$
-	select car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id, car_category_name from Car where car_plate_number = p_plate_number;
+	select car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id, car_category_name from Car where car_plate_number = p_plate_number;
 $$
 	language 'sql';
 
@@ -238,17 +275,6 @@ $$
 $$
 	language 'sql';
 
-create table Rent(
-	rental_id serial primary key,
-	date_rented text,
-	date_due date,
-	date_returned date,
-	total_bill numeric,
-	overdue_cost numeric,
-	plate_number text references Car(plate_number),
-	renter_id int references Owner(user_id)
-);
-
 create table Category(
 	category_name text primary key
 );
@@ -347,3 +373,69 @@ $$
 	select category_name, brandname From Category, Brand;
 $$
 	language 'sql';
+
+create table Cart(
+	cart_id serial primary key,
+	cart_total numeric,
+	cart_time_added timestamp default current_timestamp ,
+	cart_plate_number text references Car(car_plate_number),
+	cart_user_id int references UserAccount(user_id)
+);
+
+create or replace function cart_add_product(p_cart_plate_number text, p_user_id) returns text as
+$$
+declare
+	v_cart_plate_number text;
+	v_res text; 
+
+begin
+	select into v_cart_plate_number cart_plate_number from Cart where cart_plate_number = p_cart_plate_number;
+
+		if v_cart_plate_number isnull then
+			if p_cart_plate_number = '' then
+				v_res = 'Error';
+			else
+				insert into Cart(cart_plate_number, cart_user_id)
+					values(p_cart_plate_number, p_user_id);
+					v_res = 'Ok';
+			end if;
+		else
+			v_res = 'Car already exists';
+		end if;
+		return v_res;
+end;
+$$
+	language 'plpgsql' 
+
+create or replace function get_cartbyuser(in p_user_id int, out text, out text, out text, out text, out numeric, out text) returns setof text as 
+$$
+	Car.category_name, Car.brandname, Car.car_model, Car.color, Car.car_rental_rate, Car.car_image from Car where user_id = p_user_id
+$$
+	language 'sql';
+
+create table Rents(
+	rental_id serial primary key,
+	date_rented timestamp default current_timestamp,
+	date_due date,
+	date_returned timestamp default current_timestamp,
+	total_bill numeric,
+	overdue_cost numeric,
+	plate_number text references Car(car_plate_number),
+	renter_id int references Owner(user_id)
+);
+
+create table rent_detail(
+	rental_id int references Rents(rental_id)
+	car_plate_number text references Car(car_plate_number)
+	quantity int,
+	unit_cost numeric
+
+);
+
+
+-- create table CartItem(
+-- 	cartitem_cart_id int references Cart(cart_id),
+-- 	cartitem_item text references Car(plate_number),
+-- 	quantity int default 1,
+-- 	cartitem_added date
+-- );

@@ -684,30 +684,19 @@ But that's the difference in our opinions.</textarea>
         </div>
 
 
-        <!-- Update cars -->
+        <!-- Update car -->
         <div class="content" id="updatecarpage" style="display:none">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-lg-8 col-md-7">
                         <div class="card">
                             <div class="header">
                                 <h2 class="title">Update Vehicle</h2>
-                                <!-- <p class="category">Here is a subtitle for this table</p> -->
                             </div>
-                            <div class="content table-responsive table-full-width">
-                                 <table class="table table-striped">
-                                    <thead>
-                                        <th>Owner ID</th>
-                                        <th>Brand Name</th>
-                                        <th>Model</th>
-                                        <th>Color</th>
-                                        <th>Rental Rate</th>
-                                        <th>Image</th>
-                                    </thead>
-                                    <tbody id="cardetails">
-                                    </tbody>
-                                </table>
-
+                            <div class="content">
+                                <form id="cardetailsforupdate">
+                                    <!-- <div class="clearfix"></div> -->
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -750,6 +739,49 @@ But that's the difference in our opinions.</textarea>
                                         <th>Image</th>
                                     </thead>
                                     <tbody id="cars">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Car details -->
+        <div class="content" id="cardetailspage" style="display:none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2 class="title">Vehicles</h2>
+                                <!-- <p class="category">Here is a subtitle for this table</p> -->
+                            </div>
+                            <!-- <div class="row">
+                                <div class="col-md-2">
+                                   <div class="header">
+                                        <h4 class="title">Vehicle Type</h4>
+                                    </div>
+                                </div>
+                            <div class="col-md-1">
+                                    <div class="header">
+                                        <h4 class="title">Vehicles</h4>
+                                    </div>
+                            </div>
+                            </div> -->
+                            <div class="content table-responsive table-full-width">
+                                 <table class="table table-striped">
+                                    <thead>
+                                        <th>Owner ID</th>
+                                        <th>Vehicle Type</th> 
+                                        <!-- <th>Plate Number</th>                                        -->
+                                        <th>Brand Name</p></th>
+                                        <th>Model</th>
+                                        <th>Color</th>
+                                        <th>Rental Rate</th>
+                                        <th>Image</th>
+                                    </thead>
+                                    <tbody id="cardetails">
                                     </tbody>
                                 </table>
                             </div>
