@@ -128,6 +128,20 @@ def new_owner(owner_first_name, owner_last_name):
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
+@app.route('/owners', methods=['GET'])
+def get_owners():
+    res = spcall('get_carowners', ())
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    recs = []
+    for r in res:
+        recs.append({'owner_id': str(r[0]), 'owner_firstname': str(r[1]), 'owner_lastname': str(r[2]),
+                    'owner_address1': str(r[3]), 'owner_address2': str(r[4]), 'owner_mobile_no': str(r[5])})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+
 # Get all categories
 @app.route('/category', methods=['GET'])
 def get_categories():
