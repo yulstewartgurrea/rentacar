@@ -129,7 +129,7 @@ def new_owner(owner_first_name, owner_last_name):
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
 @app.route('/owners', methods=['GET'])
-def get_owners():
+def get_carowners():
     res = spcall('get_carowners', ())
 
     if 'Error' in str(res[0][0]):

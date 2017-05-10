@@ -68,7 +68,7 @@
                         <p>Add Owner</p>
                     </a>
                 </li>
-                <li onclick="getcars();">
+                <li onclick="getcarowners();">
                     <a href="#">
                         <i class="ti-view-list-alt"></i>
                         <p>Owners</p>
@@ -614,6 +614,47 @@ But that's the difference in our opinions.</textarea>
             </div>
         </div>
 
+        <!--Table for cars-->
+        <div class="content" id="carownerspage" style="display:none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2 class="title">Vehicles</h2>
+                                <!-- <p class="category">Here is a subtitle for this table</p> -->
+                            </div>
+                            <!-- <div class="row">
+                                <div class="col-md-2">
+                                   <div class="header">
+                                        <h4 class="title">Vehicle Type</h4>
+                                    </div>
+                                </div>
+                            <div class="col-md-1">
+                                    <div class="header">
+                                        <h4 class="title">Vehicles</h4>
+                                    </div>
+                            </div>
+                            </div> -->
+                            <div class="content table-responsive table-full-width">
+                                 <table class="table table-striped">
+                                    <thead>
+                                        <th>Owner ID</th>
+                                        <th>First Name</th> 
+                                        <th>Last Name </th>                                       
+                                        <th>Address1</th>
+                                        <th>Address2</th>
+                                        <th>Mobile No.</th>
+                                    </thead>
+                                    <tbody id="carowners">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Add cars -->
         <div class="content" id="addcarpage" style="display:none">
@@ -753,6 +794,7 @@ But that's the difference in our opinions.</textarea>
                 </div>
             </div>
         </div>
+
         <!-- Car details -->
         <div class="content" id="cardetailspage" style="display:none">
             <div class="container-fluid">

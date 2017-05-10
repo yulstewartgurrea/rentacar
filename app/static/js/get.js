@@ -553,3 +553,59 @@ function updatecardetails(plate_number) {
 
     });
 }
+
+
+function getcarowners() {
+    $.ajax({
+        url: 'http://127.0.0.1:5000/owners',
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        success: function(res){
+            console.log(res);
+            $("#carowners")
+            if(res.status==='Ok') {
+                for(i=0; i<res.count; i++){
+                    owner_id = res.entries[i].owner_id;
+                    owner_firstname = res.entries[i].owner_firstname;
+                    owner_lastname = res.entries[i].owner_lastname;
+                    owner_address1 = res.entries[i].owner_address1;
+                    owner_address2 = res.entries[i].owner_address2;
+                    owner_mobile_no = res.entries[i].owner_mobile_no;
+                    $("#carowners").append(getcarownershtml(owner_id, owner_firstname, owner_lastname, owner_address1,
+                        owner_address2, owner_mobile_no));
+                }
+            
+            $("#carownerspage").show();
+            $("#mainpage").hide();
+            $("#userprofilepage").hide();
+            $("#addcarpage").hide();
+            $("#carspage").show();
+            $("#addownerpage").hide();
+            $("#updatecarpage").hide();
+            $("#shoppage").show();
+            $("#accountpage").hide();
+            $("#homepage").hide();
+            $("#cardetailsecommercepage").hide();
+
+            } else {
+                $("#carowners").html();
+                alert("Error");
+            }
+        }
+
+    });
+}
+
+function getcarownershtml(owner_id, owner_firstname, owner_lastname, owner_address1, owner_address2, owner_mobile_no) {
+    return '<tr> ' +
+            '<td>' + owner_id + '</td>' +
+            '<td>' + owner_firstname + '</td>' +
+            '<td>' + owner_lastname + '</td>' +
+            '<td>' + owner_address1 + '</td>' +
+            '<td>' + owner_address2 + '</td>' +
+            '<td>' + owner_mobile_no + '</td>' +
+            '<td>' + '<a href="#" onclick="getcarbyplatenumberforupdate(\''+car_plate_number+'\')">'+ '<div class="ti-pencil-alt"> update' +'</div>'+'</a>'+'</td>' + 
+            '<td>' + '<div class="ti-trash"> delete' + '</div>'+'</td>' +                     
+            '</tr>'
+}
