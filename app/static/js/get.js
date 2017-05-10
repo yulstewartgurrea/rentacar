@@ -580,10 +580,10 @@ function getcarowners() {
             $("#mainpage").hide();
             $("#userprofilepage").hide();
             $("#addcarpage").hide();
-            $("#carspage").show();
+            $("#carspage").hide();
             $("#addownerpage").hide();
             $("#updatecarpage").hide();
-            $("#shoppage").show();
+            $("#shoppage").hide();
             $("#accountpage").hide();
             $("#homepage").hide();
             $("#cardetailsecommercepage").hide();
@@ -608,4 +608,25 @@ function getcarownershtml(owner_id, owner_firstname, owner_lastname, owner_addre
             '<td>' + '<a href="#" onclick="getcarbyplatenumberforupdate(\''+car_plate_number+'\')">'+ '<div class="ti-pencil-alt"> update' +'</div>'+'</a>'+'</td>' + 
             '<td>' + '<div class="ti-trash"> delete' + '</div>'+'</td>' +                     
             '</tr>'
+}
+
+function getcarownerbyid(car_owner_id) {
+
+    $.ajax({
+        url: 'http://127.0.0.1:5000/owner/'+car_owner_id,
+        type: 'GET'
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        success: function(res){
+            console.log(res);
+            $("#carownerdetails").html();
+            if(res.status==='Ok') {
+                for(i=0; i<res.count, i++) {
+                    
+                }
+            }
+
+        }
+
+    });
 }

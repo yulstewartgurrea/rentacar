@@ -30,6 +30,7 @@ function showaddcarpage() {
 	$("#carspage").hide();
 	$("#addownerpage").hide();
 	$("#updatecarpage").hide();
+	$("#carownerspage").hide();
 }
 
 // function showtableforcars() {
@@ -46,6 +47,7 @@ function showaddownerpage() {
 	$("#carspage").hide();
 	$("#addownerpage").show();
 	$("#updatecarpage").hide();
+	$("#carownerspage").hide();
 }
 
 function showshophomepage() {
