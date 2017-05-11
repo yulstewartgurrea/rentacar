@@ -587,8 +587,6 @@ function updatecardetails(plate_number) {
     var car_image = $("#update_car_image").val();
     var car_plate_number = $("update_car_plate_number").val();
 
-
-
     var data = JSON.stringify({'car_owner_id': car_owner_id, 'car_category_name': car_category_name, 'car_brandname': car_brandname,
                                 'car_model': car_model, 'car_color': car_color, 'car_image': car_image, 'car_rental_rate': car_rental_rate,
                                 'car_image': car_image, 'car_plate_number': plate_number})
@@ -832,6 +830,37 @@ function getcarownerbyidforupdatehtml(owner_id) {
     '</div>'+
                                     
     '<div class="text-center">'+
-        '<input type="button" class="btn btn-info btn-fill btn-wd" onclick="addowner('+owner_id+');" value="Save">'+
+        '<input type="button" class="btn btn-info btn-fill btn-wd" onclick="updatecarowner('+owner_id+');" value="Save">'+
     '</div>'
+}
+
+function updatecarowner(oid) {
+
+    var owner_id = $("#update_owner_id").val();
+    var owner_first_name = $("#update_owner_firstname").val();
+    var owner_last_name = $("#update_owner_lastname").val();
+    var owner_address1 = $("#update_owner_address1").val();
+    var owner_address2 = $("#update_owner_address2").val();
+    var owner_mobile_no = $("#update_owner_mobile_no").val();
+
+    var data = JSON.stringify({'owner_id': oid, 'owner_first_name': owner_first_name, 'owner_last_name': owner_last_name,
+                'owner_address1': owner_address1, 'owner_address2': owner_address2, 
+                'owner_mobile_no': owner_mobile_no})
+
+    $.ajax({
+        url: 'http://127.0.0.1:5000/owner/update/'+oid,
+        type: 'PUT',
+        contentType: 'application/json; charset=utf-8',
+        data: data,
+        dataType: 'json',
+        success: function(res){
+            console.log(res);
+            if(res.status==='Ok') {
+                alert("Car Updated!" + data)
+            } else {
+                alert("Error")
+            }
+        }
+
+    });
 }

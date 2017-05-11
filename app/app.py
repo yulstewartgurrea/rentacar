@@ -128,6 +128,34 @@ def new_owner(owner_first_name, owner_last_name):
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
+# Update Car Owner
+@app.route('/owner/update/<owner_id>', methods=['PUT'])
+def update_carowner(owner_id):
+    jsn = json.loads(request.data)
+
+    owner_id = jsn.get('owner_id', '')
+    owner_first_name = jsn.get('owner_first_name', '')
+    owner_last_name = jsn.get('owner_last_name', '')
+    owner_address1 = jsn.get('owner_address1', '')
+    owner_address2 = jsn.get('owner_address2', '')
+    owner_mobile_no = jsn.get('owner_mobile_no', '')
+
+    print (jsn)
+
+    res = spcall('update_carowner', (
+        owner_id,
+        owner_first_name,
+        owner_last_name,
+        owner_address1,
+        owner_address2,
+        owner_mobile_no), True)
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+    else:
+        return jsonify({'status': 'Ok'})
+
+# Get car owners
 @app.route('/owners', methods=['GET'])
 def get_carowners():
     res = spcall('get_carowners', ())
@@ -142,6 +170,7 @@ def get_carowners():
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
+# Get car owner by id
 @app.route('/owner/<string:owner_id>', methods=['GET'])
 def get_carownerbyid(owner_id):
     res = spcall('get_carownerbyid', (owner_id,), )

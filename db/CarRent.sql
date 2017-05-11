@@ -37,20 +37,6 @@ $$
 
 select new_owner('o1', 'o1', 'add1', 'add1', 1);
 
--- Get car owners
-create or replace function get_carowners(out int, out text, out text, out text, out text, out numeric) returns setof record as
-$$
-	select owner_id, owner_first_name, owner_last_name, owner_address1, owner_address2, owner_mobile_no from Owner;
-$$
-	language 'sql';
-
--- Get car owner by id
-create or replace function get_carownerbyid(in p_owner_id int, out int, out text, out text, out text, out text, out numeric) returns setof record as
-$$
-	select owner_id, owner_first_name, owner_last_name, owner_address1, owner_address2, owner_mobile_no from Owner where owner_id = p_owner_id;
-$$
-	language 'sql';
-
 -- Update Owner
 create or replace function update_carowner(in p_owner_id int, p_owner_fname text, p_owner_lname text, p_owner_add1 text, p_owner_add2 text,
 										p_owner_mobile_no numeric) returns void as
@@ -67,6 +53,22 @@ $$
 	owner_id = p_owner_id
 $$
 	language 'sql';
+
+-- Get car owners
+create or replace function get_carowners(out int, out text, out text, out text, out text, out numeric) returns setof record as
+$$
+	select owner_id, owner_first_name, owner_last_name, owner_address1, owner_address2, owner_mobile_no from Owner;
+$$
+	language 'sql';
+
+-- Get car owner by id
+create or replace function get_carownerbyid(in p_owner_id int, out int, out text, out text, out text, out text, out numeric) returns setof record as
+$$
+	select owner_id, owner_first_name, owner_last_name, owner_address1, owner_address2, owner_mobile_no from Owner where owner_id = p_owner_id;
+$$
+	language 'sql';
+
+
 
 select update_carowner(1, 'ambot', 'ambot', 'Ambot', 'Ambot', 'ambotnmo');
 
