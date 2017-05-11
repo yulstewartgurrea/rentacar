@@ -9,7 +9,7 @@ function getcars() {
             $("#cars").html("");
             $("#carsecommerce").html("");
             $("#categories2").html("");
-            $("#brands2").html();
+            $("#brands2").html("");
             if(res.status=='Ok'){
                 for (i=0; i<res.count; i++ ) {
                     car_plate_number = res.entries[i].car_plate_number; 
@@ -36,18 +36,27 @@ function getcars() {
 
                 }
 
+                /////////////
+                //Dashboard//
+                ////////////
                 $("#mainpage").hide();
                 $("#userprofilepage").hide();
-                $("#addcarpage").hide();
-                $("#carspage").show();
                 $("#addownerpage").hide();
+                $("#carownerspage").hide();
+                $("#carownersdetailspage").hide();
+                $("#addcarpage").hide();
                 $("#updatecarpage").hide();
+                $("#carspage").show();
+                $("#cardetailspage").hide();
+                $("#updateownerpage").hide();
+                
+                /////////////
+                //Ecommerce//
+                ////////////
                 $("#shoppage").show();
                 $("#accountpage").hide();
                 $("#homepage").hide();
                 $("#cardetailsecommercepage").hide();
-                // $("#carbycategoryeccomerce").hide();
-
 
             } else {
                 $("#cars").html("");
@@ -123,11 +132,28 @@ function getcarbyplatenumber(car_plate_number){
                     // $("#cardetailsecommerce").append(getcardetailshtmlecommerce(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image))
                     // $("#updatecardetails").append(updatecarbyplatenumberhtml(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image))
                 }
+
+                /////////////
+                //Dashboard//
+                ////////////
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addownerpage").hide();
+                $("#carownerspage").hide();
+                $("#carownersdetailspage").hide();
+                $("#addcarpage").hide();
                 $("#updatecarpage").hide();
                 $("#carspage").hide();
-                $("#shoppage").hide();
                 $("#cardetailspage").show();
+
+                /////////////
+                //Ecommerce//
+                ////////////
+                $("#shoppage").hide();
+                $("#accountpage").hide();
+                $("#homepage").hide();
                 $("#cardetailsecommercepage").show();
+
             } else {
                 $("#cardetails").html("");
                 alert("Error")
@@ -286,12 +312,19 @@ function getcarbyplatenumberforupdate(car_plate_number){
                 document.getElementById('update_car_image').value = car_image;
                 document.getElementById('update_car_plate_number').value = car_plate_number;
 
-                // document.getElementById('update_car_plate_number').value = car_plate_number;
-                // $("#updatecarpage").show();
-                $("#carspage").hide();
-                $("#shoppage").hide();
-                $("#cardetailsecommercepage").show();
+                /////////////
+                //Dashboard//
+                ////////////
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addownerpage").hide();
+                $("#carownerspage").hide();
+                $("#carownersdetailspage").hide();
+                $("#addcarpage").hide();
                 $("#updatecarpage").show();
+                $("#carspage").hide();
+                $("#cardetailspage").hide();
+
             } else {
                 $("#cardetailsforupdate").html("");
                 alert("Error")
@@ -386,12 +419,29 @@ function getcarbycategory(car_category_name) {
                     car_owner_id = res.entries[i].car_owner_id;
                     $("#carbycategoryeccomerce").append(getcarbycategoryhtml(car_owner_id, car_plate_number, car_brandname, car_model, car_color, car_rental_rate, car_image));
                 }
+
+                /////////////
+                //Dashboard//
+                ////////////
                 $("#mainpage").hide();
                 $("#userprofilepage").hide();
-                $("#addcarpage").hide();
-                $("#carspage").show();
                 $("#addownerpage").hide();
+                $("#carownerspage").hide();
+                $("#carownersdetailspage").hide();
+                $("#addcarpage").hide();
                 $("#updatecarpage").hide();
+                $("#carspage").hide();
+                $("#cardetailspage").hide();
+
+                /////////////
+                //Ecommerce//
+                ////////////
+                // $("#shoppage").show();
+                // $("#accountpage").hide();
+                // $("#homepage").hide();
+                // $("#cardetailsecommercepage").hide();
+
+                $("#carspage").show();
                 $("#carsecommerce").hide()
 
             } else if(res.status==='Error') {
@@ -436,14 +486,21 @@ function getcarbybrand(car_brandname) {
                     car_owner_id = res.entries[i].car_owner_id;
                     $("#carbybrandecommerce").append(getcarbybrandhtml(car_owner_id, car_plate_number, car_model, car_color, car_rental_rate, car_image, car_category_name));
                 }
+
+                /////////////
+                //Dashboard//
+                ////////////
                 $("#mainpage").hide();
                 $("#userprofilepage").hide();
-                $("#addcarpage").hide();
-                $("#carspage").show();
                 $("#addownerpage").hide();
+                $("#carownerspage").hide();
+                $("#carownersdetailspage").hide();
+                $("#addcarpage").hide();
                 $("#updatecarpage").hide();
-                $("#carsecommerce").hide()
+                $("#carspage").hide();
+                $("#cardetailspage").hide();
 
+                
             } else if(res.status==='Error') {
                 $("#carbybrandecommerce").html("");
                 alert('Error')
@@ -563,7 +620,7 @@ function getcarowners() {
         contentType: 'application/json; charset=utf-8',
         success: function(res){
             console.log(res);
-            $("#carowners")
+            $("#carowners").html("");
             if(res.status==='Ok') {
                 for(i=0; i<res.count; i++){
                     owner_id = res.entries[i].owner_id;
@@ -575,18 +632,19 @@ function getcarowners() {
                     $("#carowners").append(getcarownershtml(owner_id, owner_firstname, owner_lastname, owner_address1,
                         owner_address2, owner_mobile_no));
                 }
-            
-            $("#carownerspage").show();
-            $("#mainpage").hide();
-            $("#userprofilepage").hide();
-            $("#addcarpage").hide();
-            $("#carspage").hide();
-            $("#addownerpage").hide();
-            $("#updatecarpage").hide();
-            $("#shoppage").hide();
-            $("#accountpage").hide();
-            $("#homepage").hide();
-            $("#cardetailsecommercepage").hide();
+
+                /////////////
+                //Dashboard//
+                ////////////
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addownerpage").hide();
+                $("#carownerspage").show();
+                $("#carownersdetailspage").hide();
+                $("#addcarpage").hide();
+                $("#updatecarpage").hide();
+                $("#carspage").hide();
+                $("#cardetailspage").hide();
 
             } else {
                 $("#carowners").html();
@@ -599,13 +657,13 @@ function getcarowners() {
 
 function getcarownershtml(owner_id, owner_firstname, owner_lastname, owner_address1, owner_address2, owner_mobile_no) {
     return '<tr> ' +
-            '<td>' + owner_id + '</td>' +
+            '<td>' + '<a href="#" onclick="getcarownerbyid('+owner_id+');">'+owner_id +'</a>'+ '</td>' +
             '<td>' + owner_firstname + '</td>' +
             '<td>' + owner_lastname + '</td>' +
             '<td>' + owner_address1 + '</td>' +
             '<td>' + owner_address2 + '</td>' +
             '<td>' + owner_mobile_no + '</td>' +
-            '<td>' + '<a href="#" onclick="getcarbyplatenumberforupdate(\''+car_plate_number+'\')">'+ '<div class="ti-pencil-alt"> update' +'</div>'+'</a>'+'</td>' + 
+            '<td>' + '<a href="#" onclick="getcarownerbyidforupdate('+owner_id+')">'+ '<div class="ti-pencil-alt"> update' +'</div>'+'</a>'+'</td>' + 
             '<td>' + '<div class="ti-trash"> delete' + '</div>'+'</td>' +                     
             '</tr>'
 }
@@ -614,19 +672,166 @@ function getcarownerbyid(car_owner_id) {
 
     $.ajax({
         url: 'http://127.0.0.1:5000/owner/'+car_owner_id,
-        type: 'GET'
+        type: 'GET',
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         success: function(res){
             console.log(res);
-            $("#carownerdetails").html();
+            $("#carownerdetails").html("");
             if(res.status==='Ok') {
-                for(i=0; i<res.count, i++) {
-                    
+                for(i=0; i<res.count; i++) {
+                    owner_id = res.entries[i].owner_id;
+                    owner_firstname = res.entries[i].owner_firstname;
+                    owner_lastname = res.entries[i].owner_lastname;
+                    owner_address1 = res.entries[i].owner_address1;
+                    owner_address2 = res.entries[i].owner_address2;
+                    owner_mobile_no = res.entries[i].owner_mobile_no;
+                    $("#carownerdetails").append(getcarownerbyidhtml(owner_id, owner_firstname, owner_lastname, owner_address1,
+                                owner_address2, owner_mobile_no))
+
                 }
+
+                /////////////
+                //Dashboard//
+                ////////////
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addownerpage").hide();
+                $("#carownerspage").hide();
+                $("#carownersdetailspage").show();
+                $("#addcarpage").hide();
+                $("#updatecarpage").hide();
+                $("#carspage").hide();
+                $("#cardetailspage").hide();
+
+            } else {
+                $("#carownerdetails").html("");
+                alert("Error!");
             }
 
         }
 
     });
+}
+
+function getcarownerbyidhtml(owner_id, owner_firstname, owner_lastname, owner_address1, owner_address2, owner_mobile_no) {
+    return '<tr> ' +
+            '<td>' + owner_id + '</td>' +
+            '<td>' + owner_firstname + '</td>' +
+            '<td>' + owner_lastname + '</td>' +
+            '<td>' + owner_address1 + '</td>' +
+            '<td>' + owner_address2 + '</td>' +
+            '<td>' + owner_mobile_no + '</td>' +
+            '</tr>'
+}
+
+function getcarownerbyidforupdate(car_owner_id) {
+
+    $.ajax({
+        url: 'http://127.0.0.1:5000/owner/'+car_owner_id,
+        type: 'GET',
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        success: function(res){
+            console.log(res);
+            $("#carownerdetailsforupdate").html("");
+            if(res.status==='Ok') {
+                for(i=0; i<res.count; i++) {
+                    owner_id = res.entries[i].owner_id;
+                    owner_firstname = res.entries[i].owner_firstname;
+                    owner_lastname = res.entries[i].owner_lastname;
+                    owner_address1 = res.entries[i].owner_address1;
+                    owner_address2 = res.entries[i].owner_address2;
+                    owner_mobile_no = res.entries[i].owner_mobile_no;
+                    $("#carownerdetailsforupdate").append(getcarownerbyidforupdatehtml(owner_id))
+
+                }
+
+                document.getElementById('update_owner_id').value = owner_id;
+                document.getElementById('update_owner_firstname').value = owner_firstname;
+                document.getElementById('update_owner_lastname').value = owner_lastname;
+                document.getElementById('update_owner_address1').value = owner_address1;
+                document.getElementById('update_owner_address2').value = owner_address2;
+                document.getElementById('update_owner_mobile_no').value = owner_mobile_no;
+
+                /////////////
+                //Dashboard//
+                ////////////
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addownerpage").hide();
+                $("#carownerspage").hide();
+                $("#carownersdetailspage").hide();
+                $("#addcarpage").hide();
+                $("#updatecarpage").hide();
+                $("#carspage").hide();
+                $("#cardetailspage").hide();
+                $("#updateownerpage").show();
+
+            } else {
+                $("#carownerdetailsforupdate").html("");
+                alert("Error!");
+            }
+
+        }
+
+    });
+
+}
+
+function getcarownerbyidforupdatehtml(owner_id) {
+    return '<div class="row">'+
+        '<div class="col-md-6">'+
+            '<div class="form-group">'+
+                '<label>Owner ID</label>'+
+                '<input type="text" class="form-control border-input" id="update_owner_id" disabled>'+
+            '</div>'+
+        '</div>'+
+    '</div>'+
+
+    '<div class="row">'+
+        '<div class="col-md-6">'+
+            '<div class="form-group">'+
+                '<label>First Name</label>'+
+                '<input type="text" class="form-control border-input" id="update_owner_firstname">'+
+            '</div>'+
+        '</div>'+
+        '<div class="col-md-6">'+
+            '<div class="form-group">'+
+                '<label>Last Name</label>'+
+                '<input type="text" class="form-control border-input" id="update_owner_lastname">'+
+            '</div>'+
+        '</div>'+
+    '</div>'+
+
+    '<div class="row">'+
+        '<div class="col-md-12">'+
+            '<div class="form-group">'+
+                '<label>Address 1</label>'+
+                '<input type="text" class="form-control border-input" id="update_owner_address1">'+
+            '</div>'+
+        '</div>'+
+    '</div>'+
+
+    '<div class="row">'+
+        '<div class="col-md-12">'+
+            '<div class="form-group">'+
+                '<label>Address 2</label>'+
+                '<input type="text" class="form-control border-input" id="update_owner_address2">'+
+            '</div>'+
+        '</div>'+
+    '</div>'+
+
+    '<div class="row">'+
+        '<div class="col-md-5">'+
+            '<div class="form-group">'+
+                '<label>Mobile No.</label>'+
+                '<input type="text" class="form-control border-input" id="update_owner_mobile_no">'+
+            '</div>'+
+        '</div>'+
+    '</div>'+
+                                    
+    '<div class="text-center">'+
+        '<input type="button" class="btn btn-info btn-fill btn-wd" onclick="addowner('+owner_id+');" value="Save">'+
+    '</div>'
 }

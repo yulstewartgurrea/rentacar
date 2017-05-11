@@ -31,6 +31,7 @@ function showaddcarpage() {
 	$("#addownerpage").hide();
 	$("#updatecarpage").hide();
 	$("#carownerspage").hide();
+	$("#carownersdetailspage").hide();
 }
 
 // function showtableforcars() {

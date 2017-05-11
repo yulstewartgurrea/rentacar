@@ -35,7 +35,7 @@ end;
 $$
 	language 'plpgsql';
 
--- select new_owner('o1', 'o1', 'add1', 'add1', 1);
+select new_owner('o1', 'o1', 'add1', 'add1', 1);
 
 -- Get car owners
 create or replace function get_carowners(out int, out text, out text, out text, out text, out numeric) returns setof record as
@@ -52,7 +52,7 @@ $$
 	language 'sql';
 
 -- Update Owner
-create or replace function update_carowner(p_owner_id int, p_owner_fname text, p_owner_lname text, p_owner_add1 text, p_owner_add2, text,
+create or replace function update_carowner(in p_owner_id int, p_owner_fname text, p_owner_lname text, p_owner_add1 text, p_owner_add2 text,
 										p_owner_mobile_no numeric) returns void as
 $$
 	update Owner
@@ -67,6 +67,8 @@ $$
 	owner_id = p_owner_id
 $$
 	language 'sql';
+
+select update_carowner(1, 'ambot', 'ambot', 'Ambot', 'Ambot', 'ambotnmo');
 
 create table Car(
 	car_plate_number text primary key,
