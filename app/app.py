@@ -103,6 +103,9 @@ def new_customer():
 def get_customers():
     res = spcall('get_customers', ())
 
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
     recs = []
     for r in res:
         recs.append({'user_id': r[0], 'first_name': str(r[1]), 'last_name': str(r[2]), 'address1': str(r[3]),

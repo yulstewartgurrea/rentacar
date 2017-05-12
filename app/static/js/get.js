@@ -91,7 +91,7 @@ function getcarshtml(car_owner_id, car_category_name, car_plate_number, car_bran
             '<td>' + car_rental_rate + '</td>' +
             '<td>' + car_image + '</td>' +
             '<td>' + '<a href="#" onclick="getcarbyplatenumberforupdate(\''+car_plate_number+'\')">'+ '<div class="ti-pencil-alt"> update' +'</div>'+'</a>'+'</td>' + 
-            '<td>' + '<div class="ti-trash"> delete' + '</div>'+'</td>' +                     
+            '<td>' + '<a href="#">'+'<div class="ti-trash"> delete' + '</div>'+'</a>'+'</td>' +                     
             '</tr>'
 }
 
@@ -643,6 +643,7 @@ function getcarowners() {
                 $("#updatecarpage").hide();
                 $("#carspage").hide();
                 $("#cardetailspage").hide();
+                $("#updateownerpage").hide();
 
             } else {
                 $("#carowners").html();
@@ -662,7 +663,7 @@ function getcarownershtml(owner_id, owner_firstname, owner_lastname, owner_addre
             '<td>' + owner_address2 + '</td>' +
             '<td>' + owner_mobile_no + '</td>' +
             '<td>' + '<a href="#" onclick="getcarownerbyidforupdate('+owner_id+')">'+ '<div class="ti-pencil-alt"> update' +'</div>'+'</a>'+'</td>' + 
-            '<td>' + '<div class="ti-trash"> delete' + '</div>'+'</td>' +                     
+            '<td>' + '<a href="#">'+'<div class="ti-trash"> delete' + '</div>'+'</a>'+'</td>' +                     
             '</tr>'
 }
 
@@ -857,10 +858,81 @@ function updatecarowner(oid) {
             console.log(res);
             if(res.status==='Ok') {
                 alert("Car Updated!" + data)
+
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addownerpage").hide();
+                $("#carownerspage").hide();
+                $("#carownersdetailspage").hide();
+                $("#addcarpage").hide();
+                $("#updatecarpage").hide();
+                $("#carspage").hide();
+                $("#cardetailspage").hide();
+                $("#updateownerpage").show();
+
             } else {
                 alert("Error")
             }
         }
 
     });
+}
+
+function getcustomers() {
+    
+    $.ajax({
+        url: 'http://127.0.0.1:5000/customers',
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        success: function(res) {
+            console.log(res);
+            $("#accountcustomers").html("");
+            if(res.status=='Ok'){
+                for (i=0; i<res.count; i++ ) {
+                    customer_user_id = res.entries[i].user_id; 
+                    customer_firstname = res.entries[i].first_name;
+                    customer_lastname = res.entries[i].last_name;
+                    customer_address1 = res.entries[i].address1;
+                    customer_address2 = res.entries[i].address2;
+                    customer_mobile_no = res.entries[i].mobile_no;
+                    customer_email = res.entries[i].email;
+                    $("#accountcustomers").append(getcustomershtml(customer_user_id, customer_firstname, customer_lastname, customer_address1,
+                                            customer_address2, customer_mobile_no, customer_email));
+                }
+
+                /////////////
+                //Dashboard//
+                ////////////
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addownerpage").hide();
+                $("#carownerspage").hide();
+                $("#carownersdetailspage").hide();
+                $("#addcarpage").hide();
+                $("#updatecarpage").hide();
+                $("#carspage").hide();
+                $("#cardetailspage").hide();
+                $("#accountcustomerspage").show();
+
+            } else if(res.status==='Error') {
+                $("#accountcustomers").html("");
+                alert('Error');
+            }
+        }
+    });
+
+}
+
+function getcustomershtml(customer_user_id, customer_firstname, customer_lastname, customer_address1,
+                        customer_address2, customer_mobile_no, customer_email) {
+    return '<tr> ' +
+            '<td>' + customer_user_id + '</td>' +
+            '<td>' + customer_email + '</td>' +
+            '<td>' + customer_firstname + '</td>' +
+            '<td>' + customer_lastname + '</td>' +
+            '<td>' + customer_address1 + '</td>' +
+            '<td>' + customer_address2 + '</td>' +
+            '<td>' + customer_mobile_no + '</td>' +
+            '</tr>'
 }

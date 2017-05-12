@@ -56,10 +56,10 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li onclick="showuserprofilepage();">
+                <li onclick="getcustomers();">
                     <a href="#">
                         <i class="ti-user"></i>
-                        <p>User Profile</p>
+                        <p>Customers</p>
                     </a>
                 </li>
                 <li onclick="showaddownerpage();">
@@ -84,6 +84,12 @@
                     <a href="#">
                         <i class="ti-view-list-alt"></i>
                         <p>Vehicles</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="ti-truck"></i>
+                        <p>Rentals</p>
                     </a>
                 </li>
                 <li>
@@ -342,6 +348,49 @@
                                         <i class="ti-check"></i> Data information certified
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Table for customers-->
+        <div class="content" id="accountcustomerspage" style="display:none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2 class="title">Customers</h2>
+                                <!-- <p class="category">Here is a subtitle for this table</p> -->
+                            </div>
+                            <!-- <div class="row">
+                                <div class="col-md-2">
+                                   <div class="header">
+                                        <h4 class="title">Vehicle Type</h4>
+                                    </div>
+                                </div>
+                            <div class="col-md-1">
+                                    <div class="header">
+                                        <h4 class="title">Vehicles</h4>
+                                    </div>
+                            </div>
+                            </div> -->
+                            <div class="content table-responsive table-full-width">
+                                 <table class="table table-striped">
+                                    <thead>
+                                        <th>Customer ID</th>
+                                        <th>Email</th>
+                                        <th>First Name</th> 
+                                        <th>Last Name </th>                                       
+                                        <th>Address1</th>
+                                        <th>Address2</th>
+                                        <th>Mobile No.</th>
+                                    </thead>
+                                    <tbody id="accountcustomers">
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
