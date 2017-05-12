@@ -49,6 +49,7 @@ function getcars() {
                 $("#carspage").show();
                 $("#cardetailspage").hide();
                 $("#updateownerpage").hide();
+                $("#accountcustomerspage").hide();
                 
                 /////////////
                 //Ecommerce//
@@ -145,6 +146,7 @@ function getcarbyplatenumber(car_plate_number){
                 $("#updatecarpage").hide();
                 $("#carspage").hide();
                 $("#cardetailspage").show();
+                $("#accountcustomerspage").hide();
 
                 /////////////
                 //Ecommerce//
@@ -324,6 +326,7 @@ function getcarbyplatenumberforupdate(car_plate_number){
                 $("#updatecarpage").show();
                 $("#carspage").hide();
                 $("#cardetailspage").hide();
+                $("#accountcustomerspage").hide();
 
             } else {
                 $("#cardetailsforupdate").html("");
@@ -644,6 +647,7 @@ function getcarowners() {
                 $("#carspage").hide();
                 $("#cardetailspage").hide();
                 $("#updateownerpage").hide();
+                $("#accountcustomerspage").hide();
 
             } else {
                 $("#carowners").html();
@@ -702,6 +706,7 @@ function getcarownerbyid(car_owner_id) {
                 $("#updatecarpage").hide();
                 $("#carspage").hide();
                 $("#cardetailspage").hide();
+                $("#accountcustomerspage").hide();
 
             } else {
                 $("#carownerdetails").html("");
@@ -766,6 +771,7 @@ function getcarownerbyidforupdate(car_owner_id) {
                 $("#carspage").hide();
                 $("#cardetailspage").hide();
                 $("#updateownerpage").show();
+                $("#accountcustomerspage").hide();
 
             } else {
                 $("#carownerdetailsforupdate").html("");
@@ -859,6 +865,9 @@ function updatecarowner(oid) {
             if(res.status==='Ok') {
                 alert("Car Updated!" + data)
 
+                /////////////
+                //Dashboard//
+                ////////////
                 $("#mainpage").hide();
                 $("#userprofilepage").hide();
                 $("#addownerpage").hide();
@@ -869,6 +878,7 @@ function updatecarowner(oid) {
                 $("#carspage").hide();
                 $("#cardetailspage").hide();
                 $("#updateownerpage").show();
+                $("#accountcustomerspage").hide();
 
             } else {
                 alert("Error")

@@ -12,6 +12,7 @@ function showmainpage() {
 	$("#carspage").hide();
 	$("#addownerpage").hide();
 	$("#updatecarpage").hide();
+	$("#accountcustomerspage").hide();
 }
 
 function showuserprofilepage() {
@@ -32,6 +33,8 @@ function showaddcarpage() {
 	$("#updatecarpage").hide();
 	$("#carownerspage").hide();
 	$("#carownersdetailspage").hide();
+	$("#accountcustomerspage").hide();
+
 }
 
 // function showtableforcars() {
@@ -49,6 +52,8 @@ function showaddownerpage() {
 	$("#addownerpage").show();
 	$("#updatecarpage").hide();
 	$("#carownerspage").hide();
+	$("#accountcustomerspage").hide();
+
 }
 
 function showshophomepage() {
