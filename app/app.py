@@ -342,21 +342,35 @@ def get_carbyplatenumber(car_plate_number):
 def get_carbycategory(car_category_name):
     res = spcall('get_carbycategory', (car_category_name,), )
 
+    rescategory = spcall('get_category', ())
+
     resbrand = spcall('get_brand', ())
+
+    if 'Error' in str(res):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    if 'Error' in str(rescategory[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
 
     if 'Error' in str(resbrand[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
 
-    if 'Error' in str(res):
-        return jsonify({'status': 'Error', 'message': res[0][0]})
-
     recs = []
     for r in res:
-        recs.append({'car_plate_number': str(r[0]),'car_color': str(r[1]), 'car_brandname': str(r[2]), 'car_model': str(r[3]), 'car_rental_rate': str(r[4]),
-            'car_image': str(r[5]), 'car_owner_id': r[6]})
+        recs.append({'car_category_name': str(r[0]), 'car_plate_number': str(r[1]),'car_color': str(r[2]), 'car_brandname': str(r[3]), 'car_model': str(r[4]), 
+            'car_rental_rate': str(r[5]), 'car_image': str(r[6]), 'car_owner_id': r[7]})
 
-    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+    recscategory = []
+    for r in rescategory:
+        recscategory.append({'category_name': str(r[0])})
+
+    recsbrand = []
+    for r in resbrand:
+        recsbrand.append({'brandname': str(r[0])})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs), 'brands': recsbrand, 'countbrands': len(recsbrand),
+                    'categories': recscategory, 'countcategories': len(recscategory)})
 
 # Get car by brandname
 @app.route('/car/brand/<string:car_brandname>', methods=['GET'])
@@ -371,18 +385,11 @@ def get_carbybrandname(car_brandname):
         recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_model': str(r[2]), 'car_rental_rate': str(r[3]),
             'car_image': str(r[4]), 'car_owner_id': r[5], 'car_category_name': str(r[6])})
 
-    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})    
 
-def getcat(category_name):
-    return spcall('get_category', (category_name,))
-    
-
+# Get car by category and brandname
 @app.route('/car/category/<string:car_category_name>/brand/<string:car_brandname>', methods=['GET'])
 def get_carbycategorybrandname(car_category_name, car_brandname):
-    # jsn = json.loads(request.data)
-
-    # car_category_name = get_cat(jsn['car_category_name'],)
-    # car_brandname = get_
     res = spcall('get_carbycategorybrandname', (car_category_name, car_brandname,), )
 
     if 'Error' in str(res):
@@ -390,8 +397,8 @@ def get_carbycategorybrandname(car_category_name, car_brandname):
 
     recs = []
     for r in res:
-        recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_model': str(r[2]), 'car_rental_rate': str(r[3]),
-            'car_image': str(r[4]), 'car_owner_id': r[5], 'car_category_name': car_category_name})
+        recs.append({'car_category_name': str(r[0]) ,'car_plate_number': str(r[1]), 'car_color': str(r[2]), 'car_model': str(r[3]),
+                    'car_rental_rate': str(r[4]), 'car_image': str(r[5]), 'car_owner_id': r[6]})
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 

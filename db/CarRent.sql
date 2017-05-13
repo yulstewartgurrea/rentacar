@@ -161,9 +161,9 @@ $$
 -- select get_carbyplatenumber('ghx-938');	
 
 -- Get car by category
-create or replace function get_carbycategory(in p_category_name text, out text, out text, out text, out text, out numeric, out text, out int) returns setof record as
+create or replace function get_carbycategory(in p_category_name text, out text, out text, out text, out text, out text, out numeric, out text, out int) returns setof record as
 $$
-	select car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id from Car where car_category_name = p_category_name;
+	select car_category_name, car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id from Car where car_category_name = p_category_name;
 $$
 	language 'sql';
 
@@ -182,11 +182,15 @@ $$
 -- select get_carbybrandname('Toyota');
 
 -- Get car by category and brandname
-create or replace function get_carbycategorybrandname(in p_category_name text, in p_brandname text, out text, out text, out text, out numeric, out text, out int) returns setof record as
+create or replace function get_carbycategorybrandname(in p_category_name text, in p_brandname text, out text, out text, out text, out text, out numeric, out text, out int) returns setof record as
 $$
-	select car_plate_number, car_color, car_model, car_rental_rate, car_image, car_owner_id from Car where car_category_name = p_category_name and car_brandname = p_brandname;
+	select car_category_name, car_plate_number, car_color, car_model, car_rental_rate, car_image, car_owner_id from Car where car_category_name = p_category_name and car_brandname = p_brandname;
 $$
 	language 'sql';
+
+select get_carbycategorybrandname('MPV', 'Isuzu');
+select get_carbycategorybrandname('Compacet Vehicle', 'Mitsubishi');
+
 
 create table UserAccount(
 	user_id serial primary key,
