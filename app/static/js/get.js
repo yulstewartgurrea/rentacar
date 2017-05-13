@@ -439,13 +439,10 @@ function getcarbycategory(car_category_name) {
                 /////////////
                 //Ecommerce//
                 ////////////
-                // $("#shoppage").show();
-                // $("#accountpage").hide();
-                // $("#homepage").hide();
-                // $("#cardetailsecommercepage").hide();
-
-                $("#carspage").show();
-                $("#carsecommerce").hide()
+                $("#shoppage").show();
+                $("#homepage").hide();
+                $("#cardetailsecommercepage").hide();
+                $("#carsecommerce").hide();
 
             } else if(res.status==='Error') {
                 $("#carbycategoryeccomerce").html("");

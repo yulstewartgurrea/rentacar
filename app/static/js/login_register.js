@@ -40,9 +40,10 @@ function login() {
         dataType: 'json',
         success: function(res) {
             console.log(res);
-            $("#name").html();
+            $("#name").html("");
             $("#categories").html("");
             $("#brands").html("");
+            $("#user").html("");
             if(res.status==='Login successful' && res.is_admin===true && res.is_customer===false) {
                 alert('Login Successful:');
                 document.location.href="../../partials/admin/dashboard.html";
@@ -57,19 +58,26 @@ function login() {
                     brandname = res.brands[i].brandname;
                     $("#brands").append(getbrandhtml(brandname))                   
                 }
+
+                for(i=0; i<res.countuserinfo; i++){ 
+                    user_id = res.userinfo[i].first_name;
+                    $("#user").append(getuserinfohtml(user_id))
+                }
+
+                /////////////////////////
+                /////////PAGES//////////
+                ///////////////////////
                 $("#accountpage").hide();
                 $("#homepage").show();
-                $("#shoppage").hide();
-                $("#cardetailsecommercepage").hide();
-                $("#cartpage").hide();
-                $("#checkoutpage").hide();
-                $("#brandarea").show();
                 $("#categories").show();
-                $("#brands").show();
                 $("#allcarsmenuweb").show();
                 $("#allcarsmenumobile").show();
                 $("#menu1").show();
                 $("#ecommercehomepage2").show();
+                $("#ecommercehomepage").hide();
+                $("#uname").show();
+                $("#cartsearchbutton").show();
+
             } else {
                 alert("Invalid Credentials")
             }
@@ -81,28 +89,33 @@ function getnamehtml(first_name) {
     return first_name
 }
 
+function getuserinfohtml(user_id){
+    return '<p> Welcome '+user_id+'</p>'
+}
+
 function getcategoryhtml(category_name) {
-    return '<div class="col-lg-3 col-md-3" >'+ 
+    return '<div class="col-lg-4 col-md-4" >'+ 
                 '<div class="single-product">'+
                     '<div class="product-img">'+
-                        '<a href="#">'+
+                        '<a href="#" onclick="getcarbycategory(\''+category_name+'\');">'+
                             '<img class="primary-image" src="../../shoptemplate/img/product/1.jpg" alt="" />'+
                             // '<img class="secondary-image" src="img/product/2.jpg" alt="" />'+
                         '</a>'+                        
-                    '</div>'
+                    '</div>'+
                 '</div>'+
                 '<div class="product-content">'+
-                    '<h2 class="product-name"><a href="#">'+category_name+'</a></h2>'+
+                    '<h2 class="product-name" style="text-align:center" onclick="getcarbycategory(\''+category_name+'\')"><a href="#">'+category_name+'</a></h2>'+
                 '</div>'+
             '</div>'
+            
 }
 
 function getbrandhtml(brandname){
     return '<div class="col-md-2">'+
                 '<div class="single-brand">'+
-                    '<a href="#"><img src="../../shoptemplate/img/brand/1.png" alt="" /></a>'+
+                    '<a href="#"><img src="../../shoptemplate/img/brand/1.png" alt="" />'+'</a>'+
                 '</div>'+
-                '<h2 class="product-name"><a href="#">'+brandname+'</a></h2>'+
+                '<h2 class="product-name" style="text-align:center">'+'<a href="#">'+brandname+'</a>'+'</h2>'+
             '</div>'
             
 }

@@ -13,6 +13,7 @@ function showmainpage() {
 	$("#addownerpage").hide();
 	$("#updatecarpage").hide();
 	$("#accountcustomerspage").hide();
+
 }
 
 function showuserprofilepage() {
@@ -22,6 +23,7 @@ function showuserprofilepage() {
 	$("#carspage").hide();
 	$("#addownerpage").hide();
 	$("#updatecarpage").hide();
+
 }
 
 function showaddcarpage() {
@@ -52,8 +54,8 @@ function showaddownerpage() {
 	$("#addownerpage").show();
 	$("#updatecarpage").hide();
 	$("#carownerspage").hide();
+	$("#cardetailspage").hide();
 	$("#accountcustomerspage").hide();
-
 }
 
 function showshophomepage() {
@@ -63,6 +65,7 @@ function showshophomepage() {
 	$("#cardetailspage").hide();
 	$("#cartpage").hide();
 	$("#checkoutpage").hide();
+
 }	
 
 function showshophomepage2() {
@@ -71,5 +74,6 @@ function showshophomepage2() {
 	$("#shoppage").hide();
 	$("#cardetailspage").hide();
 	$("#cartpage").hide();
-	$("#checkoutpage").hide();  
+	$("#checkoutpage").hide();
+
 }
