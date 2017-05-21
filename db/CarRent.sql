@@ -281,6 +281,16 @@ $$
 
 select update_useraccount(9, 'c99', 'c99', 'add9', 'add9', 99, 'c9');
 
+-- Get userprofile by id
+create or replace function get_userprofile(in p_user_id int, out int, out text,
+								out text, out text, out text, out numeric, out text) returns setof record as
+$$
+	select user_id, first_name, last_name, address1, address2, mobile_no, email from UserAccount where user_id = p_user_id;
+$$
+	language 'sql'
+
+select get_userprofile(9)
+
 -- Get customers
 create or replace function get_customers(out int, out text, out text, out text, out text, out numeric, out text,
 										out text, out boolean, out boolean) returns setof record as

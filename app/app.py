@@ -139,6 +139,64 @@ def get_customers():
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
+# Get account by user id
+@app.route('/account/<string:user_id>', methods=['GET'])
+def useraccount(user_id):
+    res = spcall('get_userprofile', (user_id,), )
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    recs = []
+    for r in res:
+        recs.append({'user_id': str(r[0]), 'first_name': str(r[1]), 'last_name': str(r[2]), 'address1': str(r[3]),
+            'address2': str(r[4]), 'mobile_no': str(r[5]), 'email': str(r[6])})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)}) 
+
+# Update useraccount
+@app.route('/account/update/<string:user_id>', methods=['PUT'])
+def update_useraccount(user_id):
+    jsn = json.loads(request.data)
+
+    user_id = jsn.get('user_id', '')
+    first_name = jsn.get('first_name', '')
+    last_name = jsn.get('last_name', '')
+    address1 = jsn.get('address1', '')
+    address2 = jsn.get('address2', '')
+    mobile_no = jsn.get('mobile_no', '')
+
+    print (jsn)
+
+    res = spcall('update_useraccount', (
+        user_id,
+        first_name,
+        last_name,
+        address1,
+        address2,
+        mobile_no,
+        email), True)
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+    else:
+        return jsonify({'status': 'Ok'})
+
+# Get car owner by id
+@app.route('/owner/<string:owner_id>', methods=['GET'])
+def get_carownerbyid(owner_id):
+    res = spcall('get_carownerbyid', (owner_id,), )
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    recs = []
+    for r in res:
+        recs.append({'owner_id': str(r[0]), 'owner_firstname': str(r[1]), 'owner_lastname': str(r[2]), 'owner_address1': str(r[3]),
+            'owner_address2': str(r[4]), 'owner_mobile_no': str(r[5])})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+
 #Add new owner of car
 @app.route('/owner/<string:owner_first_name>/<string:owner_last_name>', methods=['POST'])
 def new_owner(owner_first_name, owner_last_name):
