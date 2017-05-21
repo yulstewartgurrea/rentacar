@@ -1,20 +1,30 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, abort, escape, app
 import json, os, sys
 import flask
 from config import *
+from flask_session import Session
+# from redissession import RedisSessionInterface
+from flask_multisession import RedisSessionInterface
+from redis import Redis
+from decorator import *
+from that_queue_module import queue_daemon
+
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+# app.session_interface = RedisSessionInterface()
+# app.config['REDIS_QUEUE_KEY'] = 'my_queue'
+# queue_daemon(app)
+
+redis = Redis()
 
 @app.route('/')
 def hello_world():
     return "hello world!"
 
 # Login
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET' ,'POST'])
 def login():
-    """
-
-    """
     jsn = json.loads(request.data)
 
     res = spcall('login', (
@@ -27,7 +37,7 @@ def login():
 
     if 'Error' in str(rescategory[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
-
+    
     if 'Error' in str(resbrand[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
@@ -42,33 +52,38 @@ def login():
     if len(res) == 0:
         return jsonify({'status': 'Invalid credentials'})
 
-    if 'Invalid credentials' in str(res):
+    if 'Invalid credentials' in str(res[0][0]):
         return jsonify({'status': 'Invalid credentials', 'message': res[0][0]})
 
-    if 'Login successful' in str(res):
+    if 'Login successful' in str(res[0][0]):
         session['logged_in'] = True
-        user = get_userbyemail(jsn['email'])
-        session['user_id'] = user[0][0]
-        session['first_name'] = user[0][1]
-        session['last_name'] = user[0][2]
-        session['address1'] = user[0][3]
-        session['address2'] = user[0][4]
-        session['mobile_no'] = user[0][5]
-        session['is_admin'] = user[0][6]
-        session['is_customer'] = user[0][7]
+        session['email'] = jsn['email']
+        user = get_userbyemail(session['email'])
+        session['email'] = jsn['email']
+        session['user_id'] = user[0][1]
+        session['first_name'] = user[0][2]
+        session['last_name'] = user[0][3]
+        session['address1'] = user[0][4]
+        session['address2'] = user[0][5]
+        session['mobile_no'] = user[0][6]
+        session['is_admin'] = user[0][7]
+        session['is_customer'] = user[0][8]
 
+        print res[0][0]
+        print ('email:' +session['email'])
         recsuser = []
         for r in user:
-            recsuser.append({'user_id': session['user_id'], 'first_name': session['first_name'], 
-                    'last_name': session['last_name'], 'address1': session['address1'], 'address2': session['address2'], 
-                    'mobile_no': session['mobile_no']})
+            recsuser.append({'email': session['email'], 'user_id': session['user_id'], 'first_name': session['first_name'], 'last_name': session['last_name'],
+                            'address1': session['address1'], 'address2': session['address2'], 'mobile_no': session['mobile_no'],
+                            'is_admin': session['is_admin'], 'is_customer': session['is_customer']})
 
-        return jsonify({'status': 'Login successful', 'message': res[0][0], 'categories': recscategory,
-                    'userinfo': recsuser, 'countuserinfo': len(recsuser), 'is_admin': session['is_admin'],
-                    'is_customer': session['is_customer'], 'countcategories': len(recscategory), 'brands': recsbrand, 'countbrands': len(recsbrand)})
-    else:
-        session['logged_in'] = False
-        return jsonify({'status': 'Invalid credentials'})
+        print recsuser
+
+        return jsonify({'status': 'Login successful', 'message': res[0][0], 'categories': recscategory, 'countcategories': len(recscategory),
+                'userinfo': recsuser, 'countuserinfo': len(recsuser), 'brands': recsbrand, 'countbrands': len(recsbrand), 'user_id': session['user_id']})
+    # else:
+    #     session['logged_in'] = False
+    #     return jsonify({'status': 'Invalid credentials'})
 
 def get_userbyemail(email):
     return spcall("get_userbyemail", (email,))
@@ -279,6 +294,14 @@ def update_car(car_plate_number):
 # Get all cars
 @app.route('/cars', methods=['GET'])
 def get_cars():
+
+    email = session.get('email')
+    user_id = session.get('user_id')
+    first_name = session.get('first_name')
+    last_name = session.get('last_name')
+
+    print ("email:" + str(email))
+
     res = spcall('get_cars', ())
 
     rescategory = spcall('get_category', ())
@@ -286,6 +309,8 @@ def get_cars():
     resbrand = spcall('get_brand', ())
 
     rescategorybrand = spcall('get_categorybrand', ())
+
+    # user = spcall('get_userbyemail', (email,))
 
     if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
@@ -298,6 +323,9 @@ def get_cars():
 
     if 'Error' in str(rescategorybrand):
         return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    recsuser = []
+    recsuser.append({'email': email ,'user_id':user_id, 'first_name': first_name, 'last_name': last_name})
 
     recs = []
     for r in res:
@@ -320,7 +348,8 @@ def get_cars():
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs), 'categories': recscategory,
                 'countcategories': len(recscategory), 'brands': recsbrand, 'countbrands': len(recsbrand),
-                'categorybrand': recscategorybrand, 'countcategorybrand': len(recscategorybrand)})
+                'categorybrand': recscategorybrand, 'countcategorybrand': len(recscategorybrand),
+                'recsuser': recsuser, 'recsusercount': len(recsuser)})
 
 # Get car by plate number
 @app.route('/car/platenumber/<string:car_plate_number>', methods=['GET'])
@@ -335,7 +364,20 @@ def get_carbyplatenumber(car_plate_number):
         recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_brandname': str(r[2]), 'car_model': str(r[3]), 'car_rental_rate': str(r[4]),
             'car_image': str(r[5]), 'car_owner_id': r[6], 'car_category_name': str(r[7])})
 
-    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+    email = session.get('email')
+    user_id = session.get('user_id')
+    first_name = session.get('first_name')
+    last_name = session.get('last_name')
+
+
+    recsuser = []
+    recsuser.append({'email': email ,'user_id':user_id, 'first_name': first_name, 'last_name': last_name})
+    
+    # print log.userinfo
+    print recsuser        
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs), 'recsuser':recsuser, 'recsusercount': len(recsuser)})
+
 
 # Get car by category name
 @app.route('/car/category/<string:car_category_name>', methods=['GET'])
@@ -402,11 +444,44 @@ def get_carbycategorybrandname(car_category_name, car_brandname):
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
-# def addtocart():
-#     if 'email' not in session:
-#         return abort(401)
-#     else: 
-#         res = spcall("")
+@app.route('/cart', methods=['POST'])
+def addtocart():
+    jsn = json.loads(request.data)    
+
+    res = spcall('cart_addproduct', (
+                jsn['cart_plate_number'],
+                jsn['cart_user_id']), True)
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    if 'Ok' in str(res[0][0]):
+        user = get_userbyemail(jsn['email'])
+        session['user_id'] = user[0][0]
+        session['cart_plate_number'] = [0][0]
+        sessionn['cart_user_id'] = [0][1]
+
+        session['cart'] = []
+        for r in res:
+            session['cart'].append({'cart_plate_number': str(r[0]), 'cart_user_id': str(r[1])})
+
+    # return jsonify({'status': 'Ok', 'message': res[0][0], 'user_id': session['user_id']})
+    return jsonify({'status': 'Ok', 'message': res[0][0], 'entries': session['cart']})
+
+@app.route('/cart/<string:cart_user_id>/<string:cart_id>', methods=['GET'])
+def cart(cart_id, cart_user_id):
+    res = spcall('get_cartbyuser', (cart_id ,cart_user_id), )
+
+    if 'Error' in str(res):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    recs = []
+    for r in res:
+        recs.append({'car_plate_number': str(r[0]), 'car_category_name': str(r[1]), 'car_brandname': str(r[2]), 'car_model': str(r[3]),
+            'car_color': str(r[4]), 'car_rental_rate': str(r[5]), 'car_image': str(r[6]), 'cart_user_id': str(r[7]),
+            'cart_id': str(r[8])})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})        
 
 @app.after_request
 def add_cors(resp):
@@ -423,6 +498,5 @@ def add_cors(resp):
 
 
 if __name__ == '__main__':
-    app.secret_key = 'B1Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-    # app.run(host='localhost', debug=True)
+    # app.session_interface = RedisSessionInterface()
     app.run(host='0.0.0.0', debug=True)

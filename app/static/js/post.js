@@ -57,7 +57,3 @@ function addcar() {
 	});
 
 }
-
-function addcarttocart() {
-	
-}

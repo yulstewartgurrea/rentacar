@@ -1,3 +1,5 @@
+auth_user=''
+
 function getcars() {
     $.ajax({
         url: 'http://127.0.0.1:5000/cars',
@@ -25,9 +27,15 @@ function getcars() {
 
                 }
 
-                for (i=0; i<res.countcategories; i++ ) {
+                for(i=0; i<res.countcategories; i++ ) {
                     category_name = res.categories[i].category_name; 
                     $("#categories2").append(getecommercecategoryhtml(category_name));
+                }
+
+                for(i=0; i<res.recsusercount; i++) {
+                    email = res.recsuser[i].email;
+                    user_id = res.recsuser[i].user_id;
+
                 }
   
                 /////////////
@@ -60,6 +68,15 @@ function getcars() {
                 $("#cars").html("");
                 alert('Error')
             }
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
         }
     });
 } 
@@ -127,8 +144,12 @@ function getcarbyplatenumber(car_plate_number){
                     car_owner_id = res.entries[i].car_owner_id;
                     car_category_name = res.entries[i].car_category_name;
                     $("#cardetails").append(getcarbyplatenumberhtml(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image))
-                    // $("#cardetailsecommerce").append(getcardetailshtmlecommerce(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image))
-                    // $("#updatecardetails").append(updatecarbyplatenumberhtml(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image))
+                    $("#cardetailsecommerce").append(getcardetailshtmlecommerce(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image))
+                }
+
+                for(i=0; i<res.recsusercount; i++){
+                    user_id = res.recsuser[i].user_id;
+                    first_name = res.recsuser[i].first_name;
                 }
 
                 /////////////
@@ -157,6 +178,15 @@ function getcarbyplatenumber(car_plate_number){
                 $("#cardetails").html("");
                 alert("Error")
             }
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
         }
     });
 }
@@ -224,7 +254,7 @@ function getcardetailshtmlecommerce(car_owner_id, car_category_name, car_brandna
                         '<form action="#">'+
                             '<div class="quantity">'+
                                 '<input type="number" value="1" />'+
-                                '<button type="submit">Add to cart</button>'+
+                                '<button>Add to cart</button>'+
                             '</div>'+
                         '</form>'+
                         '<div class="add-to-wishlist">'+
@@ -329,7 +359,17 @@ function getcarbyplatenumberforupdate(car_plate_number){
                 $("#cardetailsforupdate").html("");
                 alert("Error")
             }
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
         }
+
     });
 }
 
@@ -451,7 +491,17 @@ function getcarbycategory(car_category_name) {
                 $("#brands2").html("");
                 alert('Error')
             }
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
         }
+
     });
 }
 
@@ -506,7 +556,17 @@ function getcarbycategorybrandname(categoryname, brandname) {
                 $("#carbycategorybrandecommerce2").html("");
                 alert('Error')
             }
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
         }
+
     });
 
 }
@@ -556,6 +616,15 @@ function updatecardetails(plate_number) {
             } else {
                 alert("Error")
             }
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
         }
 
     });
@@ -602,6 +671,15 @@ function getcarowners() {
                 $("#carowners").html();
                 alert("Error");
             }
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
         }
 
     });
@@ -661,6 +739,15 @@ function getcarownerbyid(car_owner_id) {
                 $("#carownerdetails").html("");
                 alert("Error!");
             }
+
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
 
         }
 
@@ -726,6 +813,15 @@ function getcarownerbyidforupdate(car_owner_id) {
                 $("#carownerdetailsforupdate").html("");
                 alert("Error!");
             }
+
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
 
         }
 
@@ -832,6 +928,15 @@ function updatecarowner(oid) {
             } else {
                 alert("Error")
             }
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
         }
 
     });
@@ -878,7 +983,17 @@ function getcustomers() {
                 $("#accountcustomers").html("");
                 alert('Error');
             }
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
         }
+
     });
 
 }
@@ -894,4 +1009,33 @@ function getcustomershtml(customer_user_id, customer_firstname, customer_lastnam
             '<td>' + customer_address2 + '</td>' +
             '<td>' + customer_mobile_no + '</td>' +
             '</tr>'
+}
+
+function addtocart() {
+    
+    $.ajax({
+        url: 'http://127.0.0.1:5000/car/'+car_plate_number+'/'+car_brand_name+'/'+car_model+'/'+car_color,
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        data: data,
+        dataType: 'json',
+        success: function(res){
+            console.log(res);
+            if(res.message==='Ok') {
+                alert("Vehicle Added!")
+            } else {
+                alert(res.message)
+            }
+        },
+
+        error: function(e){
+                alert("Naay wrong charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
+        }
+        
+    });
 }

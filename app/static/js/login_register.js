@@ -1,3 +1,5 @@
+auth_user = ''
+
 function register() {
 
     var email = $('#reg_email').val();
@@ -13,12 +15,24 @@ function register() {
         dataType: 'json',
         success: function(res){
             console.log(res);
+            
             if(res.message==='Ok') {
                 alert('Registeration successful');
-            } else{
+            } 
+
+            else{
                 shakeModalReg();
             }
             
+        },
+
+        error: function(e){
+                alert("Error in database or report to admin charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
         }
 
     });
@@ -33,7 +47,6 @@ function login() {
 
     $.ajax({
         url: 'http://127.0.0.1:5000/login',
-        // url: 'http://localhost:5000/login',
         type: 'POST',
         contentType: 'application/json; charset=utf-8',
         data: data,
@@ -44,25 +57,33 @@ function login() {
             $("#categories").html("");
             $("#brands").html("");
             $("#user").html("");
-            if(res.status==='Login successful' && res.is_admin===true && res.is_customer===false) {
+            if(res.status==='Login successful' && res.userinfo[0].is_admin===true && res.userinfo[0].is_customer===false) {
                 alert('Login Successful:');
                 document.location.href="../../partials/admin/dashboard.html";
-            } else if(res.status==='Login successful' && res.is_admin===false && res.is_customer===true) {
+            } 
+
+            else if(res.status==='Login successful' && res.userinfo[0].is_admin===false && res.userinfo[0].is_customer===true) {
+                
                 alert('Login Successful');
-                $("#name").append(getnamehtml(res.first_name));
+
+                $("#name").append(getnamehtml(res.userinfo[0].first_name));
+
                 for (i=0; i<res.countcategories; i++ ) {
                     category_name = res.categories[i].category_name; 
                     $("#categories").append(getcategoryhtml(category_name));
                 }
-                for(i=0; i<res.countbrands; i++){
-                    brandname = res.brands[i].brandname;
-                    $("#brands").append(getbrandhtml(brandname))                   
-                }
 
                 for(i=0; i<res.countuserinfo; i++){ 
-                    user_id = res.userinfo[i].first_name;
-                    $("#user").append(getuserinfohtml(user_id))
+                    email = res.userinfo[i].email;
+                    user_id = res.userinfo[i].user_id;
+                    first_name = res.userinfo[i].first_name;
+                    last_name = res.userinfo[i].last_name;
+                    address1 = res.userinfo[i].address1;
+                    address2 = res.userinfo[i].address2;
+                    mobile_no = res.userinfo[i].mobile_no;
+                    $("#user").append(getuserinfohtml(email, user_id))
                 }
+
 
                 /////////////////////////
                 /////////PAGES//////////
@@ -81,7 +102,17 @@ function login() {
             } else {
                 alert("Invalid Credentials")
             }
+        },
+
+        error: function(e){
+                alert("Error in database or report to admin charot!: " + e);
+        },
+        beforeSend: function (xhrObj){
+
+            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+
         }
+
     });
 }
 
@@ -92,6 +123,8 @@ function getnamehtml(first_name) {
 function getuserinfohtml(user_id){
     return '<p> Welcome '+user_id+'</p>'
 }
+
+function userprofilehtml()
 
 function getcategoryhtml(category_name) {
     return '<div class="col-lg-4 col-md-4" >'+ 
@@ -109,17 +142,6 @@ function getcategoryhtml(category_name) {
             '</div>'
             
 }
-
-function getbrandhtml(brandname){
-    return '<div class="col-md-2">'+
-                '<div class="single-brand">'+
-                    '<a href="#"><img src="../../shoptemplate/img/brand/1.png" alt="" />'+'</a>'+
-                '</div>'+
-                '<h2 class="product-name" style="text-align:center">'+'<a href="#">'+brandname+'</a>'+'</h2>'+
-            '</div>'
-            
-}
-
 
 function shakeModalLogin(){
     $('#loginModal .modal-dialog').addClass('shake');

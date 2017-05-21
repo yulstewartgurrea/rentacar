@@ -65,6 +65,7 @@ function showshophomepage() {
 	$("#cardetailspage").hide();
 	$("#cartpage").hide();
 	$("#checkoutpage").hide();
+	$('#cardetailsecommercepage').hide();
 
 }	
 
@@ -75,5 +76,6 @@ function showshophomepage2() {
 	$("#cardetailspage").hide();
 	$("#cartpage").hide();
 	$("#checkoutpage").hide();
+	$('#cardetailsecommercepage').hide();
 
 }

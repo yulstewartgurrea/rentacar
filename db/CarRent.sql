@@ -73,6 +73,7 @@ $$
 select update_carowner(1, 'ambot', 'ambot', 'Ambot', 'Ambot', 'ambotnmo');
 
 create table Car(
+	-- car_id serial primary key,
 	car_plate_number text primary key,
 	car_color text,
 	car_model text,
@@ -261,6 +262,25 @@ $$
 
 -- select new_customer('c1@gmail.com', 'password');
 
+#Update account
+create or replace function update_useraccount(in p_user_id int, p_firstname text, p_lastname text,
+								p_address1 text, p_address2 text, p_mobileno numeric, email text) returns void as
+$$
+	update UserAccount
+	set
+		first_name = p_firstname,
+		last_name = p_lastname,
+		address1 = p_address1,
+		address2 = p_address2,
+		mobile_no = p_mobileno
+
+	where
+		user_id = p_user_id
+$$
+	language 'sql';
+
+select update_useraccount(9, 'c99', 'c99', 'add9', 'add9', 99, 'c9');
+
 -- Get customers
 create or replace function get_customers(out int, out text, out text, out text, out text, out numeric, out text,
 										out text, out boolean, out boolean) returns setof record as
@@ -290,10 +310,10 @@ $$
 	language 'plpgsql';
 
 -- Login role with users email
-create or replace function get_userbyemail(in p_email text, out int, out text, out text, out text, 
+create or replace function get_userbyemail(in p_email text, out text, out int, out text, out text, out text, 
 										out text, out numeric, out boolean, out boolean) returns setof record as
 $$
-	select user_id, first_name, last_name, address1, address2, mobile_no, is_admin, is_customer from UserAccount where email = p_email;
+	select email, user_id, first_name, last_name, address1, address2, mobile_no, is_admin, is_customer from UserAccount where email = p_email;
 $$
 	language 'sql';
 
@@ -398,13 +418,13 @@ $$
 
 create table Cart(
 	cart_id serial primary key,
-	cart_total numeric,
+	cart_total numeric default 0,
 	cart_time_added timestamp default current_timestamp ,
 	cart_plate_number text references Car(car_plate_number),
 	cart_user_id int references UserAccount(user_id)
 );
 
-create or replace function cart_add_product(p_cart_plate_number text, p_user_id) returns text as
+create or replace function cart_addproduct(p_cart_plate_number text, p_user_id int) returns text as
 $$
 declare
 	v_cart_plate_number text;
@@ -414,7 +434,7 @@ begin
 	select into v_cart_plate_number cart_plate_number from Cart where cart_plate_number = p_cart_plate_number;
 
 		if v_cart_plate_number isnull then
-			if p_cart_plate_number = '' then
+			if p_cart_plate_number = '' or p_user_id = null then
 				v_res = 'Error';
 			else
 				insert into Cart(cart_plate_number, cart_user_id)
@@ -429,11 +449,20 @@ end;
 $$
 	language 'plpgsql' 
 
-create or replace function get_cartbyuser(in p_user_id int, out text, out text, out text, out text, out numeric, out text) returns setof text as 
+select cart_addproduct('ghx-938', 9);
+select cart_addproduct('kdh-662', 9);
+
+
+create or replace function get_cartbyuser(in p_user_id int, in p_cart_id int, out text, out text, out text, out text,
+										out text, out numeric, out text, out int, out int) returns setof record as 
 $$
-	Car.category_name, Car.brandname, Car.car_model, Car.color, Car.car_rental_rate, Car.car_image from Car where user_id = p_user_id
+	select Car.car_plate_number, Car.car_category_name, Car.car_brandname, Car.car_model, Car.car_color, Car.car_rental_rate, Car.car_image,
+						cart_user_id, cart_id from Cart Cross Join Car where Cart.cart_id = p_cart_id and Car.car_plate_number = Cart.cart_plate_number
+					and Cart.cart_user_id = p_user_id;
 $$
 	language 'sql';
+
+select get_cartbyuser(9, 3)
 
 create table Rents(
 	rental_id serial primary key,
