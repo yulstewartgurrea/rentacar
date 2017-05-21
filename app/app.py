@@ -6,8 +6,8 @@ from flask_session import Session
 # from redissession import RedisSessionInterface
 from flask_multisession import RedisSessionInterface
 from redis import Redis
-from decorator import *
-from that_queue_module import queue_daemon
+# from decorator import *
+# from that_queue_module import queue_daemon
 
 
 app = Flask(__name__)
@@ -65,7 +65,7 @@ def login():
         session['last_name'] = user[0][3]
         session['address1'] = user[0][4]
         session['address2'] = user[0][5]
-        session['mobile_no'] = user[0][6]
+        session['mobile_no'] = str(user[0][6])
         session['is_admin'] = user[0][7]
         session['is_customer'] = user[0][8]
 
@@ -80,7 +80,7 @@ def login():
         print recsuser
 
         return jsonify({'status': 'Login successful', 'message': res[0][0], 'categories': recscategory, 'countcategories': len(recscategory),
-                'userinfo': recsuser, 'countuserinfo': len(recsuser), 'brands': recsbrand, 'countbrands': len(recsbrand), 'user_id': session['user_id']})
+                'userinfo': recsuser, 'countuserinfo': len(recsuser), 'brands': recsbrand, 'countbrands': len(recsbrand)})
     # else:
     #     session['logged_in'] = False
     #     return jsonify({'status': 'Invalid credentials'})
@@ -152,6 +152,8 @@ def useraccount(user_id):
         recs.append({'user_id': str(r[0]), 'first_name': str(r[1]), 'last_name': str(r[2]), 'address1': str(r[3]),
             'address2': str(r[4]), 'mobile_no': str(r[5]), 'email': str(r[6])})
 
+    print recs
+
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)}) 
 
 # Update useraccount
@@ -165,6 +167,7 @@ def update_useraccount(user_id):
     address1 = jsn.get('address1', '')
     address2 = jsn.get('address2', '')
     mobile_no = jsn.get('mobile_no', '')
+    email = jsn.get('email', '')
 
     print (jsn)
 
@@ -177,25 +180,12 @@ def update_useraccount(user_id):
         mobile_no,
         email), True)
 
+    print res
+    
     if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
     else:
         return jsonify({'status': 'Ok'})
-
-# Get car owner by id
-@app.route('/owner/<string:owner_id>', methods=['GET'])
-def get_carownerbyid(owner_id):
-    res = spcall('get_carownerbyid', (owner_id,), )
-
-    if 'Error' in str(res[0][0]):
-        return jsonify({'status': 'Error', 'message': res[0][0]})
-
-    recs = []
-    for r in res:
-        recs.append({'owner_id': str(r[0]), 'owner_firstname': str(r[1]), 'owner_lastname': str(r[2]), 'owner_address1': str(r[3]),
-            'owner_address2': str(r[4]), 'owner_mobile_no': str(r[5])})
-
-    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
 #Add new owner of car
 @app.route('/owner/<string:owner_first_name>/<string:owner_last_name>', methods=['POST'])

@@ -63,6 +63,7 @@ function getcars() {
                 $("#carsecommerce").show();
                 $("#carbycategorybrandecommerce2").hide();
                 $("#carbycategoryeccomerce").hide();
+                $("#profilepage").hide();
 
             } else {
                 $("#cars").html("");
@@ -85,9 +86,7 @@ function getecommercecategoryhtml(category_name) {
     return '<li onclick="getcarbycategory(\''+category_name+'\');">'+'<a href="#">' +category_name+ '</a>'+'</li>'
 }
 
-// function getecommercebrandhtml(category_name, brandname) {
 function getecommercebrandhtml(brandname, category_name) {
-
     // return '<li onclick="getcarbybrand(\''+brandname+'\');">'+'<a href="#">'+brandname+'</a>'+'</li>'
     // return '<li onclick="getcarbycategorybrandname(\''+category_name+'\''+','+'\''+brandname+'\');">'+'<a href="#">'+category_name+','+brandname+'</a>'+'</li>'
     return '<li onclick="getcarbycategorybrandname(\''+category_name+'\',\''+brandname+'\');">'+'<a href="#">'+brandname+'</a>'+'</li>'
@@ -173,6 +172,7 @@ function getcarbyplatenumber(car_plate_number){
                 $("#accountpage").hide();
                 $("#homepage").hide();
                 $("#cardetailsecommercepage").show();
+                $("#profilepage").hide();
 
             } else {
                 $("#cardetails").html("");
@@ -304,8 +304,6 @@ function getcardetailshtmlecommerce(car_owner_id, car_category_name, car_brandna
 }
 
 function getcarbyplatenumberforupdate(car_plate_number){
-
-    // var car_owner_id = $("#update_car_owner_id").val();
 
     $.ajax({
         url: 'http://127.0.0.1:5000/car/platenumber/'+car_plate_number,
@@ -484,6 +482,7 @@ function getcarbycategory(car_category_name) {
                 $("#carsecommerce").hide();
                 $("#carbycategorybrandecommerce2").hide();
                 $("#carbycategoryeccomerce").show();
+                $("#profilepage").show();
 
             } else if(res.status==='Error') {
                 $("#carbycategoryeccomerce").html("");
@@ -551,6 +550,7 @@ function getcarbycategorybrandname(categoryname, brandname) {
                 $("#carsecommerce").hide()
                 $("#carbycategoryeccomerce").hide();
                 $("#carbycategorybrandecommerce2").show();
+                $("#profilepage").show();
 
             } else if(res.status==='Error') {
                 $("#carbycategorybrandecommerce2").html("");
