@@ -4,6 +4,7 @@ function register() {
 
     var email = $('#reg_email').val();
     var password = $('#reg_password').val();
+    var password2 = $("#reg_password2").val();
 
     var data = JSON.stringify({'email': email, 'password': password})
 
@@ -20,9 +21,16 @@ function register() {
                 alert('Registeration successful');
             } 
 
-            else{
-                shakeModalReg();
+            else if(res.message==='Email already exists') {
+                alert('Email already exists');
             }
+
+            else if( (password != password2) || (password == null || password2 == null) ){
+                alert("Password mismatch")
+            } 
+
+            else if( res.message==='Ok' && (password != password2))
+                alert("Password mismatch")
             
         },
 
