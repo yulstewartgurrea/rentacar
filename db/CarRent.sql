@@ -1,3 +1,5 @@
+create or replace function verifypassword(out pass)
+
 --TABLES--
 
 create table Owner(

@@ -26,11 +26,15 @@ function register() {
             }
 
             else if( (password != password2) || (password == null || password2 == null) ){
-                alert("Password mismatch")
+                alert("Password mismatch");
             } 
 
-            else if( res.message==='Ok' && (password != password2))
-                alert("Password mismatch")
+            else if( res.message==='Invalid Email address' || email == null)
+                alert("Invalid Email Address");
+
+            else if(res.message==='Ok' && (password != password2)) {
+                alert('Registeration successful');
+            } 
             
         },
 

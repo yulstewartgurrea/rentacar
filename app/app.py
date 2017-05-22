@@ -8,7 +8,6 @@ from flask_multisession import RedisSessionInterface
 from redis import Redis
 from passlib.hash import sha256_crypt, oracle10
 from werkzeug.security import generate_password_hash, check_password_hash
-# from decorator import *
 # from that_queue_module import queue_daemon
 from simplecrypt import encrypt, decrypt
 import hashlib
@@ -66,11 +65,11 @@ def login():
     if invalid(jsn['email']):
         return jsonify({'status': 'Error', 'message': 'Invalid Email address'})
 
-    # plaintext = decrypt(jsn['password'], 'my secret message')
+    pas = hashlib.md5(jsn['password'].encode()).hexdigest()
 
     res = spcall('login', (
         jsn['email'],
-        jsn['password'],), True)
+        pas,), True)
 
     rescategory = spcall('get_category', ())
 
@@ -96,7 +95,7 @@ def login():
     if 'Invalid credentials' in str(res[0][0]):
         return jsonify({'status': 'Invalid credentials', 'message': res[0][0]})
 
-    if 'Login successful' in str(res[0][0]):
+    if'Login successful' in str(res[0][0]):
         session['logged_in'] = True
         session['email'] = jsn['email']
         user = get_userbyemail(session['email'])
@@ -158,15 +157,16 @@ def new_admin(email):
 def new_customer():
     jsn = json.loads(request.data)
 
+    pas = hashlib.md5(jsn['password'].encode()).hexdigest()
+
     if invalid(jsn['email']):
         return jsonify({'status': 'Error', 'message': 'Invalid Email address'})
 
-    # testing = encrypt(jsn['password'], 'my secret message')
-    # print testing
-
     res = spcall('new_customer', (
         jsn['email'],
-        jsn['password']), True)
+        pas), True)
+
+    return pas
 
     # print decrypt(jsn['password'], testing)
     
