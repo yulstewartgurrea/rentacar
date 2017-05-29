@@ -148,25 +148,47 @@ $$
 select car_update('ghx-938', 'black', 'Mitsubishi', 'lancer 1996', 10, 'image10', 2, 'SUV');
 
 -- Get all Cars
-create or replace function get_cars(out text, out text, out text, out text, out numeric, out text, out int, out text) returns setof record as
+create or replace function get_cars(in p_user_id int, out text, out text, out text, out text, out numeric, out text, out int, out text, out int) returns setof record as
 $$
-	select car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id, car_category_name from Car;
+	select car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id, car_category_name, UserAccount.user_id from Car
+	CROSS JOIN UserAccount where UserAccount.user_id = p_user_id;
+$$
+	language 'sql';
+
+-- Get cars in admin
+create or replace function get_carsinadmin(out text, out text, out text, out text, out numeric, out text, out int, out text ) returns setof record as
+$$
+	select car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id, car_category_name from Car
 $$
 	language 'sql';
 
 -- Get car by plate_number
-create or replace function get_carbyplatenumber(in p_plate_number text, out text, out text, out text, out text, out numeric, out text, out int, out text) returns setof record as
+create or replace function get_carbyplatenumber(in p_plate_number text, in p_user_id int, out text, out text, out text, out text,
+	out numeric, out text, out int, out text, out int) returns setof record as
 $$
-	select car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id, car_category_name from Car where car_plate_number = p_plate_number;
+	select car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id, car_category_name, UserAccount.user_id 
+		from Car CROSS JOIN UserAccount where car_plate_number = p_plate_number and user_id = p_user_id;
 $$
 	language 'sql';
 
 -- select get_carbyplatenumber('ghx-938');	
 
--- Get car by category
-create or replace function get_carbycategory(in p_category_name text, out text, out text, out text, out text, out text, out numeric, out text, out int) returns setof record as
+-- Get car by plate_number in admin
+create or replace function get_carbyplatenumberinadmin(in p_plate_number text, out text, out text, out text, out text,
+	out numeric, out text, out int, out text) returns setof record as
 $$
-	select car_category_name, car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id from Car where car_category_name = p_category_name;
+	select car_plate_number, car_color, car_brandname, car_model, car_rental_rate, car_image, car_owner_id, car_category_name
+		from Car where car_plate_number = p_plate_number;
+$$
+	language 'sql';
+
+-- Get car by category
+create or replace function get_carbycategory(in p_category_name text, in p_user_id int, out text, out text, out text, out text,
+		out text, out numeric, out text, out int, out int) returns setof record as
+$$
+	select car_category_name, car_plate_number, car_color, car_brandname, car_model,
+		car_rental_rate, car_image, car_owner_id, UserAccount.user_id from Car CROSS JOIN UserAccount
+		where car_category_name = p_category_name and UserAccount.user_id = p_user_id;
 $$
 	language 'sql';
 
@@ -185,9 +207,11 @@ $$
 -- select get_carbybrandname('Toyota');
 
 -- Get car by category and brandname
-create or replace function get_carbycategorybrandname(in p_category_name text, in p_brandname text, out text, out text, out text, out text, out numeric, out text, out int) returns setof record as
+create or replace function get_carbycategorybrandname(in p_category_name text, in p_brandname text, in p_user_id int,
+	out text, out text, out text, out text, out numeric, out text, out int, out int) returns setof record as
 $$
-	select car_category_name, car_plate_number, car_color, car_model, car_rental_rate, car_image, car_owner_id from Car where car_category_name = p_category_name and car_brandname = p_brandname;
+	select car_category_name, car_plate_number, car_color, car_model, car_rental_rate, car_image, car_owner_id, UserAccount.user_id 
+		from Car CROSS JOIN UserAccount where car_category_name = p_category_name and car_brandname = p_brandname and user_id = p_user_id;
 $$
 	language 'sql';
 
@@ -209,7 +233,7 @@ create table UserAccount(
 );
 
 -- New Admin
-
+	
 create or replace function new_admin(p_email text, p_password text) returns text as
 $$
 declare 
@@ -366,9 +390,9 @@ $$
 -- select new_category('Construction');
 
 -- Get category 
-create or replace function get_category(out text) returns setof text as 
+create or replace function get_category(in p_user_id int, out text, out int) returns setof record as 
 $$
-	select category_name from Category;
+	select category_name, user_id from Category CROSS JOIN UserAccount where UserAccount.user_id = p_user_id;
 $$
 	language 'sql';
 
@@ -443,7 +467,7 @@ declare
 	v_res text; 
 
 begin
-	select into v_cart_plate_number cart_plate_number from Cart where cart_plate_number = p_cart_plate_number;
+	select into v_cart_plate_number cart_plate_number from Cart where cart_plate_number = p_cart_plate_number and cart_user_id = p_user_id ;
 
 		if v_cart_plate_number isnull then
 			if p_cart_plate_number = '' or p_user_id = null then
@@ -465,35 +489,80 @@ select cart_addproduct('ghx-938', 9);
 select cart_addproduct('kdh-662', 9);
 
 
-create or replace function get_cartbyuser(in p_user_id int, in p_cart_id int, out text, out text, out text, out text,
+-- create or replace function get_cartbyuser(in p_user_id int, in p_cart_id int, out text, out text, out text, out text,
+-- 										out text, out numeric, out text, out int, out int) returns setof record as 
+-- $$
+-- 	select Car.car_plate_number, Car.car_category_name, Car.car_brandname, Car.car_model, Car.car_color, Car.car_rental_rate, Car.car_image,
+-- 						cart_user_id, cart_id from Cart Cross Join Car where Cart.cart_id = p_cart_id and Car.car_plate_number = Cart.cart_plate_number
+-- 					and Cart.cart_user_id = p_user_id;
+-- $$
+-- 	language 'sql';
+
+
+create or replace function get_cartbyuser2(in p_user_id int, out text, out text, out text, out text,
 										out text, out numeric, out text, out int, out int) returns setof record as 
 $$
 	select Car.car_plate_number, Car.car_category_name, Car.car_brandname, Car.car_model, Car.car_color, Car.car_rental_rate, Car.car_image,
-						cart_user_id, cart_id from Cart Cross Join Car where Cart.cart_id = p_cart_id and Car.car_plate_number = Cart.cart_plate_number
+						cart_user_id, cart_id from Cart Cross Join Car where Car.car_plate_number = Cart.cart_plate_number
 					and Cart.cart_user_id = p_user_id;
 $$
 	language 'sql';
 
 select get_cartbyuser(9, 3)
 
-create table Rents(
+create table Rent(
 	rental_id serial primary key,
-	date_rented timestamp default current_timestamp,
-	date_due date,
-	date_returned timestamp default current_timestamp,
-	total_bill numeric,
-	overdue_cost numeric,
-	plate_number text references Car(car_plate_number),
-	renter_id int references Owner(user_id)
-);
+	rent_date_rented timestamp default current_timestamp,
+	rent_date_due date default now(),
+	rent_total_bill numeric,
+	rent_overdue_cost int default 0,
+	rent_plate_number text references Car(car_plate_number),
+	rent_user_id int references UserAccount(user_id),
+	rent_quantity int default 1
+)
 
-create table rent_detail(
-	rental_id int references Rents(rental_id)
-	car_plate_number text references Car(car_plate_number)
-	quantity int,
-	unit_cost numeric
+create or replace function rentcar(p_rent_plate_number text, p_user_id int) returns text as
+$$
+declare
+	v_rent_plate_number text;
+	v_res text;
 
-);
+begin 	
+	select into v_rent_plate_number rent_plate_number from Rent where rent_plate_number = p_rent_plate_number;
+
+		if v_rent_plate_number isnull then
+			if p_rent_plate_number = '' or p_user_id = null then
+				v_res = 'Error';
+			else 
+				insert into Rent(rent_plate_number, rent_user_id)
+					values(p_rent_plate_number, p_user_id);
+					v_res = 'Ok';
+
+			end if;
+		else
+			v_res = 'Car in Rent';
+		end if;
+		return v_res;
+end 
+$$
+	language 'plpgsql';
+
+select rentcar('kdh-662', 9)
+
+create or replace function getrentbyuserid(in p_user_id int, out int, out timestamp, out date, out numeric, out int, out text, out int, out int) returns setof record as
+$$
+	select rental_id, rent_date_rented, rent_date_due, rent_total_bill, rent_overdue_cost, rent_plate_number, rent_user_id, rent_quantity from Rent where rent_user_id = p_user_id;
+$$
+	language 'sql' 
+
+select getrentbyuserid(9)
+
+create or replace function getallrents(out int, out timestamp, out date, out numeric, out int, out text, out int, out int) returns setof record as
+$$
+	select rental_id, rent_date_rented, rent_date_due, rent_total_bill, rent_overdue_cost, rent_plate_number, rent_user_id, rent_quantity from Rent order by rent_date_rented desc;
+$$
+	language 'sql'
+
 
 
 -- create table CartItem(

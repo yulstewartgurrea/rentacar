@@ -1,6 +1,6 @@
 auth_user=''
 
-function getcars() {
+function getcarsinadmin() {
     $.ajax({
         url: 'http://127.0.0.1:5000/cars',
         type: 'GET',
@@ -31,12 +31,6 @@ function getcars() {
                     category_name = res.categories[i].category_name; 
                     $("#categories2").append(getecommercecategoryhtml(category_name));
                 }
-
-                for(i=0; i<res.recsusercount; i++) {
-                    email = res.recsuser[i].email;
-                    user_id = res.recsuser[i].user_id;
-
-                }
   
                 /////////////
                 //Dashboard//
@@ -52,6 +46,7 @@ function getcars() {
                 $("#cardetailspage").hide();
                 $("#updateownerpage").hide();
                 $("#accountcustomerspage").hide();
+                $("#allrentalspage").hide();
                 
                 /////////////
                 //Ecommerce//
@@ -82,23 +77,23 @@ function getcars() {
     });
 } 
 
-function getecommercecategoryhtml(category_name) {
-    return '<li onclick="getcarbycategory(\''+category_name+'\');">'+'<a href="#">' +category_name+ '</a>'+'</li>'
-}
+// function getecommercecategoryhtml(category_name) {
+//     return '<li onclick="getcarbycategory(\''+category_name+'\');">'+'<a href="#">' +category_name+ '</a>'+'</li>'
+// }
 
-function getecommercebrandhtml(brandname, category_name) {
-    // return '<li onclick="getcarbybrand(\''+brandname+'\');">'+'<a href="#">'+brandname+'</a>'+'</li>'
-    // return '<li onclick="getcarbycategorybrandname(\''+category_name+'\''+','+'\''+brandname+'\');">'+'<a href="#">'+category_name+','+brandname+'</a>'+'</li>'
-    return '<li onclick="getcarbycategorybrandname(\''+category_name+'\',\''+brandname+'\');">'+'<a href="#">'+brandname+'</a>'+'</li>'
-    // return '<li onclick="getcarbycategorybrandname(\''+brandname+'\');">'+'<a href="#">'+brandname+'</a>'+'</li>'
+// function getecommercebrandhtml(brandname, category_name) {
+//     // return '<li onclick="getcarbybrand(\''+brandname+'\');">'+'<a href="#">'+brandname+'</a>'+'</li>'
+//     // return '<li onclick="getcarbycategorybrandname(\''+category_name+'\''+','+'\''+brandname+'\');">'+'<a href="#">'+category_name+','+brandname+'</a>'+'</li>'
+//     return '<li onclick="getcarbycategorybrandname(\''+category_name+'\',\''+brandname+'\');">'+'<a href="#">'+brandname+'</a>'+'</li>'
+//     // return '<li onclick="getcarbycategorybrandname(\''+brandname+'\');">'+'<a href="#">'+brandname+'</a>'+'</li>'
 
-}
+// }
 
 function getcarshtml(car_owner_id, car_category_name, car_plate_number, car_brandname, car_model, car_color, car_rental_rate, car_image) {
     return '<tr> ' +
             '<td>' + car_owner_id + '</td>' +
             '<td>' + car_category_name + '</td>' +
-            '<td>'+ '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">' + car_plate_number + '</a>'+'</td>' +
+            '<td>'+ '<a href="#" onclick="getcarbyplatenumberinadmin(\''+car_plate_number+'\');">' + car_plate_number + '</a>'+'</td>' +
             '<td>' + car_brandname + '</td>' +
             '<td>' + car_model + '</td>' +
             '<td>' + car_color + '</td>' +
@@ -109,21 +104,21 @@ function getcarshtml(car_owner_id, car_category_name, car_plate_number, car_bran
             '</tr>'
 }
 
-function getcarsecommercehtml(car_owner_id, car_category_name, car_plate_number, car_brandname, car_model, car_color, car_rental_rate, car_image) {
-    return '<div class="col-lg-4 col-md-4 col-sm-4">'+
-                '<div class="single-product">'+
-                    '<div class="product-img">'+
-                        '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+
-                            '<img class="primary-image" src="../../shoptemplate/img/product/women/8.jpg" alt="" />'+
-                            '<img class="secondary-image" src="../../shoptemplate/img/product/women/3.jpg" alt="" />'+
-                        '</a>'+
-                        '<h5 class="product_title">'+'<a href="#" style="text-transform: uppercase" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+car_model+'</a>'+'</h5>'+                          
-                    '</div>'+
-                '</div>'+
-            '</div>'
-}
+// function getcarsecommercehtml(car_owner_id, car_category_name, car_plate_number, car_brandname, car_model, car_color, car_rental_rate, car_image) {
+//     return '<div class="col-lg-4 col-md-4 col-sm-4">'+
+//                 '<div class="single-product">'+
+//                     '<div class="product-img">'+
+//                         '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+
+//                             '<img class="primary-image" src="../../shoptemplate/img/product/women/8.jpg" alt="" />'+
+//                             '<img class="secondary-image" src="../../shoptemplate/img/product/women/3.jpg" alt="" />'+
+//                         '</a>'+
+//                         '<h5 class="product_title">'+'<a href="#" style="text-transform: uppercase" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+car_model+'</a>'+'</h5>'+                          
+//                     '</div>'+
+//                 '</div>'+
+//             '</div>'
+// }
 
-function getcarbyplatenumber(car_plate_number){
+function getcarbyplatenumberinadmin(car_plate_number){
     $.ajax({
         url: 'http://127.0.0.1:5000/car/platenumber/'+car_plate_number,
         type: 'GET',
@@ -143,12 +138,7 @@ function getcarbyplatenumber(car_plate_number){
                     car_owner_id = res.entries[i].car_owner_id;
                     car_category_name = res.entries[i].car_category_name;
                     $("#cardetails").append(getcarbyplatenumberhtml(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image))
-                    $("#cardetailsecommerce").append(getcardetailshtmlecommerce(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image))
-                }
-
-                for(i=0; i<res.recsusercount; i++){
-                    user_id = res.recsuser[i].user_id;
-                    first_name = res.recsuser[i].first_name;
+                    // $("#cardetailsecommerce").append(getcardetailshtmlecommerce(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image))
                 }
 
                 /////////////
@@ -164,6 +154,7 @@ function getcarbyplatenumber(car_plate_number){
                 $("#carspage").hide();
                 $("#cardetailspage").show();
                 $("#accountcustomerspage").hide();
+                $("#allrentalspage").hide();
 
                 /////////////
                 //Ecommerce//
@@ -203,105 +194,105 @@ function getcarbyplatenumberhtml(car_owner_id, car_category_name, car_brandname,
             '</tr>'
 }
 
-function getcardetailshtmlecommerce(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image) {
-    return '<div class="product-simple-area">'+
-        '<div class="container">'+
-            '<div class="row">'+
-                '<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">'+
-                    '<div class="single-product-image">'+
-                        '<div class="single-product-tab">'+
-                          // <!-- Nav tabs -->
-                          '<ul class="nav nav-tabs" role="tablist">'+
-                            '<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab"><img alt="" src="../../shoptemplate/img/product/tab/s1.jpg"></a></li>'+
-                            '<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><img alt="" src="../../shoptemplate/img/product/tab/s2.jpg"></a></li>'+
-                            '<li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><img alt="" src="../../shoptemplate/img/product/tab/s3.jpg"></a></li>'+
-                            '<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab"><img alt="" src="../../shoptemplate/img/product/tab/s4.jpg"></a></li>'+
-                          '</ul>'+
+// function getcardetailshtmlecommerce(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image) {
+//     return '<div class="product-simple-area">'+
+//         '<div class="container">'+
+//             '<div class="row">'+
+//                 '<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">'+
+//                     '<div class="single-product-image">'+
+//                         '<div class="single-product-tab">'+
+//                           // <!-- Nav tabs -->
+//                           '<ul class="nav nav-tabs" role="tablist">'+
+//                             '<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab"><img alt="" src="../../shoptemplate/img/product/tab/s1.jpg"></a></li>'+
+//                             '<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><img alt="" src="../../shoptemplate/img/product/tab/s2.jpg"></a></li>'+
+//                             '<li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><img alt="" src="../../shoptemplate/img/product/tab/s3.jpg"></a></li>'+
+//                             '<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab"><img alt="" src="../../shoptemplate/img/product/tab/s4.jpg"></a></li>'+
+//                           '</ul>'+
 
-                          // <!-- Tab panes -->
-                          '<div class="tab-content">'+
-                            '<div role="tabpanel" class="tab-pane active" id="home"><img alt="" src="../../shoptemplate/img/product/tab/1.jpg"></div>'+
-                            '<div role="tabpanel" class="tab-pane" id="profile"><img alt="" src="../../shoptemplate/img/product/tab/2.jpg"></div>'+
-                            '<div role="tabpanel" class="tab-pane" id="messages"><img alt="" src="../../shoptemplate/img/product/tab/3.jpg"></div>'+
-                            '<div role="tabpanel" class="tab-pane" id="settings"><img alt="" src="../../shoptemplate/img/product/tab/4.jpg"></div>'+
-                          '</div>'+
-                        '</div>'+
-                    '</div>'+
-                '</div>'+
-                '<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">'+
-                    '<div class="single-product-info">'+
-                        '<div class="product-nav">'+
-                            '<a href="#"><i class="fa fa-angle-right"></i></a>'+
-                        '</div>'+
-                        '<h1 class="product_title">'+car_model+'</h1>'+
-                        '<div class="price-box">'+
-                            '<span class="new-price">'+car_rental_rate+'</span>'+
-                            '<span class="old-price">£190.00</span>'+
-                        '</div>'+
-                        '<div class="pro-rating">'+
-                            // <a href="#"><i class="fa fa-star"></i></a>
-                            // <a href="#"><i class="fa fa-star"></i></a>
-                            // <a href="#"><i class="fa fa-star"></i></a>
-                            // <a href="#"><i class="fa fa-star"></i></a>
-                            '<a href="#"><i class="fa fa-star"></i></a>'+
-                        '</div>'+
-                        '<div class="short-description">'+
-                            '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</p>'+                      
-                        '</div>'+
-                        '<div class="stock-status">'+
-                            '<label>Availability</label>: <strong>In stock</strong>'+
-                        '</div>'+
-                        '<form action="#">'+
-                            '<div class="quantity">'+
-                                '<input type="number" value="1" />'+
-                                '<button>Add to cart</button>'+
-                            '</div>'+
-                        '</form>'+
-                        '<div class="add-to-wishlist">'+
-                            '<a href="#" data-toggle="tooltip" title="Add to Wishlist"><i class="fa fa-star"></i></a>'+
-                            '<a href="#" data-toggle="tooltip" title="Compare"><i class="fa fa-exchange"></i></a>'+
-                        '</div>'+
-                        '<div class="share_buttons">'+
-                            '<a href="#"><img src="../../shoptemplate/img/share-img.png" alt="" /></a>'+
-                        '</div>'+
-                    '</div>'+
-                '</div>'+
-            '</div>'+
-        '</div>'+
-    '</div>'+
-    // <!-- product-simple-area end -->
+//                           // <!-- Tab panes -->
+//                           '<div class="tab-content">'+
+//                             '<div role="tabpanel" class="tab-pane active" id="home"><img alt="" src="../../shoptemplate/img/product/tab/1.jpg"></div>'+
+//                             '<div role="tabpanel" class="tab-pane" id="profile"><img alt="" src="../../shoptemplate/img/product/tab/2.jpg"></div>'+
+//                             '<div role="tabpanel" class="tab-pane" id="messages"><img alt="" src="../../shoptemplate/img/product/tab/3.jpg"></div>'+
+//                             '<div role="tabpanel" class="tab-pane" id="settings"><img alt="" src="../../shoptemplate/img/product/tab/4.jpg"></div>'+
+//                           '</div>'+
+//                         '</div>'+
+//                     '</div>'+
+//                 '</div>'+
+//                 '<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">'+
+//                     '<div class="single-product-info">'+
+//                         '<div class="product-nav">'+
+//                             '<a href="#"><i class="fa fa-angle-right"></i></a>'+
+//                         '</div>'+
+//                         '<h1 class="product_title">'+car_model+'</h1>'+
+//                         '<div class="price-box">'+
+//                             '<span class="new-price">'+car_rental_rate+'</span>'+
+//                             '<span class="old-price">£190.00</span>'+
+//                         '</div>'+
+//                         '<div class="pro-rating">'+
+//                             // <a href="#"><i class="fa fa-star"></i></a>
+//                             // <a href="#"><i class="fa fa-star"></i></a>
+//                             // <a href="#"><i class="fa fa-star"></i></a>
+//                             // <a href="#"><i class="fa fa-star"></i></a>
+//                             '<a href="#"><i class="fa fa-star"></i></a>'+
+//                         '</div>'+
+//                         '<div class="short-description">'+
+//                             '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</p>'+                      
+//                         '</div>'+
+//                         '<div class="stock-status">'+
+//                             '<label>Availability</label>: <strong>In stock</strong>'+
+//                         '</div>'+
+//                         '<form action="#">'+
+//                             '<div class="quantity">'+
+//                                 '<input type="number" value="1" />'+
+//                                 '<button>Add to cart</button>'+
+//                             '</div>'+
+//                         '</form>'+
+//                         '<div class="add-to-wishlist">'+
+//                             '<a href="#" data-toggle="tooltip" title="Add to Wishlist"><i class="fa fa-star"></i></a>'+
+//                             '<a href="#" data-toggle="tooltip" title="Compare"><i class="fa fa-exchange"></i></a>'+
+//                         '</div>'+
+//                         '<div class="share_buttons">'+
+//                             '<a href="#"><img src="../../shoptemplate/img/share-img.png" alt="" /></a>'+
+//                         '</div>'+
+//                     '</div>'+
+//                 '</div>'+
+//             '</div>'+
+//         '</div>'+
+//     '</div>'+
+//     // <!-- product-simple-area end -->
 
-    '<div class="product-tab-area">'+
-        '<div class="container">'+
-            '<div class="row">'+
-                '<div class="col-lg-12 col-md-12">'+
-                    '<div class="product-tabs">'+
-                        '<div>'+
-                          // <!-- Nav tabs -->
-                          '<ul class="nav nav-tabs" role="tablist">'+
-                            '<li role="presentation" class="active"><a href="#tab-desc" aria-controls="tab-desc" role="tab" data-toggle="tab">Description</a></li>'+
-                            '<li role="presentation"><a href="#page-comments" aria-controls="page-comments" role="tab" data-toggle="tab">Reviews (1)</a></li>'+
-                          '</ul>'+
-                          // <!-- Tab panes -->
-                          '<div class="tab-content">'+
-                            '<div role="tabpanel" class="tab-pane active" id="tab-desc">'+
-                                '<div class="product-tab-desc">'+
-                                    '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</p>'+
-                                    // <p>Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis mi. Cras neque metus, consequat et blandit et, luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget.</p>
-                                '</div>'+
-                            '</div>'+
-                          '</div>'+
-                        '</div>'+                      
-                    '</div>'+
-                    '<div class="clear"></div>'+
-                '</div>'+
-                '<div class="col-lg-3 col-md-3">'+         
-                '</div>'+
-            '</div>'+
-        '</div>'+
-    '</div>'
+//     '<div class="product-tab-area">'+
+//         '<div class="container">'+
+//             '<div class="row">'+
+//                 '<div class="col-lg-12 col-md-12">'+
+//                     '<div class="product-tabs">'+
+//                         '<div>'+
+//                           // <!-- Nav tabs -->
+//                           '<ul class="nav nav-tabs" role="tablist">'+
+//                             '<li role="presentation" class="active"><a href="#tab-desc" aria-controls="tab-desc" role="tab" data-toggle="tab">Description</a></li>'+
+//                             '<li role="presentation"><a href="#page-comments" aria-controls="page-comments" role="tab" data-toggle="tab">Reviews (1)</a></li>'+
+//                           '</ul>'+
+//                           // <!-- Tab panes -->
+//                           '<div class="tab-content">'+
+//                             '<div role="tabpanel" class="tab-pane active" id="tab-desc">'+
+//                                 '<div class="product-tab-desc">'+
+//                                     '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</p>'+
+//                                     // <p>Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis mi. Cras neque metus, consequat et blandit et, luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget.</p>
+//                                 '</div>'+
+//                             '</div>'+
+//                           '</div>'+
+//                         '</div>'+                      
+//                     '</div>'+
+//                     '<div class="clear"></div>'+
+//                 '</div>'+
+//                 '<div class="col-lg-3 col-md-3">'+         
+//                 '</div>'+
+//             '</div>'+
+//         '</div>'+
+//     '</div>'
 
-}
+// }
 
 function getcarbyplatenumberforupdate(car_plate_number){
 
@@ -352,6 +343,7 @@ function getcarbyplatenumberforupdate(car_plate_number){
                 $("#carspage").hide();
                 $("#cardetailspage").hide();
                 $("#accountcustomerspage").hide();
+                $("#allrentalspage").hide();
 
             } else {
                 $("#cardetailsforupdate").html("");
@@ -438,154 +430,154 @@ function carbyplatenumberhtmlforupdate(car_plate_number) {
 
 }
 
-function getcarbycategory(car_category_name) {
-    $.ajax({
-        url: 'http://127.0.0.1:5000/car/category/'+car_category_name,
-        type: 'GET',
-        dataType: 'json',
-        success: function(res) {
-            console.log(res);
-            $("#carbycategoryeccomerce").html("");
-            $("#categories2").html("");
-            $("#brands2").html("");
-            if(res.status=='Ok'){
-                for (i=0; i<res.count; i++ ) {
-                    car_category_name = res.entries[i].car_category_name;
-                    car_plate_number = res.entries[i].car_plate_number; 
-                    car_brandname = res.entries[i].car_brandname;
-                    car_model = res.entries[i].car_model;
-                    car_color = res.entries[i].car_color;
-                    car_rental_rate = res.entries[i].car_rental_rate;
-                    car_image = res.entries[i].car_image;
-                    car_owner_id = res.entries[i].car_owner_id;
-                    $("#carbycategoryeccomerce").append(getcarbycategoryhtml(car_category_name, car_owner_id, car_plate_number,
-                                    car_brandname, car_model, car_color, car_rental_rate, car_image));
-                }
+// function getcarbycategory(car_category_name) {
+//     $.ajax({
+//         url: 'http://127.0.0.1:5000/car/category/'+car_category_name,
+//         type: 'GET',
+//         dataType: 'json',
+//         success: function(res) {
+//             console.log(res);
+//             $("#carbycategoryeccomerce").html("");
+//             $("#categories2").html("");
+//             $("#brands2").html("");
+//             if(res.status=='Ok'){
+//                 for (i=0; i<res.count; i++ ) {
+//                     car_category_name = res.entries[i].car_category_name;
+//                     car_plate_number = res.entries[i].car_plate_number; 
+//                     car_brandname = res.entries[i].car_brandname;
+//                     car_model = res.entries[i].car_model;
+//                     car_color = res.entries[i].car_color;
+//                     car_rental_rate = res.entries[i].car_rental_rate;
+//                     car_image = res.entries[i].car_image;
+//                     car_owner_id = res.entries[i].car_owner_id;
+//                     $("#carbycategoryeccomerce").append(getcarbycategoryhtml(car_category_name, car_owner_id, car_plate_number,
+//                                     car_brandname, car_model, car_color, car_rental_rate, car_image));
+//                 }
 
-                for (i=0; i<res.countcategories; i++ ) {
-                    category_name = res.categories[i].category_name; 
-                    $("#categories2").append(getecommercecategoryhtml(category_name));
-                }
+//                 for (i=0; i<res.countcategories; i++ ) {
+//                     category_name = res.categories[i].category_name; 
+//                     $("#categories2").append(getecommercecategoryhtml(category_name));
+//                 }
 
-                category_name = car_category_name;
-                for(i=0; i<res.countbrands; i++){
-                    brandname = res.brands[i].brandname;
-                    $("#brands2").append(getecommercebrandhtml(brandname, category_name));    
-                }                
+//                 category_name = car_category_name;
+//                 for(i=0; i<res.countbrands; i++){
+//                     brandname = res.brands[i].brandname;
+//                     $("#brands2").append(getecommercebrandhtml(brandname, category_name));    
+//                 }                
 
-                /////////////
-                //Ecommerce//
-                ////////////
-                $("#shoppage").show();
-                $("#homepage").hide();
-                $("#cardetailsecommercepage").hide();
-                $("#carsecommerce").hide();
-                $("#carbycategorybrandecommerce2").hide();
-                $("#carbycategoryeccomerce").show();
-                $("#profilepage").show();
+//                 /////////////
+//                 //Ecommerce//
+//                 ////////////
+//                 $("#shoppage").show();
+//                 $("#homepage").hide();
+//                 $("#cardetailsecommercepage").hide();
+//                 $("#carsecommerce").hide();
+//                 $("#carbycategorybrandecommerce2").hide();
+//                 $("#carbycategoryeccomerce").show();
+//                 $("#profilepage").show();
 
-            } else if(res.status==='Error') {
-                $("#carbycategoryeccomerce").html("");
-                $("#categories2").html("");
-                $("#brands2").html("");
-                alert('Error')
-            }
-        },
+//             } else if(res.status==='Error') {
+//                 $("#carbycategoryeccomerce").html("");
+//                 $("#categories2").html("");
+//                 $("#brands2").html("");
+//                 alert('Error')
+//             }
+//         },
 
-        error: function(e){
-                alert("Naay wrong charot!: " + e);
-        },
-        beforeSend: function (xhrObj){
+//         error: function(e){
+//                 alert("Naay wrong charot!: " + e);
+//         },
+//         beforeSend: function (xhrObj){
 
-            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+//             xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
 
-        }
+//         }
 
-    });
-}
+//     });
+// }
 
-function getcarbycategoryhtml(car_category_name, car_owner_id, car_plate_number,
-                            car_brandname, car_model, car_color, car_rental_rate, car_image) {
-    return '<div class="col-lg-4 col-md-4 col-sm-4">'+
-                '<div class="single-product">'+
-                    '<div class="product-img">'+
-                        '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+
-                            '<img class="primary-image" src="../../shoptemplate/img/product/women/8.jpg" alt="" />'+
-                            '<img class="secondary-image" src="../../shoptemplate/img/product/women/3.jpg" alt="" />'+
-                        '</a>'+
-                        '<h5 class="product_title"><a href="#" style="text-transform: uppercase" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+car_model+'</a></h5>'+                          
-                    '</div>'+
-                '</div>'+
-            '</div>'
+// function getcarbycategoryhtml(car_category_name, car_owner_id, car_plate_number,
+//                             car_brandname, car_model, car_color, car_rental_rate, car_image) {
+//     return '<div class="col-lg-4 col-md-4 col-sm-4">'+
+//                 '<div class="single-product">'+
+//                     '<div class="product-img">'+
+//                         '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+
+//                             '<img class="primary-image" src="../../shoptemplate/img/product/women/8.jpg" alt="" />'+
+//                             '<img class="secondary-image" src="../../shoptemplate/img/product/women/3.jpg" alt="" />'+
+//                         '</a>'+
+//                         '<h5 class="product_title"><a href="#" style="text-transform: uppercase" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+car_model+'</a></h5>'+                          
+//                     '</div>'+
+//                 '</div>'+
+//             '</div>'
 
-}
+// }
 
-function getcarbycategorybrandname(categoryname, brandname) {
+// function getcarbycategorybrandname(categoryname, brandname) {
 
-    $.ajax({
-        url: 'http://127.0.0.1:5000/car/category/'+categoryname+'/brand/'+brandname,
-        type: 'GET',
-        dataType: 'json',
-        success: function(res) {
-            console.log(res);
-            $("#carbycategorybrandecommerce2").html("");
-            if(res.status==='Ok'){
-                for (i=0; i<res.count; i++ ) {
-                    car_category_name = res.entries[i].car_category_name;
-                    car_plate_number = res.entries[i].car_plate_number; 
-                    car_model = res.entries[i].car_model;
-                    car_color = res.entries[i].car_color;
-                    car_rental_rate = res.entries[i].car_rental_rate;
-                    car_image = res.entries[i].car_image;
-                    car_owner_id = res.entries[i].car_owner_id;
-                    $("#carbycategorybrandecommerce2").append(getcarbybrandcategoryhtml(car_category_name, car_owner_id,
-                        car_plate_number, car_model, car_color, car_rental_rate, car_image));
-                }
-                $("#mainpage").hide();
-                $("#userprofilepage").hide();
-                $("#addcarpage").hide();
-                $("#carspage").show();
-                $("#addownerpage").hide();
-                $("#updatecarpage").hide();
-                $("#carsecommerce").hide()
-                $("#carbycategoryeccomerce").hide();
-                $("#carbycategorybrandecommerce2").show();
-                $("#profilepage").show();
+//     $.ajax({
+//         url: 'http://127.0.0.1:5000/car/category/'+categoryname+'/brand/'+brandname,
+//         type: 'GET',
+//         dataType: 'json',
+//         success: function(res) {
+//             console.log(res);
+//             $("#carbycategorybrandecommerce2").html("");
+//             if(res.status==='Ok'){
+//                 for (i=0; i<res.count; i++ ) {
+//                     car_category_name = res.entries[i].car_category_name;
+//                     car_plate_number = res.entries[i].car_plate_number; 
+//                     car_model = res.entries[i].car_model;
+//                     car_color = res.entries[i].car_color;
+//                     car_rental_rate = res.entries[i].car_rental_rate;
+//                     car_image = res.entries[i].car_image;
+//                     car_owner_id = res.entries[i].car_owner_id;
+//                     $("#carbycategorybrandecommerce2").append(getcarbybrandcategoryhtml(car_category_name, car_owner_id,
+//                         car_plate_number, car_model, car_color, car_rental_rate, car_image));
+//                 }
+//                 $("#mainpage").hide();
+//                 $("#userprofilepage").hide();
+//                 $("#addcarpage").hide();
+//                 $("#carspage").show();
+//                 $("#addownerpage").hide();
+//                 $("#updatecarpage").hide();
+//                 $("#carsecommerce").hide()
+//                 $("#carbycategoryeccomerce").hide();
+//                 $("#carbycategorybrandecommerce2").show();
+//                 $("#profilepage").show();
 
-            } else if(res.status==='Error') {
-                $("#carbycategorybrandecommerce2").html("");
-                alert('Error')
-            }
-        },
+//             } else if(res.status==='Error') {
+//                 $("#carbycategorybrandecommerce2").html("");
+//                 alert('Error')
+//             }
+//         },
 
-        error: function(e){
-                alert("Naay wrong charot!: " + e);
-        },
-        beforeSend: function (xhrObj){
+//         error: function(e){
+//                 alert("Naay wrong charot!: " + e);
+//         },
+//         beforeSend: function (xhrObj){
 
-            xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
+//             xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
 
-        }
+//         }
 
-    });
+//     });
 
-}
+// }
 
-function getcarbybrandcategoryhtml(car_category_name, car_owner_id, car_plate_number,
-                            car_model, car_color, car_rental_rate, car_image) {
-    return '<div class="col-lg-4 col-md-4 col-sm-4">'+
-                '<div class="single-product">'+
-                    '<div class="product-img">'+
-                        '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+
-                            '<img class="primary-image" src="../../shoptemplate/img/product/women/8.jpg" alt="" />'+
-                            '<img class="secondary-image" src="../../shoptemplate/img/product/women/3.jpg" alt="" />'+
-                        '</a>'+
-                        '<h5 class="product_title"><a href="#" style="text-transform: uppercase" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+car_model+'</a></h5>'+                          
-                    '</div>'+
-                '</div>'+
-            '</div>'
+// function getcarbybrandcategoryhtml(car_category_name, car_owner_id, car_plate_number,
+//                             car_model, car_color, car_rental_rate, car_image) {
+//     return '<div class="col-lg-4 col-md-4 col-sm-4">'+
+//                 '<div class="single-product">'+
+//                     '<div class="product-img">'+
+//                         '<a href="#" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+
+//                             '<img class="primary-image" src="../../shoptemplate/img/product/women/8.jpg" alt="" />'+
+//                             '<img class="secondary-image" src="../../shoptemplate/img/product/women/3.jpg" alt="" />'+
+//                         '</a>'+
+//                         '<h5 class="product_title"><a href="#" style="text-transform: uppercase" onclick="getcarbyplatenumber(\''+car_plate_number+'\');">'+car_model+'</a></h5>'+                          
+//                     '</div>'+
+//                 '</div>'+
+//             '</div>'
 
-}
+// }
 
 function updatecardetails(plate_number) {
 
@@ -666,6 +658,7 @@ function getcarowners() {
                 $("#cardetailspage").hide();
                 $("#updateownerpage").hide();
                 $("#accountcustomerspage").hide();
+                $("#allrentalspage").hide();
 
             } else {
                 $("#carowners").html();
@@ -734,6 +727,8 @@ function getcarownerbyid(car_owner_id) {
                 $("#carspage").hide();
                 $("#cardetailspage").hide();
                 $("#accountcustomerspage").hide();
+                $("#updateownerpage").hide();
+                $("#allrentalspage").hide();
 
             } else {
                 $("#carownerdetails").html("");
@@ -808,6 +803,7 @@ function getcarownerbyidforupdate(car_owner_id) {
                 $("#cardetailspage").hide();
                 $("#updateownerpage").show();
                 $("#accountcustomerspage").hide();
+                $("#allrentalspage").hide();
 
             } else {
                 $("#carownerdetailsforupdate").html("");
@@ -924,6 +920,7 @@ function updatecarowner(oid) {
                 $("#cardetailspage").hide();
                 $("#updateownerpage").show();
                 $("#accountcustomerspage").hide();
+                $("#allrentalspage").hide();
 
             } else {
                 alert("Error")
@@ -978,6 +975,8 @@ function getcustomers() {
                 $("#carspage").hide();
                 $("#cardetailspage").hide();
                 $("#accountcustomerspage").show();
+                $("#updateownerpage").hide();
+                $("#allrentalspage").hide();
 
             } else if(res.status==='Error') {
                 $("#accountcustomers").html("");
@@ -1011,20 +1010,48 @@ function getcustomershtml(customer_user_id, customer_firstname, customer_lastnam
             '</tr>'
 }
 
-function addtocart() {
-    
+function getrentalsinadmin(){
     $.ajax({
-        url: 'http://127.0.0.1:5000/car/'+car_plate_number+'/'+car_brand_name+'/'+car_model+'/'+car_color,
-        type: 'POST',
-        contentType: 'application/json; charset=utf-8',
-        data: data,
+        url: 'http://127.0.0.1:5000/rentals',
+        type: 'GET',
+        contentType: "application/json; charset=utf-8",
         dataType: 'json',
         success: function(res){
             console.log(res);
-            if(res.message==='Ok') {
-                alert("Vehicle Added!")
+            $("#allrents").html("");
+            if(res.status=='Ok'){
+                for(i=0; i<res.count; i++) {
+                    rental_id = res.entries[i].rental_id;
+                    rent_date_rented = res.entries[i].rent_date_rented;
+                    rent_date_due = res.entries[i].rent_date_due;
+                    rent_total_bill = res.entries[i].rent_total_bill;
+                    rent_overdue_cost = res.entries[i].rent_overdue_cost;
+                    rent_plate_number = res.entries[i].rent_plate_number;
+                    rent_user_id = res.entries[i].rent_user_id;
+                    rent_quantity = res.entries[i].rent_quantity;
+                    $("#allrents").append(getallrentshtml(rental_id, rent_date_rented, rent_date_due, rent_total_bill, rent_overdue_cost, rent_plate_number,
+                                                            rent_user_id, rent_quantity))
+                    // $("#cardetailsecommerce").append(getcardetailshtmlecommerce(car_owner_id, car_category_name, car_brandname, car_model, car_color, car_rental_rate, car_image))
+                }
+
+                /////////////
+                //Dashboard//
+                ////////////
+                $("#mainpage").hide();
+                $("#userprofilepage").hide();
+                $("#addownerpage").hide();
+                $("#carownerspage").hide();
+                $("#carownersdetailspage").hide();
+                $("#addcarpage").hide();
+                $("#updatecarpage").hide();
+                $("#carspage").hide();
+                $("#cardetailspage").hide();
+                $("#accountcustomerspage").hide();
+                $("#allrentalspage").show();
+
             } else {
-                alert(res.message)
+                $("#allrents").html("");
+                alert("Error")
             }
         },
 
@@ -1036,6 +1063,19 @@ function addtocart() {
             xhrObj.setRequestHeader("Authorization", "Basic " + btoa( auth_user ));
 
         }
-        
     });
+}
+
+function getallrentshtml(rental_id, rent_date_rented, rent_date_due, rent_total_bill, rent_overdue_cost, rent_plate_number,
+                                                            rent_user_id, rent_quantity) {
+    return '<tr> ' +
+            '<td>' + rental_id + '</td>' +
+            '<td>' + rent_date_rented + '</td>' +
+            '<td>' + rent_date_due + '</td>' +
+            '<td>' + rent_total_bill + '</td>' +
+            '<td>' + rent_overdue_cost + '</td>' +
+            '<td>'+ '<a href="#" onclick="getcarbyplatenumberinadmin(\''+rent_plate_number+'\');">' + rent_plate_number + '</a>'+'</td>' +
+            '<td>' + rent_user_id+ '</td>' +
+            '<td>' + rent_quantity + '</td>' +                    
+            '</tr>'
 }

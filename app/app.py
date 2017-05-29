@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session, abort, escape, app
+from flask import Flask, request, jsonify, session, abort, escape, app, g
 import json, os, sys
 import flask
 from config import *
@@ -11,47 +11,19 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # from that_queue_module import queue_daemon
 from simplecrypt import encrypt, decrypt
 import hashlib
+from itsdangerous import URLSafeTimedSerializer
+from datetime import timedelta
+
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+app.secret_key = "a_random_secret_key_$%#!@"
+# app.config['SECRET_KEY'] = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 # app.session_interface = RedisSessionInterface()
 # app.config['REDIS_QUEUE_KEY'] = 'my_queue'
 # queue_daemon(app)
 
-redis = Redis()
-
-GENERIC_DOMAINS = "aero", "asia", "biz", "cat", "com", "coop", \
-                  "edu", "gov", "info", "int", "jobs", "mil", "mobi", "museum", \
-                  "name", "net", "org", "pro", "tel", "travel"
-
-def invalid(emailaddress, domains=GENERIC_DOMAINS):
-    """Checks for a syntactically invalid email address."""
-
-    # Email address must be 7 characters in total.
-    if len(emailaddress) < 7:
-        return True  # Address too short.
-
-    # Split up email address into parts.
-    try:
-        localpart, domainname = emailaddress.rsplit('@', 1)
-        host, toplevel = domainname.rsplit('.', 1)
-    except ValueError:
-        return True  # Address does not have enough parts.
-
-    # Check for Country code or Generic Domain.
-    if len(toplevel) != 2 and toplevel not in domains:
-        return True  # Not a domain name.
-
-    for i in '-_.%+.':
-        localpart = localpart.replace(i, "")
-    for i in '-_.':
-        host = host.replace(i, "")
-
-    if localpart.isalnum() and host.isalnum():
-        return False  # Email address is fine.
-    else:
-        return True  # Email address has funny characters.
+# redis = Redis()
 
 @app.route('/')
 def hello_world():
@@ -71,23 +43,8 @@ def login():
         jsn['email'],
         pas,), True)
 
-    rescategory = spcall('get_category', ())
-
-    resbrand = spcall('get_brand', ())
-
-    if 'Error' in str(rescategory[0][0]):
+    if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
-    
-    if 'Error' in str(resbrand[0][0]):
-        return jsonify({'status': 'Error', 'message': res[0][0]})
-
-    recscategory = []
-    for r in rescategory:
-        recscategory.append({'category_name': str(r[0])})
-
-    recsbrand = []
-    for r in resbrand:
-        recsbrand.append({'brandname': str(r[0])})
 
     if len(res) == 0:
         return jsonify({'status': 'Invalid credentials'})
@@ -95,7 +52,7 @@ def login():
     if 'Invalid credentials' in str(res[0][0]):
         return jsonify({'status': 'Invalid credentials', 'message': res[0][0]})
 
-    if'Login successful' in str(res[0][0]):
+    if 'Login successful' in str(res[0][0]):
         session['logged_in'] = True
         session['email'] = jsn['email']
         user = get_userbyemail(session['email'])
@@ -108,9 +65,22 @@ def login():
         session['mobile_no'] = str(user[0][6])
         session['is_admin'] = user[0][7]
         session['is_customer'] = user[0][8]
+        user_id = session['user_id']
+
+        rescategory = spcall('get_category', (user_id,), )
+
+        if 'Error' in str(rescategory):
+            return jsonify({'status': 'Error', 'message': res[0][0]})
+
+        recscategory = []
+        for r in rescategory:
+            recscategory.append({'category_name': str(r[0]), 'user_id': r[1]})
 
         print res[0][0]
+
         print ('email:' +session['email'])
+        print recscategory
+
         recsuser = []
         for r in user:
             recsuser.append({'email': session['email'], 'user_id': session['user_id'], 'first_name': session['first_name'], 'last_name': session['last_name'],
@@ -120,7 +90,7 @@ def login():
         print recsuser
 
         return jsonify({'status': 'Login successful', 'message': res[0][0], 'categories': recscategory, 'countcategories': len(recscategory),
-                'userinfo': recsuser, 'countuserinfo': len(recsuser), 'brands': recsbrand, 'countbrands': len(recsbrand)})
+                'userinfo': recsuser, 'countuserinfo': len(recsuser)})
     # else:
     #     session['logged_in'] = False
     #     return jsonify({'status': 'Invalid credentials'})
@@ -140,15 +110,20 @@ def logout():
 def new_admin(email):
     jsn = json.loads(request.data)
 
+    pas = hashlib.md5(jsn['password'].encode()).hexdigest()
+
     if invalid(jsn['email']):
         return jsonify({'status': 'Error', 'message': 'Invalid Email address'})
 
     res = spcall('new_admin', (
         jsn['email'],
-        jsn['password']), True)
+        pas), True)
 
     if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    if len(res) == 0:
+        return jsonify({'status': 'Password Mismatch'})
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
@@ -165,16 +140,15 @@ def new_customer():
     res = spcall('new_customer', (
         jsn['email'],
         pas), True)
-
-    return pas
-
-    # print decrypt(jsn['password'], testing)
     
     if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
     if 'Email already exists' in str(res[0][0]):
         return jsonify({'status': 'Email already exists', 'message': res[0][0]})
+
+    if len(res) == 0:
+        return jsonify({'status': 'Password Mismatch'})
 
     return jsonify({'status': 'Ok', 'message': res[0][0]})
 
@@ -345,8 +319,8 @@ def get_brands():
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
 # Add new car
-@app.route('/car/<string:car_plate_number>/<string:car_brandname>/<string:car_model>/<string:car_color>', methods=['POST'])
-def new_car(car_plate_number, car_color, car_brandname, car_model):
+@app.route('/car/<string:car_plate_number>', methods=['POST'])
+def new_car(car_plate_number):
     jsn = json.loads(request.data)
 
     res = spcall('new_car', (
@@ -356,7 +330,8 @@ def new_car(car_plate_number, car_color, car_brandname, car_model):
         jsn['car_model'],
         jsn['car_rental_rate'],
         jsn['car_image'],
-        jsn['car_owner_id']), True)
+        jsn['car_owner_id'],
+        jsn['car_category_name'],), True)
 
     if 'Error' in res[0][0]:
         return jsonify({'status': 'Error', 'message': res[0][0]})
@@ -395,25 +370,14 @@ def update_car(car_plate_number):
         return jsonify({'status': 'Ok'})
 
 # Get all cars
-@app.route('/cars', methods=['GET'])
-def get_cars():
+@app.route('/cars/<string:user_id>', methods=['GET'])
+def get_cars(user_id):
 
-    email = session.get('email')
-    user_id = session.get('user_id')
-    first_name = session.get('first_name')
-    last_name = session.get('last_name')
+    print ("user_id:" + str(user_id))
 
-    print ("email:" + str(email))
+    res = spcall('get_cars', (user_id,), )
 
-    res = spcall('get_cars', ())
-
-    rescategory = spcall('get_category', ())
-
-    resbrand = spcall('get_brand', ())
-
-    rescategorybrand = spcall('get_categorybrand', ())
-
-    # user = spcall('get_userbyemail', (email,))
+    rescategory = spcall('get_category', (user_id,), )
 
     if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
@@ -421,43 +385,38 @@ def get_cars():
     if 'Error' in str(rescategory[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
-    if 'Error' in str(resbrand[0][0]):
-        return jsonify({'status': 'Error', 'message': res[0][0]})
+    recs = []
+    for r in res:
+        recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_brandname': str(r[2]), 'car_model': r[3],
+            'car_rental_rate': str(r[4]), 'car_image': str(r[5]), 'car_owner_id': r[6], 'car_category_name': str(r[7]),
+            'user_id': str(r[8])})
 
-    if 'Error' in str(rescategorybrand):
-        return jsonify({'status': 'Error', 'message': res[0][0]})
+    recscategory = []
+    for r in rescategory:
+        recscategory.append({'category_name': str(r[0]), 'user_id': r[1]})
 
-    recsuser = []
-    recsuser.append({'email': email ,'user_id':user_id, 'first_name': first_name, 'last_name': last_name})
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs), 'categories': recscategory,
+                'countcategories': len(recscategory)})
+
+@app.route('/cars', methods=['GET'])
+def get_carsinadmin():
+
+    res = spcall('get_carsinadmin', (), )
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
 
     recs = []
     for r in res:
         recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_brandname': str(r[2]), 'car_model': r[3],
             'car_rental_rate': str(r[4]), 'car_image': str(r[5]), 'car_owner_id': r[6], 'car_category_name': str(r[7])})
 
-    recscategory = []
-    for r in rescategory:
-        recscategory.append({'category_name': str(r[0])})
-
-    recsbrand = []
-    for r in resbrand:
-        recsbrand.append({'brandname': str(r[0])})
-
-    # session['category_name'] = rescategory(jsn['category_name'])
-    recscategorybrand = []
-    for r in rescategorybrand:
-        # recscategorybrand.append({'category_name': session['category_name'], 'brandname': str(r[1])})
-        recscategorybrand.append({'category_name': str(r[0]), 'brandname': str(r[1])})
-
-    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs), 'categories': recscategory,
-                'countcategories': len(recscategory), 'brands': recsbrand, 'countbrands': len(recsbrand),
-                'categorybrand': recscategorybrand, 'countcategorybrand': len(recscategorybrand),
-                'recsuser': recsuser, 'recsusercount': len(recsuser)})
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
 # Get car by plate number
-@app.route('/car/platenumber/<string:car_plate_number>', methods=['GET'])
-def get_carbyplatenumber(car_plate_number):
-    res = spcall('get_carbyplatenumber', (car_plate_number,), )
+@app.route('/car/platenumber/<string:car_plate_number>/<string:user_id>', methods=['GET'])
+def get_carbyplatenumber(car_plate_number, user_id):
+    res = spcall('get_carbyplatenumber', (car_plate_number, user_id,), )
 
     if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
@@ -465,29 +424,30 @@ def get_carbyplatenumber(car_plate_number):
     recs = []
     for r in res:
         recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_brandname': str(r[2]), 'car_model': str(r[3]), 'car_rental_rate': str(r[4]),
-            'car_image': str(r[5]), 'car_owner_id': r[6], 'car_category_name': str(r[7])})
+            'car_image': str(r[5]), 'car_owner_id': r[6], 'car_category_name': str(r[7]), 'user_id': r[8]})       
 
-    email = session.get('email')
-    user_id = session.get('user_id')
-    first_name = session.get('first_name')
-    last_name = session.get('last_name')
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
+@app.route('/car/platenumber/<string:car_plate_number>', methods=['GET'])
+def get_carbyplatenumberinadmin(car_plate_number):
+    res = spcall('get_carbyplatenumberinadmin', (car_plate_number,), )
 
-    recsuser = []
-    recsuser.append({'email': email ,'user_id':user_id, 'first_name': first_name, 'last_name': last_name})
-    
-    # print log.userinfo
-    print recsuser        
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
 
-    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs), 'recsuser':recsuser, 'recsusercount': len(recsuser)})
+    recs = []
+    for r in res:
+        recs.append({'car_plate_number': str(r[0]), 'car_color': str(r[1]), 'car_brandname': str(r[2]), 'car_model': str(r[3]), 'car_rental_rate': str(r[4]),
+            'car_image': str(r[5]), 'car_owner_id': r[6], 'car_category_name': str(r[7])})       
 
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
 # Get car by category name
-@app.route('/car/category/<string:car_category_name>', methods=['GET'])
-def get_carbycategory(car_category_name):
-    res = spcall('get_carbycategory', (car_category_name,), )
+@app.route('/car/category/<string:user_id>/<string:car_category_name>', methods=['GET'])
+def get_carbycategory(car_category_name,user_id):
+    res = spcall('get_carbycategory', (car_category_name, user_id,), )
 
-    rescategory = spcall('get_category', ())
+    rescategory = spcall('get_category', (user_id,), )
 
     resbrand = spcall('get_brand', ())
 
@@ -504,15 +464,18 @@ def get_carbycategory(car_category_name):
     recs = []
     for r in res:
         recs.append({'car_category_name': str(r[0]), 'car_plate_number': str(r[1]),'car_color': str(r[2]), 'car_brandname': str(r[3]), 'car_model': str(r[4]), 
-            'car_rental_rate': str(r[5]), 'car_image': str(r[6]), 'car_owner_id': r[7]})
+            'car_rental_rate': str(r[5]), 'car_image': str(r[6]), 'car_owner_id': r[7], 'user_id': r[8]})
 
     recscategory = []
     for r in rescategory:
-        recscategory.append({'category_name': str(r[0])})
+        recscategory.append({'category_name': str(r[0]), 'user_id': r[1]})
 
     recsbrand = []
     for r in resbrand:
         recsbrand.append({'brandname': str(r[0])})
+
+    print ("user_id:" + str(user_id))
+    print ("categoryname:" + str(car_category_name))
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs), 'brands': recsbrand, 'countbrands': len(recsbrand),
                     'categories': recscategory, 'countcategories': len(recscategory)})
@@ -533,9 +496,9 @@ def get_carbybrandname(car_brandname):
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})    
 
 # Get car by category and brandname
-@app.route('/car/category/<string:car_category_name>/brand/<string:car_brandname>', methods=['GET'])
-def get_carbycategorybrandname(car_category_name, car_brandname):
-    res = spcall('get_carbycategorybrandname', (car_category_name, car_brandname,), )
+@app.route('/car/category/<string:car_category_name>/brand/<string:car_brandname>/<string:user_id>', methods=['GET'])
+def get_carbycategorybrandname(car_category_name, car_brandname, user_id):
+    res = spcall('get_carbycategorybrandname', (car_category_name, car_brandname, user_id), )
 
     if 'Error' in str(res):
         return jsonify({'status': 'Error', 'message': res[0][0]})
@@ -543,12 +506,12 @@ def get_carbycategorybrandname(car_category_name, car_brandname):
     recs = []
     for r in res:
         recs.append({'car_category_name': str(r[0]) ,'car_plate_number': str(r[1]), 'car_color': str(r[2]), 'car_model': str(r[3]),
-                    'car_rental_rate': str(r[4]), 'car_image': str(r[5]), 'car_owner_id': r[6]})
+                    'car_rental_rate': str(r[4]), 'car_image': str(r[5]), 'car_owner_id': r[6], 'user_id': r[7]})
 
     return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
 
-@app.route('/cart', methods=['POST'])
-def addtocart():
+@app.route('/cart/<string:cart_plate_number>/<string:cart_user_id>', methods=['POST'])
+def addtocart(cart_plate_number, cart_user_id):
     jsn = json.loads(request.data)    
 
     res = spcall('cart_addproduct', (
@@ -558,22 +521,13 @@ def addtocart():
     if 'Error' in str(res[0][0]):
         return jsonify({'status': 'Error', 'message': res[0][0]})
 
-    if 'Ok' in str(res[0][0]):
-        user = get_userbyemail(jsn['email'])
-        session['user_id'] = user[0][0]
-        session['cart_plate_number'] = [0][0]
-        sessionn['cart_user_id'] = [0][1]
+    print res
 
-        session['cart'] = []
-        for r in res:
-            session['cart'].append({'cart_plate_number': str(r[0]), 'cart_user_id': str(r[1])})
+    return jsonify({'status': 'Ok', 'message': res[0][0]})
 
-    # return jsonify({'status': 'Ok', 'message': res[0][0], 'user_id': session['user_id']})
-    return jsonify({'status': 'Ok', 'message': res[0][0], 'entries': session['cart']})
-
-@app.route('/cart/<string:cart_user_id>/<string:cart_id>', methods=['GET'])
-def cart(cart_id, cart_user_id):
-    res = spcall('get_cartbyuser', (cart_id ,cart_user_id), )
+@app.route('/cart/<string:cart_user_id>', methods=['GET'])
+def cart(cart_user_id):
+    res = spcall('get_cartbyuser2', (cart_user_id,), )
 
     if 'Error' in str(res):
         return jsonify({'status': 'Error', 'message': res[0][0]})
@@ -584,7 +538,93 @@ def cart(cart_id, cart_user_id):
             'car_color': str(r[4]), 'car_rental_rate': str(r[5]), 'car_image': str(r[6]), 'cart_user_id': str(r[7]),
             'cart_id': str(r[8])})
 
-    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})        
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)}) 
+
+# @app.route('/confirmrent')
+# def rentform():
+#     res = spcall('')
+
+@app.route('/rent', methods=['POST'])
+def rentcar():
+    jsn = json.loads(request.data)
+
+    res = spcall('rentcar', (
+        jsn['rent_plate_number'],
+        jsn['rent_user_id']), True)
+
+    if 'Error' in str(res[0][0]):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    print res
+
+    return jsonify({'status': 'Ok', 'message': res[0][0]})
+
+# @app.route('/rentals', methods=['GET'])
+# def rentals(user_id):
+
+#     recs = spcall()
+
+
+@app.route('/rentals', methods=['GET'])
+def getallrents():
+    res = spcall('getallrents', (), )
+
+    if 'Error' in str(res):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    recs = []
+    for r in res:
+        recs.append({'rental_id': r[0], 'rent_date_rented': str(r[1]), 'rent_date_due': str(r[2]), 'rent_total_bill': str(r[3]),
+                    'rent_overdue_cost': str(r[4]), 'rent_plate_number': str(r[5]), 'rent_user_id': r[6],
+                    'rent_quantity': r[7]})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+
+@app.route('/rentals/<string:user_id>', methods=['GET'])
+def getrentsbyid(user_id):
+    res = spcall('getrentbyuserid', (user_id,), )
+
+    if 'Error' in str(res):
+        return jsonify({'status': 'Error', 'message': res[0][0]})
+
+    recs = []
+    for r in res:
+        recs.append({'rental_id': r[0], 'rent_date_rented': str(r[1]), 'rent_date_due': str(r[2]), 'rent_total_bill': str(r[3]),
+                    'rent_overdue_cost': str(r[4]), 'rent_plate_number': str(r[5]), 'rent_user_id': r[6], 'rent_quantity': r[7]})
+
+    return jsonify({'status': 'Ok', 'entries': recs, 'count': len(recs)})
+
+GENERIC_DOMAINS = "aero", "asia", "biz", "cat", "com", "coop", \
+                  "edu", "gov", "info", "int", "jobs", "mil", "mobi", "museum", \
+                  "name", "net", "org", "pro", "tel", "travel"
+
+def invalid(emailaddress, domains=GENERIC_DOMAINS):
+    """Checks for a syntactically invalid email address."""
+
+    # Email address must be 7 characters in total.
+    if len(emailaddress) < 7:
+        return True  # Address too short.
+
+    # Split up email address into parts.
+    try:
+        localpart, domainname = emailaddress.rsplit('@', 1)
+        host, toplevel = domainname.rsplit('.', 1)
+    except ValueError:
+        return True  # Address does not have enough parts.
+
+    # Check for Country code or Generic Domain.
+    if len(toplevel) != 2 and toplevel not in domains:
+        return True  # Not a domain name.
+
+    for i in '-_.%+.':
+        localpart = localpart.replace(i, "")
+    for i in '-_.':
+        host = host.replace(i, "")
+
+    if localpart.isalnum() and host.isalnum():
+        return False  # Email address is fine.
+    else:
+        return True  # Email address has funny characters.
 
 @app.after_request
 def add_cors(resp):

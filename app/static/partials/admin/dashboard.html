@@ -80,13 +80,13 @@
                         <p>Add Vehicle</p>
                     </a>
                 </li>
-                <li onclick="getcars();">
+                <li onclick="getcarsinadmin();">
                     <a href="#">
                         <i class="ti-view-list-alt"></i>
                         <p>Vehicles</p>
                     </a>
                 </li>
-                <li>
+                <li onclick="getrentalsinadmin();">
                     <a href="#">
                         <i class="ti-truck"></i>
                         <p>Rentals</p>
@@ -789,7 +789,7 @@ But that's the difference in our opinions.</textarea>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Owner</label>
+                                                <label>Owner ID</label>
                                                 <input type="text" class="form-control border-input" id="car_owner_id">
                                             </div>
                                         </div>
@@ -798,32 +798,41 @@ But that's the difference in our opinions.</textarea>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Brand Name</label>
-                                                <input type="text" class="form-control border-input" id="car_brand_name">
+                                                <label>Vehicle Type</label>
+                                                <input type="text" class="form-control border-input" id="car_category_name">
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Brand Name</label>
+                                                <input type="text" class="form-control border-input" id="car_brandname">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Model</label>
                                                 <input type="text" class="form-control border-input" id="car_model">
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Color</label>
                                                 <input type="text" class="form-control border-input" id="car_color">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                    </div>
+
+                                    <div class="row">                                        
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Image</label>
-                                                <input type="text" class="form-control border-input" id="car_image">
+                                                <input type="file" class="form-control border-input" id="car_image">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Rental Rate</label>
                                                 <input type="text" class="form-control border-input" id="car_rental_rate">
@@ -951,6 +960,53 @@ But that's the difference in our opinions.</textarea>
                 </div>
             </div>
         </div>
+
+        <!-- All rentals -->
+        <div class="content" id="allrentalspage" style="display:none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2 class="title">Vehicles Details</h2>
+                                <!-- <p class="category">Here is a subtitle for this table</p> -->
+                            </div>
+                            <!-- <div class="row">
+                                <div class="col-md-2">
+                                   <div class="header">
+                                        <h4 class="title">Vehicle Type</h4>
+                                    </div>
+                                </div>
+                            <div class="col-md-1">
+                                    <div class="header">
+                                        <h4 class="title">Vehicles</h4>
+                                    </div>
+                            </div>
+                            </div> -->
+                            <div class="content table-responsive table-full-width">
+                                 <table class="table table-striped">
+                                    <thead>
+                                        <th>Rental ID</th>
+                                        <th>Rent Date Rented</th> 
+                                        <th>Rent Date Due</p></th>
+                                        <th>Total Bill</th>
+                                        <th>Overdue Cost</th>
+                                        <th>Plate Number</th>
+                                        <th>User ID</th>
+                                        <th>Quantity</th>
+
+                                    </thead>
+                                    <tbody id="allrents">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
 
         <footer class="footer">

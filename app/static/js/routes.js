@@ -13,6 +13,10 @@ function showmainpage() {
 	$("#addownerpage").hide();
 	$("#updatecarpage").hide();
 	$("#accountcustomerspage").hide();
+	$("#updateownerpage").hide();
+	$("#cardetailspage").hide();
+	$("#carownersdetailspage").hide();
+	$("#allrentalspage").hide();
 
 }
 
@@ -36,6 +40,8 @@ function showaddcarpage() {
 	$("#carownerspage").hide();
 	$("#carownersdetailspage").hide();
 	$("#accountcustomerspage").hide();
+	$("#updateownerpage").hide();
+	$("#allrentalspage").hide();
 
 }
 
@@ -56,6 +62,10 @@ function showaddownerpage() {
 	$("#carownerspage").hide();
 	$("#cardetailspage").hide();
 	$("#accountcustomerspage").hide();
+	$("#updateownerpage").hide();
+	$("#carownersdetailspage").hide();
+	$("#allrentalspage").hide();
+
 }
 
 function showshophomepage() {
